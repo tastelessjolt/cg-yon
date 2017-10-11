@@ -1,0 +1,5 @@
+*.dSYM
+cg_san
+*.conf
+.DS_Store
+*.o
