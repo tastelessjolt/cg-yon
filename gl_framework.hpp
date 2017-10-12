@@ -20,6 +20,8 @@
 #include <fstream>
 #include <sstream>
 
+double PI=3.14159265;
+
 namespace csX75
 {
   //! Initialize GL State

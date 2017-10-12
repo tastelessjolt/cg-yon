@@ -27,6 +27,10 @@ INCLUDES_SU=shader_util.hpp
 SRC_SU=shader_util.cpp 
 OBJ_SU=shader_util.o
 
+INCLUDES_OBJ=object.hpp
+SRC_OBJ=object.cpp
+OBJ_OBJ=object.o
+
 all: $(BIN)
 
 $(OBJ_FW): $(INCLUDES_FW) $(SRC_FW)
@@ -35,8 +39,11 @@ $(OBJ_FW): $(INCLUDES_FW) $(SRC_FW)
 $(OBJ_SU): $(INCLUDES_SU) $(SRC_SU)
 	g++ -c $(CPPFLAGS) $(SRC_SU) $(LDFLAGS) $(LIBS)
 
-$(BIN): $(OBJ_FW) $(OBJ_SU) $(SRC_MAIN)
-	g++ $(CPPFLAGS) $(SRC_MAIN) $(OBJ_FW) $(OBJ_SU) -o $(BIN) $(LDFLAGS) $(LIBS)
+$(OBJ_OBJ): $(INCLUDES_OBJ) $(INCLUDES_OBJ)
+	g++ -c $(CPPFLAGS) $(SRC_OBJ) $(LDFLAGS) $(LIBS)
+
+$(BIN): $(OBJ_FW) $(OBJ_SU) $(OBJ_OBJ) $(SRC_MAIN)
+	g++ $(CPPFLAGS) $(SRC_MAIN) $(OBJ_FW) $(OBJ_SU) $(OBJ_OBJ) -o $(BIN) $(LDFLAGS) $(LIBS)
 
 clean:
 	rm -f *~ *.o $(BIN)
