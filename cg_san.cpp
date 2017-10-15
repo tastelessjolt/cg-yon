@@ -9,27 +9,24 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
+#include "object.hpp"
+
 GLuint vPosition;
 GLuint vColor;
 GLuint vNormal;
 GLuint uModelViewMatrix;
 GLuint normalMatrix;
-
-std::vector<float> points;
-std::vector<float> triangles;
-
-int mode = CI_MODELLING_MODE;
+GLuint viewMatrix;
+GLuint uLights;
 
 GLuint shaderProgram;
-GLuint vbo_points, vbo_triangles, vao_points, vao_triangles;
 
 glm::mat4 rotation_matrix;
 glm::mat4 ortho_matrix;
-glm::mat4 modelview_matrix;
 glm::mat4 look_at;
-glm::mat4 translate;
-glm::mat4 translate_inv;
-
+glm::mat4 modelview_matrix;
+glm::mat4 projection_matrix;
+glm::mat4 view_matrix;
 GLfloat xrot = 0.0f;
 GLfloat yrot = 0.0f;
 GLfloat zrot = 0.0f;
@@ -38,35 +35,8 @@ GLfloat xpos = 0.0f;
 GLfloat ypos = 0.0f;
 GLfloat zpos = 0.0f;
 
-GLfloat rcol = 0.0f;
-GLfloat gcol = 0.0f;
-GLfloat bcol = 0.0f;
-
-
-int mode_state;
-bool mode_printed = false;
-
-GLfloat zpos_state;
-bool zpos_printed = false;
-
-GLfloat rcol_state, gcol_state, bcol_state;
-bool col_printed = false;
-
-glm::vec3 getCentroid () {
-	GLfloat sumx = 0, sumy = 0, sumz = 0;
-	for (int i = 0; i < triangles.size()/18; ++i){
-	sumx += triangles[18*i];
-	sumy += triangles[18*i+1];
-	sumz += triangles[18*i+2];
-	}
-
-	int p = triangles.size()/18;
-	sumx += triangles[18*(p-1) + 0 + 6] + triangles[18*(p-1) + 0 + 12];
-	sumy += triangles[18*(p-1) + 1 + 6] + triangles[18*(p-1) + 1 + 12];
-	sumz += triangles[18*(p-1) + 2 + 6] + triangles[18*(p-1) + 2 + 12];
-
-	return glm::vec3(sumx/(p + 2.0), sumy/(p + 2.0), sumz/(p + 2.0));
-}
+BaseObject* sphere;
+BaseObject* cube;
 
 void printState()
 {
@@ -88,46 +58,34 @@ void initShadersGL(void)
 
 void initVertexBufferGL(void)
 {
-	//Ask GL for a Vertex Buffer Object (vbo)
-	glGenBuffers (1, &vbo_points);
-	// Set it as the current buffer to be used by binding it
-	glBindBuffer (GL_ARRAY_BUFFER, vbo_points);
-	//Copy the points into the current buffer - 9 float values, start pointer and static data
-	// glBufferData (GL_ARRAY_BUFFER, points.size() * sizeof (float), &points[0], GL_DYNAMIC_DRAW);
+	glPointSize(5.0f);
 
-	glGenBuffers (1, &vbo_triangles);
-	// Set it as the current buffer to be used by binding it
-	glBindBuffer (GL_ARRAY_BUFFER, vbo_triangles);
-	//Copy the points into the current buffer - 9 float values, start pointer and static data
-	// glBufferData (GL_ARRAY_BUFFER, triangles.size() * sizeof (float), &triangles[0], GL_DYNAMIC_DRAW);
+	vPosition = glGetAttribLocation( shaderProgram, "vPosition" );
+	vColor = glGetAttribLocation( shaderProgram, "vColor" ); 
+	vNormal = glGetAttribLocation( shaderProgram, "vNormal" ); 
+	uModelViewMatrix = glGetUniformLocation( shaderProgram, "uModelViewMatrix");
+	normalMatrix =  glGetUniformLocation( shaderProgram, "normalMatrix");
+	viewMatrix = glGetUniformLocation( shaderProgram, "viewMatrix");
+	uLights = glGetUniformLocation( shaderProgram, "lights");
 
+	sphere = new Sphere();
+	cube = new Cube();
 
+	sphere->init();
+	cube->init();
 	/* 	
 	 *	Generates vao, vbo takes args as a tree of "objects"
-	 *	character1.init()	
-	 * 	character2.init()  
+	 *	character1.init()
+	 * 	character2.init()
 	 */
 
 
+	sphere->generate();
+	cube->generate();
 	/*
 	 *	Generate geometric primitives with tesselation params 
 	 *	char.generate() 
 	 */
-
-
-	// //Ask GL for a Vertex Attribute Object (vao_points)
-	// glGenVertexArrays (1, &vao_points);
-	// //Set it as the current array to be used by binding it
-	// glBindVertexArray (vao_points);
-	// //Enable the vertex attribute
-	// glEnableVertexAttribArray (0);
-	// //This the layout of our first vertex buffer
-	// //"0" means define the layout for attribute number 0. "3" means that the variables are vec3 made from every 3 floats 
-	// glVertexAttribPointer (0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-
-	uModelViewMatrix = glGetUniformLocation(shaderProgram, "uModelViewMatrix");
-
-	glPointSize(5.0f);
 }
 
 void renderGL(void)
@@ -135,6 +93,26 @@ void renderGL(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUseProgram(shaderProgram);
 
+	look_at = glm::lookAt(glm::vec3(xpos, ypos, -1.0), glm::vec3(xpos, ypos, 1.0), glm::vec3(0.0, 1.0, 0.0));
+
+	glm::mat4 ortho_matrix = glm::ortho(-3.0, 3.0, -3.0, 3.0, 3.0, -3.0);
+
+	rotation_matrix = glm::rotate(glm::mat4(1.0f), xrot, glm::vec3(1.0f,0.0f,0.0f));
+	rotation_matrix = glm::rotate(rotation_matrix, yrot, glm::vec3(0.0f,1.0f,0.0f));
+	rotation_matrix = glm::rotate(rotation_matrix, zrot, glm::vec3(0.0f,0.0f,1.0f));
+
+	glm::mat4 view_matrix = ortho_matrix * rotation_matrix;
+
+	// lighting
+	glm::vec4 light = view_matrix * glm::vec4(2.0, 2.0, 0.0, 1.0);
+	glUniform4fv(uLights, 1, glm::value_ptr(light));
+
+	glUniformMatrix3fv(viewMatrix, 1, GL_FALSE, glm::value_ptr(view_matrix));
+
+	
+	// sphere->render(view_matrix);
+	cube->render(view_matrix);
+	
 	// Renders takes arguments - transformations 
 	// character1.render()
 	// character2.render()

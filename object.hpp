@@ -8,10 +8,6 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-glm::vec4 color(0.6, 0.6, 0.6, 1.0);
-glm::vec4 black(0.2, 0.2, 0.2, 1.0);
-glm::vec4 white(1.0, 1.0, 1.0, 1.0);
-
 class BaseObject {
 protected:
 	std::vector<glm::mat4*> transforms;
@@ -23,7 +19,19 @@ public:
 	virtual void render(glm::mat4) = 0;		// Set VAO and draw
 };
 
-class Primitive : BaseObject {
+class Object : public BaseObject {
+protected:
+	std::vector<BaseObject*> children;
+
+public:
+	Object();
+	void init();	
+	void generate();	
+	void render();	
+	void render(glm::mat4);
+};
+
+class Primitive : public BaseObject {
 protected:
 	int tesselation;
 	GLuint method;
@@ -33,50 +41,39 @@ protected:
 	std::vector<glm::vec4> normals;
 public:
 	Primitive();
-
-	virtual void init() = 0;	
-	virtual void generate() = 0;	
-	virtual void render() = 0;	
+	void init();	
+	void generate();
+	virtual void loadpoints() = 0;
+	void render();
 	void render(glm::mat4);
 };
 
-class Object : BaseObject {
-protected:
-	std::vector<BaseObject*> children;
-
-public:
-	Object();
-
-	virtual void init();	
-	virtual void generate();	
-	virtual void render();	
-	virtual void render(glm::mat4);
-};
-
-
-class Sphere : Primitive {
+class Sphere : public Primitive {
 public:
 	Sphere();
-
-	void init();	
-	void generate();	
-	void render();	
+	void loadpoints();
 };
 
-class Cylinder : Primitive {
+class Cylinder : public Primitive {
 public:
 	Cylinder();
-
-	void init();	
-	void generate();	
-	void render();	
+	void loadpoints();	
 };
 
-class Cube : Primitive {
+class Cube : public Primitive {
+	glm::vec4 positions[8] = {
+	  glm::vec4(-0.5, -0.5, 0.5, 1.0),
+	  glm::vec4(-0.5, 0.5, 0.5, 1.0),
+	  glm::vec4(0.5, 0.5, 0.5, 1.0),
+	  glm::vec4(0.5, -0.5, 0.5, 1.0),
+	  glm::vec4(-0.5, -0.5, -0.5, 1.0),
+	  glm::vec4(-0.5, 0.5, -0.5, 1.0),
+	  glm::vec4(0.5, 0.5, -0.5, 1.0),
+	  glm::vec4(0.5, -0.5, -0.5, 1.0)
+	};;
 public:
 	Cube();
-
-	void init();	
-	void generate();	
-	void render();	
+	void quad(int a, int b, int c, int d);
+	void colorcube(void);
+	void loadpoints();
 };

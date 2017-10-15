@@ -1,12 +1,20 @@
 #version 400
 
-in vec3 vp;
-in vec3 vcol;
-out vec4 color;
+in vec4 vPosition;
+in vec4 vColor;
+in vec3 vNormal;
+
+uniform mat3 normalMatrix;
 uniform mat4 uModelViewMatrix;
+
+out vec4 position;
+out vec4 color;
+out vec3 normal;
 
 void main () 
 {
-  gl_Position = uModelViewMatrix * vec4 (vp, 1.0) ;
-  color = vec4(vcol, 1.0);
+	gl_Position = uModelViewMatrix * vPosition;
+	normal = (normalMatrix * normalize(vNormal));
+	position = gl_Position;
+	color = vColor;
 }

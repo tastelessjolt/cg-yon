@@ -20,13 +20,12 @@
 #include <fstream>
 #include <sstream>
 
-double PI=3.14159265;
 
 namespace csX75
 {
   //! Initialize GL State
   void initGL(void);
- 
+
   //!GLFW Error Callback
   void error_callback(int error, const char* description);
   //!GLFW framebuffer resize callback
