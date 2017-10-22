@@ -20,8 +20,8 @@ namespace csX75
   void initGL(void)
   {
     //Set framebuffer clear color
-    // glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    // glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     //Set depth buffer furthest depth
     glClearDepth(1.0);
     //Set depth test to less-than
@@ -91,14 +91,33 @@ namespace csX75
     else if (key == GLFW_KEY_X && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
       zpos += 0.05;
     }
-    else if (key == GLFW_KEY_U && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
-      ((Character1 *)char1)->manoeuvre(glm::vec3(0.1, 0.0, 0.0));
+
+    // left leg char 1
+    else if (key == GLFW_KEY_H && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+      GLfloat delta = 0.05 *
+      (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ? -1 : 1);
+
+      ((Character1 *)char1)->manoeuvre(LEFT_LEG_ANGLE, glm::vec3(delta, 0.0, 0.0));
     }
-    else if (key == GLFW_KEY_I && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
-      ((Character1 *)char1)->manoeuvre(glm::vec3(0.0, 0.1, 0.0));
+    // right leg char 1
+    else if (key == GLFW_KEY_J && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+      GLfloat delta = 0.05 *
+      (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ? -1 : 1);
+
+      ((Character1 *)char1)->manoeuvre(RIGHT_LEG_ANGLE, glm::vec3(delta, 0.0, 0.0));
     }
-    else if (key == GLFW_KEY_O && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
-      ((Character1 *)char1)->manoeuvre(glm::vec3(0.0, 0.0, 0.1));
+    // left arm char 1
+    else if (key == GLFW_KEY_K && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+      GLfloat delta = 0.05 *
+      (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ? -1 : 1);
+
+      ((Character1 *)char1)->manoeuvre(LEFT_ARM_ANGLE, glm::vec3(delta, 0.0, 0.0));
+    }
+    else if (key == GLFW_KEY_L && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+      GLfloat delta = 0.05 *
+      (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ? -1 : 1);
+
+      ((Character1 *)char1)->manoeuvre(RIGHT_ARM_ANGLE, glm::vec3(delta, 0.0, 0.0));
     }
     else if (key == GLFW_KEY_L && (action == GLFW_PRESS)) {
       // std::string filename;

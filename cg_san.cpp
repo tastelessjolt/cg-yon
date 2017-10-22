@@ -105,7 +105,7 @@ void renderGL(void)
 
 	look_at = glm::lookAt(glm::vec3(xpos, ypos, -1.0), glm::vec3(xpos, ypos, 1.0), glm::vec3(0.0, 1.0, 0.0));
 
-	glm::mat4 ortho_matrix = glm::ortho(-3.0, 3.0, -3.0, 3.0, 3.0, -3.0);
+	glm::mat4 ortho_matrix = glm::ortho(-3.0, 3.0, -3.0, 3.0, -3.0, 3.0);
 
 	rotation_matrix = glm::rotate(glm::mat4(1.0f), xrot, glm::vec3(1.0f,0.0f,0.0f));
 	rotation_matrix = glm::rotate(rotation_matrix, yrot, glm::vec3(0.0f,1.0f,0.0f));

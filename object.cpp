@@ -10,6 +10,7 @@ extern GLuint uLights;
 
 
 #define red glm::vec4(1.0, 0.0, 0.0, 1.0)
+#define blue glm::vec4(0.0, 0.0, 1.0, 1.0)
 #define grey glm::vec4(0.2, 0.2, 0.2, 1.0)
 #define white glm::vec4(1.0, 1.0, 1.0, 1.0)
 
@@ -173,21 +174,21 @@ void Cylinder::loadpoints() {
 		glm::vec4 topcn(x, y, top, 1.0);
 		glm::vec4 botcn(x, y, bottom, 1.0);
 
-		vertices.push_back(topa); normals.push_back(topa); colors.push_back(red); 
-		vertices.push_back(topc); normals.push_back(topc); colors.push_back(red); 
-		vertices.push_back(topcn); normals.push_back(topcn); colors.push_back(red); 
+		vertices.push_back(topa); normals.push_back(topa); colors.push_back(blue); 
+		vertices.push_back(topc); normals.push_back(topc); colors.push_back(blue); 
+		vertices.push_back(topcn); normals.push_back(topcn); colors.push_back(blue); 
 
-		vertices.push_back(topcn); normals.push_back(topcn); colors.push_back(red); 
-		vertices.push_back(topc); normals.push_back(topc); colors.push_back(red); 
-		vertices.push_back(botc); normals.push_back(botc); colors.push_back(red); 
+		vertices.push_back(topcn); normals.push_back(topcn); colors.push_back(blue); 
+		vertices.push_back(topc); normals.push_back(topc); colors.push_back(blue); 
+		vertices.push_back(botc); normals.push_back(botc); colors.push_back(blue); 
 		
-		vertices.push_back(topcn); normals.push_back(topcn); colors.push_back(red); 
-		vertices.push_back(botc); normals.push_back(botc); colors.push_back(red); 
-		vertices.push_back(botcn); normals.push_back(botcn); colors.push_back(red); 
+		vertices.push_back(topcn); normals.push_back(topcn); colors.push_back(blue); 
+		vertices.push_back(botc); normals.push_back(botc); colors.push_back(blue); 
+		vertices.push_back(botcn); normals.push_back(botcn); colors.push_back(blue); 
 		
-		vertices.push_back(botcn); normals.push_back(botcn); colors.push_back(red); 
-		vertices.push_back(botc); normals.push_back(botc); colors.push_back(red); 
-		vertices.push_back(bota); normals.push_back(bota); colors.push_back(red); 
+		vertices.push_back(botcn); normals.push_back(botcn); colors.push_back(blue); 
+		vertices.push_back(botc); normals.push_back(botc); colors.push_back(blue); 
+		vertices.push_back(bota); normals.push_back(bota); colors.push_back(blue); 
 		
 	}
 

@@ -12,9 +12,9 @@ uniform mat4 viewMatrix;
 void main () 
 {
 	// Defining Materials
-	vec4 diffuse = vec4(0.3, 0.0, 0.0, 1.0); 
-	vec4 ambient = vec4(0.2, 0.0, 0.0, 1.0);
-	vec4 specular = vec4(0.2, 1.0, 0.5, 1.0);
+	vec4 diffuse = vec4(0.3, 0.3, 0.3, 1.0); 
+	vec4 ambient = vec4(0.2, 0.2, 0.2, 1.0);
+	vec4 specular = vec4(0.2, 0.2, 0.2, 1.0);
 	float shininess = 5.0;
 	vec4 spec = vec4(0.0); 
 	
@@ -35,5 +35,5 @@ void main ()
 		spec = specular * pow(intSpec, shininess);
 	}  	
 
-	frag_colour = max((intensity * diffuse  + spec) * color, ambient); // All
+	frag_colour = max((intensity * diffuse  + spec), ambient) * color; // All
 }
