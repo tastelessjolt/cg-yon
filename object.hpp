@@ -10,8 +10,8 @@
 
 class BaseObject {
 protected:
-	std::vector<glm::mat4*> transforms;
 public:
+	std::vector<glm::mat4*> transforms;
 	BaseObject();
 	virtual void init() = 0;		// Generate VAOs and VBOs
 	virtual void generate() = 0;	// Generate Points
@@ -21,9 +21,9 @@ public:
 
 class Object : public BaseObject {
 protected:
-	std::vector<BaseObject*> children;
 
 public:
+	std::vector<BaseObject*> children;
 	Object();
 	void init();	
 	void generate();	

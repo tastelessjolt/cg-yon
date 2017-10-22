@@ -31,6 +31,10 @@ INCLUDES_OBJ=object.hpp
 SRC_OBJ=object.cpp
 OBJ_OBJ=object.o
 
+INCLUDES_CHAR1=character1.hpp
+SRC_CHAR1=character1.cpp
+OBJ_CHAR1=character1.o
+
 all: $(BIN)
 
 $(OBJ_FW): $(INCLUDES_FW) $(SRC_FW)
@@ -42,8 +46,11 @@ $(OBJ_SU): $(INCLUDES_SU) $(SRC_SU)
 $(OBJ_OBJ): $(INCLUDES_OBJ) $(SRC_OBJ)
 	g++ -c $(CPPFLAGS) $(SRC_OBJ) $(LDFLAGS) $(LIBS)
 
-$(BIN): $(OBJ_FW) $(OBJ_SU) $(OBJ_OBJ) $(SRC_MAIN)
-	g++ $(CPPFLAGS) $(SRC_MAIN) $(OBJ_FW) $(OBJ_SU) $(OBJ_OBJ) -o $(BIN) $(LDFLAGS) $(LIBS)
+$(OBJ_CHAR1): $(INCLUDES_CHAR1) $(SRC_CHAR1) 
+	g++ -c $(CPPFLAGS) $(SRC_CHAR1) $(LDFLAGS) $(LIBS)
+
+$(BIN): $(OBJ_FW) $(OBJ_SU) $(OBJ_OBJ) $(OBJ_CHAR1) $(SRC_MAIN) 
+	g++ $(CPPFLAGS) $(SRC_MAIN) $(OBJ_FW) $(OBJ_SU) $(OBJ_OBJ) $(OBJ_CHAR1) -o $(BIN) $(LDFLAGS) $(LIBS)
 
 clean:
 	rm -f *~ *.o $(BIN)

@@ -84,6 +84,10 @@ void Primitive::render() {
 
 void Primitive::render(glm::mat4 transform) {
 
+	for (glm::mat4* tr: transforms) {
+		transform = transform * *tr;
+	}
+
 	glm::mat4 model_matrix = glm::mat4(1.0f);
 
 	glm::mat4 modelview_matrix = transform * model_matrix;

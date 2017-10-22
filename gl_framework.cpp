@@ -2,6 +2,8 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
+#include "character1.hpp"
+
 extern GLfloat xrot;
 extern GLfloat yrot;
 extern GLfloat zrot;
@@ -10,13 +12,16 @@ extern GLfloat xpos;
 extern GLfloat ypos;
 extern GLfloat zpos;
 
+extern BaseObject* char1;
+
 namespace csX75
 {
   //! Initialize GL State
   void initGL(void)
   {
     //Set framebuffer clear color
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    // glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     //Set depth buffer furthest depth
     glClearDepth(1.0);
     //Set depth test to less-than
@@ -85,6 +90,15 @@ namespace csX75
     }
     else if (key == GLFW_KEY_X && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
       zpos += 0.05;
+    }
+    else if (key == GLFW_KEY_U && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+      ((Character1 *)char1)->manoeuvre(glm::vec3(0.1, 0.0, 0.0));
+    }
+    else if (key == GLFW_KEY_I && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+      ((Character1 *)char1)->manoeuvre(glm::vec3(0.0, 0.1, 0.0));
+    }
+    else if (key == GLFW_KEY_O && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+      ((Character1 *)char1)->manoeuvre(glm::vec3(0.0, 0.0, 0.1));
     }
     else if (key == GLFW_KEY_L && (action == GLFW_PRESS)) {
       // std::string filename;

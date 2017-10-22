@@ -9,7 +9,8 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-#include "object.hpp"
+// #include "object.hpp"
+#include "character1.hpp"
 
 GLuint vPosition;
 GLuint vColor;
@@ -38,6 +39,8 @@ GLfloat zpos = 0.0f;
 BaseObject* sphere;
 BaseObject* cube;
 BaseObject* cylinder;
+
+BaseObject* char1;
 
 void printState()
 {
@@ -72,10 +75,12 @@ void initVertexBufferGL(void)
 	sphere = new Sphere();
 	cube = new Cube();
 	cylinder = new Cylinder();
+	char1 = new Character1();
 
-	sphere->init();
-	cube->init();
-	cylinder->init();
+	// sphere->init();
+	// cube->init();
+	// cylinder->init();
+	char1->init();
 	/* 	
 	 *	Generates vao, vbo takes args as a tree of "objects"
 	 *	character1.init()
@@ -85,7 +90,8 @@ void initVertexBufferGL(void)
 
 	// sphere->generate();
 	// cube->generate();
-	cylinder->generate();
+	// cylinder->generate();
+	char1->generate();
 	/*
 	 *	Generate geometric primitives with tesselation params 
 	 *	char.generate() 
@@ -116,7 +122,8 @@ void renderGL(void)
 	
 	// sphere->render(view_matrix);
 	// cube->render(view_matrix);
-	cylinder->render(view_matrix);
+	// cylinder->render(view_matrix);
+	char1->render(view_matrix);
 	
 	// Renders takes arguments - transformations 
 	// character1.render()
