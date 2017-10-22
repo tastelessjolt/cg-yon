@@ -37,6 +37,7 @@ GLfloat zpos = 0.0f;
 
 BaseObject* sphere;
 BaseObject* cube;
+BaseObject* cylinder;
 
 void printState()
 {
@@ -70,9 +71,11 @@ void initVertexBufferGL(void)
 
 	sphere = new Sphere();
 	cube = new Cube();
+	cylinder = new Cylinder();
 
 	sphere->init();
 	cube->init();
+	cylinder->init();
 	/* 	
 	 *	Generates vao, vbo takes args as a tree of "objects"
 	 *	character1.init()
@@ -80,8 +83,9 @@ void initVertexBufferGL(void)
 	 */
 
 
-	sphere->generate();
-	cube->generate();
+	// sphere->generate();
+	// cube->generate();
+	cylinder->generate();
 	/*
 	 *	Generate geometric primitives with tesselation params 
 	 *	char.generate() 
@@ -111,7 +115,8 @@ void renderGL(void)
 
 	
 	// sphere->render(view_matrix);
-	cube->render(view_matrix);
+	// cube->render(view_matrix);
+	cylinder->render(view_matrix);
 	
 	// Renders takes arguments - transformations 
 	// character1.render()

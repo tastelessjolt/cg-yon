@@ -136,9 +136,56 @@ void Sphere::loadpoints() {
 
 Cylinder::Cylinder() {
 	tesselation = 50;
+	method = GL_TRIANGLES;
 }
 
 void Cylinder::loadpoints() {
+
+	GLfloat sectors= 2*PI/tesselation;
+	GLdouble radius = 1.0f;
+
+	GLfloat top = 0.5f;
+	GLfloat bottom = -0.5f;
+
+	GLfloat l;
+	glm::vec4 topa(0, 0, top, 1.0);
+	glm::vec4 bota(0, 0, bottom, 1.0);
+	for (GLfloat lats = 0.0; lats <= 2*PI; lats=lats+sectors)
+	{
+		GLfloat x = radius * cos(lats);
+		GLfloat y = radius * sin(lats);
+
+		glm::vec4 topc(x, y, top, 1.0);
+		glm::vec4 botc(x, y, bottom, 1.0);
+
+		if(lats+sectors>2*PI)
+			l=2*PI;
+		else
+			l=lats+sectors;
+
+		x = radius * cos(l);
+		y = radius * sin(l);
+
+		glm::vec4 topcn(x, y, top, 1.0);
+		glm::vec4 botcn(x, y, bottom, 1.0);
+
+		vertices.push_back(topa); normals.push_back(topa); colors.push_back(red); 
+		vertices.push_back(topc); normals.push_back(topc); colors.push_back(red); 
+		vertices.push_back(topcn); normals.push_back(topcn); colors.push_back(red); 
+
+		vertices.push_back(topcn); normals.push_back(topcn); colors.push_back(red); 
+		vertices.push_back(topc); normals.push_back(topc); colors.push_back(red); 
+		vertices.push_back(botc); normals.push_back(botc); colors.push_back(red); 
+		
+		vertices.push_back(topcn); normals.push_back(topcn); colors.push_back(red); 
+		vertices.push_back(botc); normals.push_back(botc); colors.push_back(red); 
+		vertices.push_back(botcn); normals.push_back(botcn); colors.push_back(red); 
+		
+		vertices.push_back(botcn); normals.push_back(botcn); colors.push_back(red); 
+		vertices.push_back(botc); normals.push_back(botc); colors.push_back(red); 
+		vertices.push_back(bota); normals.push_back(bota); colors.push_back(red); 
+		
+	}
 
 }
 
