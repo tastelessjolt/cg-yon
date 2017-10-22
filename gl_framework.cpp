@@ -119,6 +119,19 @@ namespace csX75
 
       ((Character1 *)char1)->manoeuvre(RIGHT_ARM_ANGLE, glm::vec3(delta, 0.0, 0.0));
     }
+    else if (key == GLFW_KEY_U && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+      GLfloat delta = 0.05 *
+      (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ? -1 : 1);
+
+      ((Character1 *)char1)->manoeuvre(TORSO_ANGLE, glm::vec3(0.0, delta, 0.0));
+    }
+    else if (key == GLFW_KEY_I && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+      GLfloat delta = 0.05 *
+      (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ? -1 : 1);
+
+      ((Character1 *)char1)->manoeuvre(FACE_ANGLE, glm::vec3(0.0, delta, 0.0));
+    }
+
     else if (key == GLFW_KEY_L && (action == GLFW_PRESS)) {
       // std::string filename;
       // std::cout << "Enter the name of the file to be loaded (without extension): "; std::cin >> filename;

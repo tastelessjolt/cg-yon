@@ -10,34 +10,41 @@ Character1::Character1(){
 void Character1::init(){
 
 	// character translations
-	// transforms.push_back(/*fullbodytrans*/);
-	// transforms.push_back(/*fullbodyrot*/);
 
+	// transforms.push_back(fullbodytrans);
+	// transforms.push_back(fullbodyrot);
+
+	// hip primitive
 	Primitive* hip = new Cube();
 	children.push_back(hip);
 	glm::mat4* hipmodel = new glm::mat4();
 	hip->transforms.push_back(hipmodel);
-	*hipmodel = glm::scale(glm::mat4(1.0f), glm::vec3(1.0, 0.5, 0.5)) * glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.5, 0.0));
+	*hipmodel = glm::scale(glm::mat4(1.0f), glm::vec3(1.0, 0.25, 0.5));
 
-
+	//lower body
 	Object* lowerbody = new Object();
 	children.push_back(lowerbody);
 	glm::mat4* lowerbodytrans = new glm::mat4();
+	*lowerbodytrans = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, -0.25, 0.0));
 	lowerbody->transforms.push_back(lowerbodytrans);
+	
+
+	Object* pelvis_legs = new Object();
+	lowerbody->children.push_back(pelvis_legs);
 
 	// pelvis
 	Primitive* pelvis = new Cylinder();
-	lowerbody->children.push_back(pelvis);
+	pelvis_legs->children.push_back(pelvis);
 	glm::mat4* pelvismodel = new glm::mat4();
 	pelvis->transforms.push_back(pelvismodel);
 
 	*pelvismodel = glm::scale(glm::mat4(1.0f), glm::vec3(0.3, 0.3, 1.25));
-	*pelvismodel = glm::rotate(glm::mat4(1.0f), (GLfloat)3.1415/2, glm::vec3(0.0, 1.0, 0.0)) * *pelvismodel;
-	*pelvismodel = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, 0.0)) * *pelvismodel;
+	*pelvismodel = glm::rotate(glm::mat4(1.0f), pi/2, glm::vec3(0.0, 1.0, 0.0)) * *pelvismodel;
 
+
+	// left leg
 	Object* left_leg = new Object();
-	lowerbody->children.push_back(left_leg);
-
+	pelvis_legs->children.push_back(left_leg);
 
 	glm::mat4* leftlegrot = new glm::mat4();
 	left_leg->transforms.push_back(leftlegrot);
@@ -71,11 +78,9 @@ void Character1::init(){
 	*leftfootconstraint = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, -4.0, 0.25));
 
 
-
-
+	// right leg
 	Object* right_leg = new Object();
-	lowerbody->children.push_back(right_leg);
-
+	pelvis_legs->children.push_back(right_leg);
 
 	glm::mat4* rightlegrot = new glm::mat4();
 	right_leg->transforms.push_back(rightlegrot);
@@ -109,48 +114,131 @@ void Character1::init(){
 	*rightfootconstraint = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, -4.0, 0.25));
 
 
+	// upper body
+	Object* upperbody = new Object();
+	children.push_back(upperbody);
+
+	glm::mat4* upperbodyrot = new glm::mat4();
+	upperbody->transforms.push_back(upperbodyrot);
+	*upperbodyrot = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(0.0, 1.0, 0.0));
+
+	torso_angle_matrix = upperbodyrot;
+
+	glm::mat4* upperbodytrans = new glm::mat4();
+	upperbody->transforms.push_back(upperbodytrans);
+	*upperbodytrans = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.75, 0.0));
+
+	// abdomen
+	Primitive* abdomen = new Cube();
+	upperbody->children.push_back(abdomen);
+
+	glm::mat4* abdomenmodel = new glm::mat4();
+	abdomen->transforms.push_back(abdomenmodel);
+	*abdomenmodel = glm::scale(glm::mat4(1.0f), glm::vec3(1.10, 1.5, 0.60));
+
+	// head
+	Object* head = new Object();
+	upperbody->children.push_back(head);
+
+	glm::mat4* headtranslate = new glm::mat4();
+	head->transforms.push_back(headtranslate);
+	*headtranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 1.10, 0.0));
+
+	Primitive* neck = new Cylinder();
+	head->children.push_back(neck);
+	glm::mat4* neckmodel = new glm::mat4();
+	neck->transforms.push_back(neckmodel);
+	*neckmodel = glm::scale(glm::mat4(1.0f), glm::vec3(0.25, 0.25, 0.75));
+	*neckmodel = glm::rotate(glm::mat4(1.0f), pi/2, glm::vec3(1.0, 0.0, 0.0)) * *neckmodel;
+
+	Primitive* face = new Cylinder();
+	head->children.push_back(face);
+
+	glm::mat4* facerotate = new glm::mat4();
+	face->transforms.push_back(facerotate);
+	*facerotate = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(0.0, 1.0, 0.0));
+
+	face_angle_matrix = facerotate;
+
+	glm::mat4* facemodel = new glm::mat4();
+	face->transforms.push_back(facemodel);
+	*facemodel = glm::scale(glm::mat4(1.0f), glm::vec3(0.35, 0.35, 0.65));
+	*facemodel = glm::rotate(glm::mat4(1.0f), pi/2, glm::vec3(1.0, 0.0, 0.0)) * *facemodel;
+
+
+	// shoulders left
+	Object* leftshoulder = new Object();
+	upperbody->children.push_back(leftshoulder);
+	glm::mat4* leftshouldertrans = new glm::mat4();
+	leftshoulder->transforms.push_back(leftshouldertrans);
+	*leftshouldertrans = glm::translate(glm::mat4(1.0f), glm::vec3(-0.5, 0.5, 0.0));
+
+	glm::mat4* leftshoulderrot = new glm::mat4();
+	leftshoulder->transforms.push_back(leftshoulderrot);
+	*leftshoulderrot = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(1.0, 0.0, 0.0));
+
+	left_arm_angle_matrix = leftshoulderrot;
+
+	glm::mat4* leftshoulderrot1 = new glm::mat4();
+	leftshoulder->transforms.push_back(leftshoulderrot1);
+	*leftshoulderrot1 = 	glm::rotate(glm::mat4(1.0f), -pi/8, glm::vec3(0.0, 0.0, 1.0))
+						* 	glm::rotate(glm::mat4(1.0f), pi/2, glm::vec3(1.0, 0.0, 0.0));
+
+	glm::mat4* leftshouldertrans1 = new glm::mat4();
+	leftshoulder->transforms.push_back(leftshouldertrans1);
+	*leftshouldertrans1 = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, 0.75));
+
+	Primitive* leftpalm = new Sphere();
+	leftshoulder->children.push_back(leftpalm);
+	glm::mat4* leftpalmmodel = new glm::mat4();
+	leftpalm->transforms.push_back(leftpalmmodel);
+	*leftpalmmodel = glm::scale(glm::mat4(1.0f), glm::vec3(0.20, 0.20, 0.20));
+	*leftpalmmodel = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, 0.8)) * *leftpalmmodel;
+
+	Primitive* leftarm = new Cylinder();
+	leftshoulder->children.push_back(leftarm);
+	glm::mat4* leftarmmodel = new glm::mat4();
+	leftarm->transforms.push_back(leftarmmodel);
+	*leftarmmodel = glm::scale(glm::mat4(1.0f), glm::vec3(0.15, 0.15, 1.5));
+
+
+	// shoulders right
+	Object* rightshoulder = new Object();
+	upperbody->children.push_back(rightshoulder);
+	glm::mat4* rightshouldertrans = new glm::mat4();
+	rightshoulder->transforms.push_back(rightshouldertrans);
+	*rightshouldertrans = glm::translate(glm::mat4(1.0f), glm::vec3(0.5, 0.5, 0.0));
+
+	glm::mat4* rightshoulderrot = new glm::mat4();
+	rightshoulder->transforms.push_back(rightshoulderrot);
+	*rightshoulderrot = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(1.0, 0.0, 0.0));
+
+	right_arm_angle_matrix = rightshoulderrot;
+
+	glm::mat4* rightshoulderrot1 = new glm::mat4();
+	rightshoulder->transforms.push_back(rightshoulderrot1);
+	*rightshoulderrot1 = 	glm::rotate(glm::mat4(1.0f), pi/8, glm::vec3(0.0, 0.0, 1.0))
+						* 	glm::rotate(glm::mat4(1.0f), pi/2, glm::vec3(1.0, 0.0, 0.0));
+
+	glm::mat4* rightshouldertrans1 = new glm::mat4();
+	rightshoulder->transforms.push_back(rightshouldertrans1);
+	*rightshouldertrans1 = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, 0.75));
+
+	Primitive* rightpalm = new Sphere();
+	rightshoulder->children.push_back(rightpalm);
+	glm::mat4* rightpalmmodel = new glm::mat4();
+	rightpalm->transforms.push_back(rightpalmmodel);
+	*rightpalmmodel = glm::scale(glm::mat4(1.0f), glm::vec3(0.20, 0.20, 0.20));
+	*rightpalmmodel = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, 0.8)) * *rightpalmmodel;
+
+	Primitive* rightarm = new Cylinder();
+	rightshoulder->children.push_back(rightarm);
+	glm::mat4* rightarmmodel = new glm::mat4();
+	rightarm->transforms.push_back(rightarmmodel);
+	*rightarmmodel = glm::scale(glm::mat4(1.0f), glm::vec3(0.15, 0.15, 1.5));
 
 
 
-	// BaseObject* parent;
-	// parent = new Object();
-
-	// glm::mat4* rotation_matrix;
-	// rotation_matrix = new glm::mat4();
-	// *rotation_matrix = glm::rotate(glm::mat4(1.0f), rot[0], glm::vec3(1.0f,0.0f,0.0f));
-	// *rotation_matrix = glm::rotate(*rotation_matrix, rot[1], glm::vec3(0.0f,1.0f,0.0f));
-	// *rotation_matrix = glm::rotate(*rotation_matrix, rot[2], glm::vec3(0.0f,0.0f,1.0f));
-
-	// parent->transforms.push_back(rotation_matrix);
-
-	// full_body_rot = rotation_matrix;
-
-	// BaseObject* ch1;
-	// ch1 = new Cube();
-
-	// rotation_matrix = new glm::mat4();
-	// *rotation_matrix = glm::rotate(glm::mat4(1.0f), rot[0], glm::vec3(1.0f,0.0f,0.0f));
-	// *rotation_matrix = glm::rotate(*rotation_matrix, rot[1], glm::vec3(0.0f,1.0f,0.0f));
-	// *rotation_matrix = glm::rotate(*rotation_matrix, rot[2], glm::vec3(0.0f,0.0f,1.0f));
-
-	// ch1->transforms.push_back(rotation_matrix);
-
-
-	// BaseObject* ch2;
-	// ch2 = new Cylinder();
-
-	// rotation_matrix = new glm::mat4();
-	// *rotation_matrix = glm::rotate(glm::mat4(1.0f), rot[0], glm::vec3(1.0f,0.0f,0.0f));
-	// *rotation_matrix = glm::rotate(*rotation_matrix, rot[1], glm::vec3(0.0f,1.0f,0.0f));
-	// *rotation_matrix = glm::rotate(*rotation_matrix, rot[2], glm::vec3(0.0f,0.0f,1.0f));
-
-	// ch2->transforms.push_back(rotation_matrix);
-
-	// elbow_rot = rotation_matrix;
-	// children.push_back(parent);
-
-	// ((Object *)parent)->children.push_back(ch1);
-	// ((Object *)parent)->children.push_back(ch2);
 
 	Object::init();
 }
