@@ -97,39 +97,39 @@ namespace csX75
       GLfloat delta = 0.05 *
       (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ? -1 : 1);
 
-      ((Character1 *)char1)->manoeuvre(LEFT_LEG_ANGLE, glm::vec3(delta, 0.0, 0.0));
+      ((Character1 *)char1)->manoeuvre(Character1::LEFT_LEG_ANGLE, glm::vec3(delta, 0.0, 0.0));
     }
     // right leg char 1
     else if (key == GLFW_KEY_J && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
       GLfloat delta = 0.05 *
       (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ? -1 : 1);
 
-      ((Character1 *)char1)->manoeuvre(RIGHT_LEG_ANGLE, glm::vec3(delta, 0.0, 0.0));
+      ((Character1 *)char1)->manoeuvre(Character1::RIGHT_LEG_ANGLE, glm::vec3(delta, 0.0, 0.0));
     }
     // left arm char 1
     else if (key == GLFW_KEY_K && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
       GLfloat delta = 0.05 *
       (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ? -1 : 1);
 
-      ((Character1 *)char1)->manoeuvre(LEFT_ARM_ANGLE, glm::vec3(delta, 0.0, 0.0));
+      ((Character1 *)char1)->manoeuvre(Character1::LEFT_ARM_ANGLE, glm::vec3(delta, 0.0, 0.0));
     }
     else if (key == GLFW_KEY_L && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
       GLfloat delta = 0.05 *
       (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ? -1 : 1);
 
-      ((Character1 *)char1)->manoeuvre(RIGHT_ARM_ANGLE, glm::vec3(delta, 0.0, 0.0));
+      ((Character1 *)char1)->manoeuvre(Character1::RIGHT_ARM_ANGLE, glm::vec3(delta, 0.0, 0.0));
     }
     else if (key == GLFW_KEY_U && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
       GLfloat delta = 0.05 *
       (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ? -1 : 1);
 
-      ((Character1 *)char1)->manoeuvre(TORSO_ANGLE, glm::vec3(0.0, delta, 0.0));
+      ((Character1 *)char1)->manoeuvre(Character1::TORSO_ANGLE, glm::vec3(0.0, delta, 0.0));
     }
     else if (key == GLFW_KEY_I && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
       GLfloat delta = 0.05 *
       (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ? -1 : 1);
 
-      ((Character1 *)char1)->manoeuvre(FACE_ANGLE, glm::vec3(0.0, delta, 0.0));
+      ((Character1 *)char1)->manoeuvre(Character1::FACE_ANGLE, glm::vec3(0.0, delta, 0.0));
     }
 
     else if (key == GLFW_KEY_L && (action == GLFW_PRESS)) {

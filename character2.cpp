@@ -1,31 +1,13 @@
-#include "character1.hpp"
+#include "character2.hpp"
 
 extern double PI;
 GLfloat pi = PI;
 
-Character1::Character1(){
+Character2::Character2(){
 
 }
 
-void Character1::init(){
-
-	// sizes 
-	GLfloat hipsize_l = 0.5;
-	GLfloat hipsize_w = 1.0;
-	GLfloat hipsize_h = 0.25;
-
-
-	GLfloat pelvissize_l = 0.3;
-	GLfloat pelvissize_w = 1.25;
-	GLfloat pelvissize_h = 0.3;
-
-	GLfloat legsize_l = 0.5;
-	GLfloat legsize_w = 0.5;
-	GLfloat legsize_h = 2.0;
-
-	GLfloat footsize_l = 0.6;
-	GLfloat footsize_w = 0.4;
-	GLfloat footsize_h = 0.25;
+void Character2::init(){
 
 	// character translations
 
@@ -37,13 +19,13 @@ void Character1::init(){
 	children.push_back(hip);
 	glm::mat4* hipmodel = new glm::mat4();
 	hip->transforms.push_back(hipmodel);
-	*hipmodel = glm::scale(glm::mat4(1.0f), glm::vec3(hipsize_w, hipsize_h, hipsize_l));
+	*hipmodel = glm::scale(glm::mat4(1.0f), glm::vec3(1.0, 0.25, 0.5));
 
 	//lower body
 	Object* lowerbody = new Object();
 	children.push_back(lowerbody);
 	glm::mat4* lowerbodytrans = new glm::mat4();
-	*lowerbodytrans = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, -hipsize_h, 0.0));
+	*lowerbodytrans = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, -0.25, 0.0));
 	lowerbody->transforms.push_back(lowerbodytrans);
 	
 
@@ -56,7 +38,7 @@ void Character1::init(){
 	glm::mat4* pelvismodel = new glm::mat4();
 	pelvis->transforms.push_back(pelvismodel);
 
-	*pelvismodel = glm::scale(glm::mat4(1.0f), glm::vec3(pelvissize_h, pelvissize_l, pelvissize_w));
+	*pelvismodel = glm::scale(glm::mat4(1.0f), glm::vec3(0.3, 0.3, 1.25));
 	*pelvismodel = glm::rotate(glm::mat4(1.0f), pi/2, glm::vec3(0.0, 1.0, 0.0)) * *pelvismodel;
 
 
@@ -75,21 +57,21 @@ void Character1::init(){
 
 	glm::mat4* leftlegcons = new glm::mat4();
 	left_leg_comp->transforms.push_back(leftlegcons);
-	*leftlegcons = glm::translate(glm::mat4(1.0f), glm::vec3(-pelvissize_w/4, -legsize_h/2, 0.0));
+	*leftlegcons = glm::translate(glm::mat4(1.0f), glm::vec3(-0.25, -1.0, 0.0));
 
 	Primitive* left_limb = new Cube();
 	left_leg_comp->children.push_back(left_limb);
 	
 	glm::mat4* leftlimbmodel = new glm::mat4();
 	left_limb->transforms.push_back(leftlimbmodel);
-	*leftlimbmodel = glm::scale(glm::mat4(1.0f), glm::vec3(legsize_w, legsize_h, legsize_l));
+	*leftlimbmodel = glm::scale(glm::mat4(1.0f), glm::vec3(0.5, 2.0, 0.5));
 
 	Primitive* left_foot = new Cube();
 	left_leg_comp->children.push_back(left_foot);
 
 	glm::mat4* leftfootmodel = new glm::mat4();
 	left_foot->transforms.push_back(leftfootmodel);
-	*leftfootmodel = glm::scale(glm::mat4(1.0f), glm::vec3(footsize_w, footsize_h, footsize_l));
+	*leftfootmodel = glm::scale(glm::mat4(1.0f), glm::vec3(0.4, 0.25, 0.6));
 
 	glm::mat4* leftfootconstraint = new glm::mat4();
 	left_foot->transforms.push_back(leftfootconstraint);
@@ -111,21 +93,21 @@ void Character1::init(){
 
 	glm::mat4* rightlegcons = new glm::mat4();
 	right_leg_comp->transforms.push_back(rightlegcons);
-	*rightlegcons = glm::translate(glm::mat4(1.0f), glm::vec3(pelvissize_w/4, -1.0, 0.0));
+	*rightlegcons = glm::translate(glm::mat4(1.0f), glm::vec3(0.25, -1.0, 0.0));
 
 	Primitive* right_limb = new Cube();
 	right_leg_comp->children.push_back(right_limb);
 	
 	glm::mat4* rightlimbmodel = new glm::mat4();
 	right_limb->transforms.push_back(rightlimbmodel);
-	*rightlimbmodel = glm::scale(glm::mat4(1.0f), glm::vec3(legsize_w, legsize_h, legsize_l));
+	*rightlimbmodel = glm::scale(glm::mat4(1.0f), glm::vec3(0.5, 2.0, 0.5));
 
 	Primitive* right_foot = new Cube();
 	right_leg_comp->children.push_back(right_foot);
 
 	glm::mat4* rightfootmodel = new glm::mat4();
 	right_foot->transforms.push_back(rightfootmodel);
-	*rightfootmodel = glm::scale(glm::mat4(1.0f), glm::vec3(footsize_w, footsize_h, footsize_l));
+	*rightfootmodel = glm::scale(glm::mat4(1.0f), glm::vec3(0.4, 0.25, 0.6));
 
 	glm::mat4* rightfootconstraint = new glm::mat4();
 	right_foot->transforms.push_back(rightfootconstraint);
@@ -261,7 +243,7 @@ void Character1::init(){
 	Object::init();
 }
 
-void Character1::manoeuvre(Character1::control_type ctrl, glm::vec3 param){
+void Character2::manoeuvre(Character2::control_type ctrl, glm::vec3 param){
 
 	switch(ctrl){
 

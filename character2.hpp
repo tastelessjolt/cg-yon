@@ -1,6 +1,6 @@
 #include "object.hpp"
 
-class Character1 : public Object {
+class Character2 : public Object {
 
 
 	glm::vec3 left_leg_angle;
@@ -43,8 +43,8 @@ public:
 		BODY_ANGLE,
 		BODY_TRANSLATE
 	};
-
-	Character1();
+	
+	Character2();
 	void init();
-	void manoeuvre(control_type, glm::vec3);
+	void manoeuvre(char2_control_type, glm::vec3);
 };
