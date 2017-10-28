@@ -106,7 +106,7 @@ Sphere::Sphere() {
 }
 
 void Sphere::loadpoints() {
-	GLdouble radius = 1.0f;
+	GLdouble radius = 0.5f;
 	GLfloat lats, longs;
 
 	GLfloat slices=(180/(GLfloat(tesselation)*10))/2;

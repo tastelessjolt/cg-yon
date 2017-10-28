@@ -42,6 +42,13 @@ void Character1::init(){
 	GLfloat facesize_w = 0.7;
 	GLfloat facesize_h = 0.65;
 
+	GLfloat armsize_l = 0.3;
+	GLfloat armsize_w = 0.3;
+	GLfloat armsize_h = 1.5;
+
+	GLfloat palmsize = 0.4;
+
+
 	// character translations
 
 	// transforms.push_back(fullbodytrans);
@@ -204,7 +211,7 @@ void Character1::init(){
 	upperbody->children.push_back(leftshoulder);
 	glm::mat4* leftshouldertrans = new glm::mat4();
 	leftshoulder->transforms.push_back(leftshouldertrans);
-	*leftshouldertrans = glm::translate(glm::mat4(1.0f), glm::vec3(-0.5, 0.5, 0.0));
+	*leftshouldertrans = glm::translate(glm::mat4(1.0f), glm::vec3(-abdmonesize_w/2, abdmonesize_h/2 - 0.25, 0.0));
 
 	glm::mat4* leftshoulderrot = new glm::mat4();
 	leftshoulder->transforms.push_back(leftshoulderrot);
@@ -219,20 +226,20 @@ void Character1::init(){
 
 	glm::mat4* leftshouldertrans1 = new glm::mat4();
 	leftshoulder->transforms.push_back(leftshouldertrans1);
-	*leftshouldertrans1 = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, 0.75));
+	*leftshouldertrans1 = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, armsize_h/2));
 
 	Primitive* leftpalm = new Sphere();
 	leftshoulder->children.push_back(leftpalm);
 	glm::mat4* leftpalmmodel = new glm::mat4();
 	leftpalm->transforms.push_back(leftpalmmodel);
-	*leftpalmmodel = glm::scale(glm::mat4(1.0f), glm::vec3(0.20, 0.20, 0.20));
-	*leftpalmmodel = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, 0.8)) * *leftpalmmodel;
+	*leftpalmmodel = glm::scale(glm::mat4(1.0f), glm::vec3(palmsize, palmsize, palmsize));
+	*leftpalmmodel = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, armsize_h/2 + palmsize/8)) * *leftpalmmodel;
 
 	Primitive* leftarm = new Cylinder();
 	leftshoulder->children.push_back(leftarm);
 	glm::mat4* leftarmmodel = new glm::mat4();
 	leftarm->transforms.push_back(leftarmmodel);
-	*leftarmmodel = glm::scale(glm::mat4(1.0f), glm::vec3(0.15, 0.15, 1.5));
+	*leftarmmodel = glm::scale(glm::mat4(1.0f), glm::vec3(armsize_w, armsize_l, armsize_h));
 
 
 	// shoulders right
@@ -240,7 +247,7 @@ void Character1::init(){
 	upperbody->children.push_back(rightshoulder);
 	glm::mat4* rightshouldertrans = new glm::mat4();
 	rightshoulder->transforms.push_back(rightshouldertrans);
-	*rightshouldertrans = glm::translate(glm::mat4(1.0f), glm::vec3(0.5, 0.5, 0.0));
+	*rightshouldertrans = glm::translate(glm::mat4(1.0f), glm::vec3(abdmonesize_w/2, abdmonesize_h/2 - 0.25, 0.0));
 
 	glm::mat4* rightshoulderrot = new glm::mat4();
 	rightshoulder->transforms.push_back(rightshoulderrot);
@@ -255,20 +262,20 @@ void Character1::init(){
 
 	glm::mat4* rightshouldertrans1 = new glm::mat4();
 	rightshoulder->transforms.push_back(rightshouldertrans1);
-	*rightshouldertrans1 = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, 0.75));
+	*rightshouldertrans1 = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, armsize_h/2));
 
 	Primitive* rightpalm = new Sphere();
 	rightshoulder->children.push_back(rightpalm);
 	glm::mat4* rightpalmmodel = new glm::mat4();
 	rightpalm->transforms.push_back(rightpalmmodel);
-	*rightpalmmodel = glm::scale(glm::mat4(1.0f), glm::vec3(0.20, 0.20, 0.20));
-	*rightpalmmodel = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, 0.8)) * *rightpalmmodel;
+	*rightpalmmodel = glm::scale(glm::mat4(1.0f), glm::vec3(palmsize, palmsize, palmsize));
+	*rightpalmmodel = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, armsize_h/2 + palmsize/8)) * *rightpalmmodel;
 
 	Primitive* rightarm = new Cylinder();
 	rightshoulder->children.push_back(rightarm);
 	glm::mat4* rightarmmodel = new glm::mat4();
 	rightarm->transforms.push_back(rightarmmodel);
-	*rightarmmodel = glm::scale(glm::mat4(1.0f), glm::vec3(0.15, 0.15, 1.5));
+	*rightarmmodel = glm::scale(glm::mat4(1.0f), glm::vec3(armsize_w, armsize_l, armsize_h));
 
 
 
