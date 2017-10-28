@@ -147,7 +147,7 @@ Cylinder::Cylinder() {
 void Cylinder::loadpoints() {
 
 	GLfloat sectors= 2*PI/tesselation;
-	GLdouble radius = 1.0f;
+	GLdouble radius = 0.5f;
 
 	GLfloat top = 0.5f;
 	GLfloat bottom = -0.5f;

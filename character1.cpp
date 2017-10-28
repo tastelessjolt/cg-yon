@@ -3,6 +3,10 @@
 extern double PI;
 GLfloat pi = PI;
 
+glm::vec3 rotateX = glm::vec3(1.0, 0.0, 0.0);
+glm::vec3 rotateY = glm::vec3(0.0, 1.0, 0.0);
+glm::vec3 rotateZ = glm::vec3(0.0, 0.0, 1.0);
+
 Character1::Character1(){
 
 }
@@ -14,10 +18,9 @@ void Character1::init(){
 	GLfloat hipsize_w = 1.0;
 	GLfloat hipsize_h = 0.25;
 
-
-	GLfloat pelvissize_l = 0.3;
+	GLfloat pelvissize_l = 0.6;
 	GLfloat pelvissize_w = 1.25;
-	GLfloat pelvissize_h = 0.3;
+	GLfloat pelvissize_h = 0.6;
 
 	GLfloat legsize_l = 0.5;
 	GLfloat legsize_w = 0.5;
@@ -26,6 +29,18 @@ void Character1::init(){
 	GLfloat footsize_l = 0.6;
 	GLfloat footsize_w = 0.4;
 	GLfloat footsize_h = 0.25;
+
+	GLfloat abdmonesize_l = 0.60;
+	GLfloat abdmonesize_w = 1.10;
+	GLfloat abdmonesize_h = 1.5;
+
+	GLfloat necksize_l = 0.5;
+	GLfloat necksize_w = 0.5;
+	GLfloat necksize_h = 0.75;
+
+	GLfloat facesize_l = 0.7;
+	GLfloat facesize_w = 0.7;
+	GLfloat facesize_h = 0.65;
 
 	// character translations
 
@@ -57,7 +72,7 @@ void Character1::init(){
 	pelvis->transforms.push_back(pelvismodel);
 
 	*pelvismodel = glm::scale(glm::mat4(1.0f), glm::vec3(pelvissize_h, pelvissize_l, pelvissize_w));
-	*pelvismodel = glm::rotate(glm::mat4(1.0f), pi/2, glm::vec3(0.0, 1.0, 0.0)) * *pelvismodel;
+	*pelvismodel = glm::rotate(glm::mat4(1.0f), pi/2, rotateY) * *pelvismodel;
 
 
 	// left leg
@@ -66,7 +81,7 @@ void Character1::init(){
 
 	glm::mat4* leftlegrot = new glm::mat4();
 	left_leg->transforms.push_back(leftlegrot);
-	*leftlegrot = glm::rotate(glm::mat4(1.0f), 0*pi, glm::vec3(1.0, 0.0, 0.0));	
+	*leftlegrot = glm::rotate(glm::mat4(1.0f), 0*pi, rotateX);	
 
 	left_leg_angle_matrix = leftlegrot;
 
@@ -87,13 +102,13 @@ void Character1::init(){
 	Primitive* left_foot = new Cube();
 	left_leg_comp->children.push_back(left_foot);
 
+	glm::mat4* leftfootconstraint = new glm::mat4();
+	left_foot->transforms.push_back(leftfootconstraint);
+	*leftfootconstraint = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, -legsize_h/2, legsize_h/16));
+
 	glm::mat4* leftfootmodel = new glm::mat4();
 	left_foot->transforms.push_back(leftfootmodel);
 	*leftfootmodel = glm::scale(glm::mat4(1.0f), glm::vec3(footsize_w, footsize_h, footsize_l));
-
-	glm::mat4* leftfootconstraint = new glm::mat4();
-	left_foot->transforms.push_back(leftfootconstraint);
-	*leftfootconstraint = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, -4.0, 0.25));
 
 
 	// right leg
@@ -102,7 +117,7 @@ void Character1::init(){
 
 	glm::mat4* rightlegrot = new glm::mat4();
 	right_leg->transforms.push_back(rightlegrot);
-	*rightlegrot = glm::rotate(glm::mat4(1.0f), 0*pi, glm::vec3(1.0, 0.0, 0.0));	
+	*rightlegrot = glm::rotate(glm::mat4(1.0f), 0*pi, rotateX);	
 
 	right_leg_angle_matrix = rightlegrot;
 
@@ -111,7 +126,7 @@ void Character1::init(){
 
 	glm::mat4* rightlegcons = new glm::mat4();
 	right_leg_comp->transforms.push_back(rightlegcons);
-	*rightlegcons = glm::translate(glm::mat4(1.0f), glm::vec3(pelvissize_w/4, -1.0, 0.0));
+	*rightlegcons = glm::translate(glm::mat4(1.0f), glm::vec3(pelvissize_w/4, -legsize_h/2, 0.0));
 
 	Primitive* right_limb = new Cube();
 	right_leg_comp->children.push_back(right_limb);
@@ -123,13 +138,13 @@ void Character1::init(){
 	Primitive* right_foot = new Cube();
 	right_leg_comp->children.push_back(right_foot);
 
+	glm::mat4* rightfootconstraint = new glm::mat4();
+	right_foot->transforms.push_back(rightfootconstraint);
+	*rightfootconstraint = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, -legsize_h/2, legsize_h/16));
+	
 	glm::mat4* rightfootmodel = new glm::mat4();
 	right_foot->transforms.push_back(rightfootmodel);
 	*rightfootmodel = glm::scale(glm::mat4(1.0f), glm::vec3(footsize_w, footsize_h, footsize_l));
-
-	glm::mat4* rightfootconstraint = new glm::mat4();
-	right_foot->transforms.push_back(rightfootconstraint);
-	*rightfootconstraint = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, -4.0, 0.25));
 
 
 	// upper body
@@ -138,13 +153,13 @@ void Character1::init(){
 
 	glm::mat4* upperbodyrot = new glm::mat4();
 	upperbody->transforms.push_back(upperbodyrot);
-	*upperbodyrot = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(0.0, 1.0, 0.0));
+	*upperbodyrot = glm::rotate(glm::mat4(1.0f), 0.0f, rotateY);
 
 	torso_angle_matrix = upperbodyrot;
 
 	glm::mat4* upperbodytrans = new glm::mat4();
 	upperbody->transforms.push_back(upperbodytrans);
-	*upperbodytrans = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.75, 0.0));
+	*upperbodytrans = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, abdmonesize_h/2, 0.0));
 
 	// abdomen
 	Primitive* abdomen = new Cube();
@@ -152,7 +167,7 @@ void Character1::init(){
 
 	glm::mat4* abdomenmodel = new glm::mat4();
 	abdomen->transforms.push_back(abdomenmodel);
-	*abdomenmodel = glm::scale(glm::mat4(1.0f), glm::vec3(1.10, 1.5, 0.60));
+	*abdomenmodel = glm::scale(glm::mat4(1.0f), glm::vec3(abdmonesize_w, abdmonesize_h, abdmonesize_l));
 
 	// head
 	Object* head = new Object();
@@ -160,28 +175,28 @@ void Character1::init(){
 
 	glm::mat4* headtranslate = new glm::mat4();
 	head->transforms.push_back(headtranslate);
-	*headtranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 1.10, 0.0));
+	*headtranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, abdmonesize_h/2 + necksize_h/2, 0.0));
 
 	Primitive* neck = new Cylinder();
 	head->children.push_back(neck);
 	glm::mat4* neckmodel = new glm::mat4();
 	neck->transforms.push_back(neckmodel);
-	*neckmodel = glm::scale(glm::mat4(1.0f), glm::vec3(0.25, 0.25, 0.75));
-	*neckmodel = glm::rotate(glm::mat4(1.0f), pi/2, glm::vec3(1.0, 0.0, 0.0)) * *neckmodel;
+	*neckmodel = glm::rotate(glm::mat4(1.0f), pi/2, rotateX);
+	*neckmodel = glm::scale(glm::mat4(1.0f), glm::vec3(necksize_w, necksize_h, necksize_l)) * *neckmodel;
 
 	Primitive* face = new Cylinder();
 	head->children.push_back(face);
 
 	glm::mat4* facerotate = new glm::mat4();
 	face->transforms.push_back(facerotate);
-	*facerotate = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(0.0, 1.0, 0.0));
+	*facerotate = glm::rotate(glm::mat4(1.0f), 0.0f, rotateY);
 
 	face_angle_matrix = facerotate;
 
 	glm::mat4* facemodel = new glm::mat4();
 	face->transforms.push_back(facemodel);
-	*facemodel = glm::scale(glm::mat4(1.0f), glm::vec3(0.35, 0.35, 0.65));
-	*facemodel = glm::rotate(glm::mat4(1.0f), pi/2, glm::vec3(1.0, 0.0, 0.0)) * *facemodel;
+	*facemodel = glm::rotate(glm::mat4(1.0f), pi/2, rotateX);
+	*facemodel = glm::scale(glm::mat4(1.0f), glm::vec3(facesize_w, facesize_h, facesize_l)) * *facemodel;
 
 
 	// shoulders left
@@ -193,14 +208,14 @@ void Character1::init(){
 
 	glm::mat4* leftshoulderrot = new glm::mat4();
 	leftshoulder->transforms.push_back(leftshoulderrot);
-	*leftshoulderrot = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(1.0, 0.0, 0.0));
+	*leftshoulderrot = glm::rotate(glm::mat4(1.0f), 0.0f, rotateX);
 
 	left_arm_angle_matrix = leftshoulderrot;
 
 	glm::mat4* leftshoulderrot1 = new glm::mat4();
 	leftshoulder->transforms.push_back(leftshoulderrot1);
-	*leftshoulderrot1 = 	glm::rotate(glm::mat4(1.0f), -pi/8, glm::vec3(0.0, 0.0, 1.0))
-						* 	glm::rotate(glm::mat4(1.0f), pi/2, glm::vec3(1.0, 0.0, 0.0));
+	*leftshoulderrot1 = 	glm::rotate(glm::mat4(1.0f), -pi/8, rotateZ)
+						* 	glm::rotate(glm::mat4(1.0f), pi/2, rotateX);
 
 	glm::mat4* leftshouldertrans1 = new glm::mat4();
 	leftshoulder->transforms.push_back(leftshouldertrans1);
@@ -229,14 +244,14 @@ void Character1::init(){
 
 	glm::mat4* rightshoulderrot = new glm::mat4();
 	rightshoulder->transforms.push_back(rightshoulderrot);
-	*rightshoulderrot = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(1.0, 0.0, 0.0));
+	*rightshoulderrot = glm::rotate(glm::mat4(1.0f), 0.0f, rotateX);
 
 	right_arm_angle_matrix = rightshoulderrot;
 
 	glm::mat4* rightshoulderrot1 = new glm::mat4();
 	rightshoulder->transforms.push_back(rightshoulderrot1);
-	*rightshoulderrot1 = 	glm::rotate(glm::mat4(1.0f), pi/8, glm::vec3(0.0, 0.0, 1.0))
-						* 	glm::rotate(glm::mat4(1.0f), pi/2, glm::vec3(1.0, 0.0, 0.0));
+	*rightshoulderrot1 = 	glm::rotate(glm::mat4(1.0f), pi/8, rotateZ)
+						* 	glm::rotate(glm::mat4(1.0f), pi/2, rotateX);
 
 	glm::mat4* rightshouldertrans1 = new glm::mat4();
 	rightshoulder->transforms.push_back(rightshouldertrans1);
@@ -267,42 +282,42 @@ void Character1::manoeuvre(Character1::control_type ctrl, glm::vec3 param){
 
 		case LEFT_LEG_ANGLE: {
 			left_leg_angle += param;
-			*left_leg_angle_matrix = glm::rotate(glm::mat4(1.0f), left_leg_angle[0], glm::vec3(1.0, 0.0, 0.0));
+			*left_leg_angle_matrix = glm::rotate(glm::mat4(1.0f), left_leg_angle[0], rotateX);
 			break;
 		}
 		case RIGHT_LEG_ANGLE: {
 			right_leg_angle += param;
-			*right_leg_angle_matrix = glm::rotate(glm::mat4(1.0f), right_leg_angle[0], glm::vec3(1.0, 0.0, 0.0));
+			*right_leg_angle_matrix = glm::rotate(glm::mat4(1.0f), right_leg_angle[0], rotateX);
 			break;
 		}
 		
 		case LEFT_ARM_ANGLE: {
 			left_arm_angle += param;
-			*left_arm_angle_matrix = glm::rotate(glm::mat4(1.0f), left_arm_angle[0], glm::vec3(1.0, 0.0, 0.0));
+			*left_arm_angle_matrix = glm::rotate(glm::mat4(1.0f), left_arm_angle[0], rotateX);
 			break;
 		}
 		case RIGHT_ARM_ANGLE: {
 			right_arm_angle += param;
-			*right_arm_angle_matrix = glm::rotate(glm::mat4(1.0f), right_arm_angle[0], glm::vec3(1.0, 0.0, 0.0));
+			*right_arm_angle_matrix = glm::rotate(glm::mat4(1.0f), right_arm_angle[0], rotateX);
 			break;
 		}
 		
 		case TORSO_ANGLE: {
 			torso_angle += param;
-			*torso_angle_matrix = glm::rotate(glm::mat4(1.0f), torso_angle[1], glm::vec3(0.0, 1.0, 0.0));
+			*torso_angle_matrix = glm::rotate(glm::mat4(1.0f), torso_angle[1], rotateY);
 			break;
 		}
 		case FACE_ANGLE: {
 			face_angle += param;
-			*face_angle_matrix = glm::rotate(glm::mat4(1.0f), face_angle[1], glm::vec3(0.0, 1.0, 0.0));
+			*face_angle_matrix = glm::rotate(glm::mat4(1.0f), face_angle[1], rotateY);
 			break;
 		}
 
 		case BODY_ANGLE: {
 			body_angle += param;
-			*body_angle_matrix = glm::rotate(glm::mat4(1.0f), body_angle[0], glm::vec3(1.0, 0.0, 0.0));
-			*body_angle_matrix = glm::rotate(*body_angle_matrix, body_angle[1], glm::vec3(0.0, 1.0, 0.0));
-			*body_angle_matrix = glm::rotate(*body_angle_matrix, body_angle[2], glm::vec3(0.0, 0.0, 1.0));
+			*body_angle_matrix = glm::rotate(glm::mat4(1.0f), body_angle[0], rotateX);
+			*body_angle_matrix = glm::rotate(*body_angle_matrix, body_angle[1], rotateY);
+			*body_angle_matrix = glm::rotate(*body_angle_matrix, body_angle[2], rotateZ);
 			break;
 		}
 		case BODY_TRANSLATE: {
@@ -316,7 +331,7 @@ void Character1::manoeuvre(Character1::control_type ctrl, glm::vec3 param){
 		}
 
 	}
-	// *llrot = glm::rotate(glm::mat4(1.0f), rot[0], glm::vec3(1.0, 0.0, 0.0));	
+	// *llrot = glm::rotate(glm::mat4(1.0f), rot[0], rotateX);	
 
 	// // std::cout << xrot << " " << yrot << " " << zrot << " " << std::endl;
 	// glm::mat4* rotation_matrix=elbow_rot;

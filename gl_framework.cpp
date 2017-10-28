@@ -53,86 +53,104 @@ namespace csX75
   void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
   {
     //!Close the window if the ESC key was pressed
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+    if ((key == GLFW_KEY_ESCAPE || key == GLFW_KEY_Q) && action == GLFW_PRESS)
       quit(window);
-    else if (key == GLFW_KEY_LEFT && (action == GLFW_PRESS || action == GLFW_REPEAT)){
+    action = glfwGetKey(window, GLFW_KEY_LEFT);
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT)){
       yrot -= 0.2;
     } 
-    else if (key == GLFW_KEY_RIGHT && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+    action = glfwGetKey(window, GLFW_KEY_RIGHT);
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
       yrot += 0.2;
     }
-    else if (key == GLFW_KEY_UP && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+    action = glfwGetKey(window, GLFW_KEY_UP);
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
       xrot -= 0.2;
     }
-    else if (key == GLFW_KEY_DOWN && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+    action = glfwGetKey(window, GLFW_KEY_DOWN);
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
       xrot += 0.2;
     }
-    else if (key == GLFW_KEY_PAGE_UP && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+    action = glfwGetKey(window, GLFW_KEY_PAGE_UP);
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
       zrot -= 0.2;
     }
-    else if (key == GLFW_KEY_PAGE_DOWN && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+    action = glfwGetKey(window, GLFW_KEY_PAGE_DOWN);
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
       zrot += 0.2;
     }
-    else if (key == GLFW_KEY_W && (action == GLFW_PRESS || action == GLFW_REPEAT)){
+    action = glfwGetKey(window, GLFW_KEY_W);
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT)){
       ypos += 0.05;
     } 
-    else if (key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+    action = glfwGetKey(window, GLFW_KEY_A);
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
       xpos -= 0.05; 
     }
-    else if (key == GLFW_KEY_S && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+    action = glfwGetKey(window, GLFW_KEY_S);
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
       ypos -= 0.05;
     }
-    else if (key == GLFW_KEY_D && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+    action = glfwGetKey(window, GLFW_KEY_D);
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
       xpos += 0.05;
     }
-    else if (key == GLFW_KEY_Z && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+    action = glfwGetKey(window, GLFW_KEY_Z);
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
       zpos -= 0.05; 
     }
-    else if (key == GLFW_KEY_X && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+    action = glfwGetKey(window, GLFW_KEY_X);
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
       zpos += 0.05;
     }
 
     // left leg char 1
-    else if (key == GLFW_KEY_H && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+    action = glfwGetKey(window, GLFW_KEY_H);
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
       GLfloat delta = 0.05 *
       (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ? -1 : 1);
 
       ((Character1 *)char1)->manoeuvre(Character1::LEFT_LEG_ANGLE, glm::vec3(delta, 0.0, 0.0));
     }
     // right leg char 1
-    else if (key == GLFW_KEY_J && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+    action = glfwGetKey(window, GLFW_KEY_J);
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
       GLfloat delta = 0.05 *
       (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ? -1 : 1);
 
       ((Character1 *)char1)->manoeuvre(Character1::RIGHT_LEG_ANGLE, glm::vec3(delta, 0.0, 0.0));
     }
     // left arm char 1
-    else if (key == GLFW_KEY_K && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+    action = glfwGetKey(window, GLFW_KEY_K);
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
       GLfloat delta = 0.05 *
       (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ? -1 : 1);
 
       ((Character1 *)char1)->manoeuvre(Character1::LEFT_ARM_ANGLE, glm::vec3(delta, 0.0, 0.0));
     }
-    else if (key == GLFW_KEY_L && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+    action = glfwGetKey(window, GLFW_KEY_L);
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
       GLfloat delta = 0.05 *
       (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ? -1 : 1);
 
       ((Character1 *)char1)->manoeuvre(Character1::RIGHT_ARM_ANGLE, glm::vec3(delta, 0.0, 0.0));
     }
-    else if (key == GLFW_KEY_U && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+    action = glfwGetKey(window, GLFW_KEY_U);
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
       GLfloat delta = 0.05 *
       (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ? -1 : 1);
 
       ((Character1 *)char1)->manoeuvre(Character1::TORSO_ANGLE, glm::vec3(0.0, delta, 0.0));
     }
-    else if (key == GLFW_KEY_I && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+    action = glfwGetKey(window, GLFW_KEY_I);
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
       GLfloat delta = 0.05 *
       (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ? -1 : 1);
 
       ((Character1 *)char1)->manoeuvre(Character1::FACE_ANGLE, glm::vec3(0.0, delta, 0.0));
     }
 
-    else if (key == GLFW_KEY_L && (action == GLFW_PRESS)) {
+    if (key == GLFW_KEY_L && (action == GLFW_PRESS)) {
       // std::string filename;
       // std::cout << "Enter the name of the file to be loaded (without extension): "; std::cin >> filename;
       // filename+=".raw";
@@ -162,9 +180,6 @@ namespace csX75
       // }
 
       // fs.close();
-    }
-    else if (key == GLFW_KEY_Q && (action == GLFW_PRESS)) {
-      quit(window);
     }
   }
 
