@@ -77,3 +77,17 @@ public:
 	void colorcube(void);
 	void loadpoints();
 };
+
+class SectorTorus : public Primitive {
+	GLfloat inner_radius;
+	GLfloat outer_radius;
+	GLfloat thickness;
+	GLfloat sector_angle;
+	GLfloat start_angle;
+
+public:
+	SectorTorus(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat);
+	void loadpoints();
+};
+
+

@@ -225,3 +225,130 @@ void Cube::colorcube(void)
 void Cube::loadpoints() {
 	colorcube();
 }
+
+SectorTorus::SectorTorus(GLfloat inner_radius, GLfloat outer_radius, GLfloat thickness, GLfloat start_angle, GLfloat sector_angle) {
+	tesselation = 50;
+	method = GL_TRIANGLES;
+	this->inner_radius = inner_radius;
+	this->outer_radius = outer_radius;
+	this->thickness = thickness;
+	this->start_angle = start_angle;
+	this->sector_angle = sector_angle;
+}
+
+void SectorTorus::loadpoints() {
+	GLfloat sectors= sector_angle/tesselation;
+	GLfloat top = thickness/2;
+	GLfloat bottom = -top;
+
+	{
+		GLfloat x = inner_radius * cos(start_angle);
+		GLfloat y = inner_radius * sin(start_angle);
+
+		glm::vec4 topc_i(x, y, top, 1.0);
+		glm::vec4 botc_i(x, y, bottom, 1.0);
+
+		x = outer_radius * cos(start_angle);
+		y = outer_radius * sin(start_angle);
+
+		glm::vec4 topc_o(x, y, top, 1.0);
+		glm::vec4 botc_o(x, y, bottom, 1.0);
+
+		vertices.push_back(botc_i); normals.push_back(botc_i); colors.push_back(grey); 
+		vertices.push_back(topc_i); normals.push_back(topc_i); colors.push_back(grey); 
+		vertices.push_back(topc_o); normals.push_back(topc_o); colors.push_back(grey); 
+
+		vertices.push_back(botc_i); normals.push_back(botc_i); colors.push_back(grey); 
+		vertices.push_back(topc_o); normals.push_back(topc_o); colors.push_back(grey);
+		vertices.push_back(botc_o); normals.push_back(botc_o); colors.push_back(grey);
+	}
+	{
+		GLfloat x = inner_radius * cos(sector_angle);
+		GLfloat y = inner_radius * sin(sector_angle);
+
+		glm::vec4 topc_i(x, y, top, 1.0);
+		glm::vec4 botc_i(x, y, bottom, 1.0);
+
+		x = outer_radius * cos(sector_angle);
+		y = outer_radius * sin(sector_angle);
+
+		glm::vec4 topc_o(x, y, top, 1.0);
+		glm::vec4 botc_o(x, y, bottom, 1.0);
+
+		vertices.push_back(botc_i); normals.push_back(botc_i); colors.push_back(grey); 
+		vertices.push_back(topc_i); normals.push_back(topc_i); colors.push_back(grey); 
+		vertices.push_back(topc_o); normals.push_back(topc_o); colors.push_back(grey); 
+
+		vertices.push_back(botc_i); normals.push_back(botc_i); colors.push_back(grey); 
+		vertices.push_back(topc_o); normals.push_back(topc_o); colors.push_back(grey);
+		vertices.push_back(botc_o); normals.push_back(botc_o); colors.push_back(grey);
+	}
+
+	GLfloat l;
+	for (GLfloat lats = start_angle; lats <= sector_angle; lats=lats+sectors)
+	{
+		GLfloat x = inner_radius * cos(lats);
+		GLfloat y = inner_radius * sin(lats);
+
+		glm::vec4 topc_i(x, y, top, 1.0);
+		glm::vec4 botc_i(x, y, bottom, 1.0);
+
+		x = outer_radius * cos(lats);
+		y = outer_radius * sin(lats);
+
+		glm::vec4 topc_o(x, y, top, 1.0);
+		glm::vec4 botc_o(x, y, bottom, 1.0);
+
+		if(lats+sectors>sector_angle)
+			l=sector_angle;
+		else
+			l=lats+sectors;
+
+		x = inner_radius * cos(l);
+		y = inner_radius * sin(l);
+
+		glm::vec4 topcn_i(x, y, top, 1.0);
+		glm::vec4 botcn_i(x, y, bottom, 1.0);
+
+
+		x = outer_radius * cos(l);
+		y = outer_radius * sin(l);
+		
+		glm::vec4 topcn_o(x, y, top, 1.0);
+		glm::vec4 botcn_o(x, y, bottom, 1.0);
+
+		vertices.push_back(topcn_i); normals.push_back(topcn_i); colors.push_back(grey); 
+		vertices.push_back(topc_i); normals.push_back(topc_i); colors.push_back(grey); 
+		vertices.push_back(botc_i); normals.push_back(botc_i); colors.push_back(grey); 
+		
+		vertices.push_back(topcn_i); normals.push_back(topcn_i); colors.push_back(grey); 
+		vertices.push_back(botc_i); normals.push_back(botc_i); colors.push_back(grey); 
+		vertices.push_back(botcn_i); normals.push_back(botcn_i); colors.push_back(grey); 
+
+		vertices.push_back(topcn_o); normals.push_back(topcn_o); colors.push_back(grey); 
+		vertices.push_back(topc_o); normals.push_back(topc_o); colors.push_back(grey); 
+		vertices.push_back(botc_o); normals.push_back(botc_o); colors.push_back(grey); 
+		
+		vertices.push_back(topcn_o); normals.push_back(topcn_o); colors.push_back(grey); 
+		vertices.push_back(botc_o); normals.push_back(botc_o); colors.push_back(grey); 
+		vertices.push_back(botcn_o); normals.push_back(botcn_o); colors.push_back(grey); 
+		
+
+		vertices.push_back(topcn_i); normals.push_back(topcn_i); colors.push_back(red); 
+		vertices.push_back(topc_i); normals.push_back(topc_i); colors.push_back(red); 
+		vertices.push_back(topc_o); normals.push_back(topc_o); colors.push_back(red); 
+
+		vertices.push_back(topcn_i); normals.push_back(topcn_i); colors.push_back(red); 
+		vertices.push_back(topc_o); normals.push_back(topc_o); colors.push_back(red);
+		vertices.push_back(topcn_o); normals.push_back(topcn_o); colors.push_back(red); 
+
+		vertices.push_back(botcn_i); normals.push_back(botcn_i); colors.push_back(red); 
+		vertices.push_back(botc_i); normals.push_back(botc_i); colors.push_back(red); 
+		vertices.push_back(botc_o); normals.push_back(botc_o); colors.push_back(red); 
+
+		vertices.push_back(botcn_i); normals.push_back(botcn_i); colors.push_back(red); 
+		vertices.push_back(botc_o); normals.push_back(botc_o); colors.push_back(red);
+		vertices.push_back(botcn_o); normals.push_back(botcn_o); colors.push_back(red); 
+
+	}
+}

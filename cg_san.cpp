@@ -39,6 +39,7 @@ GLfloat zpos = 0.0f;
 BaseObject* sphere;
 BaseObject* cube;
 BaseObject* cylinder;
+BaseObject* torus;
 
 BaseObject* char1;
 
@@ -76,11 +77,13 @@ void initVertexBufferGL(void)
 	cube = new Cube();
 	cylinder = new Cylinder();
 	char1 = new Character1();
+	torus = new SectorTorus(0.8, 1, 0.3, -3.14/3, 3.14/2);
 
 	// sphere->init();
 	// cube->init();
 	// cylinder->init();
 	char1->init();
+	torus->init();
 	/* 	
 	 *	Generates vao, vbo takes args as a tree of "objects"
 	 *	character1.init()
@@ -92,6 +95,7 @@ void initVertexBufferGL(void)
 	// cube->generate();
 	// cylinder->generate();
 	char1->generate();
+	torus->generate();
 	/*
 	 *	Generate geometric primitives with tesselation params 
 	 *	char.generate() 
@@ -124,6 +128,7 @@ void renderGL(void)
 	// cube->render(view_matrix);
 	// cylinder->render(view_matrix);
 	char1->render(view_matrix);
+	torus->render(view_matrix);
 	
 	// Renders takes arguments - transformations 
 	// character1.render()
@@ -151,7 +156,7 @@ int main(int argc, char** argv)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); 
 
 	//! Create a windowed mode window and its OpenGL context
-	window = glfwCreateWindow(640, 480, "CS475/CS675 OpenGL Framework", NULL, NULL);
+	window = glfwCreateWindow(640, 640, "CS475/CS675 OpenGL Framework", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();

@@ -14,7 +14,7 @@ LIBS=$(OPENGLLIB) $(GLEWLIB) $(GLFWLIB) -lX11 -lXi -lXrandr -lXxf86vm -lXinerama
 endif
 
 LDFLAGS=-L/usr/local/lib 
-CPPFLAGS=-I/usr/local/include -std=c++11
+CPPFLAGS=-g -I/usr/local/include -std=c++11
 
 BIN=cg_san
 SRC_MAIN=cg_san.cpp 
