@@ -49,8 +49,13 @@ public:
 };
 
 class Sphere : public Primitive {
+	GLfloat lat_start;
+	GLfloat long_start;
+	GLfloat lat_angle;
+	GLfloat long_angle;
 public:
 	Sphere();
+	Sphere(GLfloat, GLfloat, GLfloat, GLfloat);
 	void loadpoints();
 };
 

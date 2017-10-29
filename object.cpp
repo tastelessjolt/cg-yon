@@ -103,6 +103,19 @@ void Primitive::render(glm::mat4 transform) {
 Sphere::Sphere() {
 	method = GL_TRIANGLE_STRIP;
 	tesselation = 50;
+
+	lat_start = 0.0;
+	long_start = 0.0;
+
+	lat_angle = PI;
+	long_angle = 2 * PI;
+}
+
+Sphere::Sphere(GLfloat lat_start, GLfloat lat_angle, GLfloat long_start, GLfloat long_angle) {
+	this->lat_start = lat_start;
+	this->long_start = long_start;
+	this->lat_angle = lat_angle;
+	this->long_angle = long_angle;
 }
 
 void Sphere::loadpoints() {
@@ -113,8 +126,8 @@ void Sphere::loadpoints() {
 	GLfloat sectors=(180/(GLfloat(tesselation)*10))/2;
 
 	GLfloat l;
-	for (lats = 0.0; lats <= PI; lats+=sectors) {
-		for(longs = 0.0; longs <= 2.0*PI; longs+=slices){
+	for (lats = lat_start; lats <= lat_angle; lats+=sectors) {
+		for(longs = long_start; longs <= long_angle; longs+=slices){
 			GLfloat x = radius * sin(lats) * cos(longs);
 			GLfloat y = radius * sin(lats) * sin(longs);
 			GLfloat z = radius * cos(lats);
@@ -123,8 +136,8 @@ void Sphere::loadpoints() {
 			colors.push_back(red); vertices.push_back(pt); 
 			normals.push_back(pt);
 
-			if(lats+sectors>PI)
-				l=PI;
+			if(lats+sectors>lat_angle)
+				l=lat_angle;
 			else
 				l=lats+sectors;
 

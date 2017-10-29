@@ -277,9 +277,6 @@ void Character1::init(){
 	rightarm->transforms.push_back(rightarmmodel);
 	*rightarmmodel = glm::scale(glm::mat4(1.0f), glm::vec3(armsize_w, armsize_l, armsize_h));
 
-
-
-
 	Object::init();
 }
 
