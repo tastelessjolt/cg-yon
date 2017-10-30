@@ -3,6 +3,7 @@
 #include <sys/stat.h>
 
 #include "character1.hpp"
+#include "character2.hpp"
 
 extern GLfloat xrot;
 extern GLfloat yrot;
@@ -13,6 +14,7 @@ extern GLfloat ypos;
 extern GLfloat zpos;
 
 extern BaseObject* char1;
+extern BaseObject* char2;
 
 namespace csX75
 {
@@ -148,6 +150,30 @@ namespace csX75
       (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ? -1 : 1);
 
       ((Character1 *)char1)->manoeuvre(Character1::FACE_ANGLE, glm::vec3(0.0, delta, 0.0));
+    }
+
+    action = glfwGetKey(window, GLFW_KEY_F);
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
+      GLfloat delta = 0.05 *
+      (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ? -1 : 1);
+
+      ((Character2 *)char2)->manoeuvre(Character2::HEADBAND_ANGLE, glm::vec3(delta, 0.0, 0.0));
+    }
+    
+    action = glfwGetKey(window, GLFW_KEY_R);
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
+      GLfloat delta = 0.05 *
+      (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ? -1 : 1);
+
+      ((Character2 *)char2)->manoeuvre(Character2::LEFT_HOUSING_ANGLE, glm::vec3(0.0, delta, delta));
+    }
+
+    action = glfwGetKey(window, GLFW_KEY_E);
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
+      GLfloat delta = 0.05 *
+      (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ? -1 : 1);
+
+      ((Character2 *)char2)->manoeuvre(Character2::RIGHT_HOUSING_ANGLE, glm::vec3(0.0, delta, delta));
     }
 
     if (key == GLFW_KEY_L && (action == GLFW_PRESS)) {

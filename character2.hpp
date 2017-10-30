@@ -9,18 +9,17 @@ class Character2 : public Object {
 	glm::vec3 body_translate;
 	glm::mat4* body_translate_matrix;
 
+	glm::mat4* left_rot;
+	glm::mat4* left_housing_rot;
+	glm::mat4* right_rot;
+	glm::mat4* right_housing_rot;
+
 public:
 	enum control_type
 	{
-		LEFT_LEG_ANGLE,
-		RIGHT_LEG_ANGLE,
-		
-		LEFT_ARM_ANGLE,
-		RIGHT_ARM_ANGLE,
-		
-		TORSO_ANGLE,
-		FACE_ANGLE,
-
+		HEADBAND_ANGLE,
+		LEFT_HOUSING_ANGLE,
+		RIGHT_HOUSING_ANGLE,
 		BODY_ANGLE,
 		BODY_TRANSLATE
 	};

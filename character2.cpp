@@ -38,9 +38,14 @@ void Character2::init(){
 	Object* left_part = new Object();
 	children.push_back(left_part);
 
-	glm::mat4* left_rot = new glm::mat4();
+
+	left_rot = new glm::mat4();
 	left_part->transforms.push_back(left_rot);
 	*left_rot = glm::mat4(1.0f);
+
+	glm::mat4* left_translate = new glm::mat4();
+	left_part->transforms.push_back(left_translate);
+	*left_translate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, -headband_rad, 0.0));
 
 	// left headband
 	Primitive* left_headband = new SectorTorus(headband_rad, headband_rad + headband_thickness, headband_width, pi/2 - headband_ang/2, headband_ang/2);
@@ -54,7 +59,7 @@ void Character2::init(){
 	left_ear->transforms.push_back(left_ear_constraint);
 	*left_ear_constraint = glm::translate(glm::mat4(1.0f), glm::vec3(headband_rad * cos(pi/2 - headband_ang/2), headband_rad * sin(pi/2 - headband_ang/2), 0.0));
 
-	glm::mat4* left_housing_rot = new glm::mat4();
+	left_housing_rot = new glm::mat4();
 	left_ear->transforms.push_back(left_housing_rot);
 	*left_housing_rot = glm::rotate(glm::mat4(1.0f), -pi/2 - pi/16, rotateZ);
 
@@ -73,9 +78,13 @@ void Character2::init(){
 	Object* right_part = new Object();
 	children.push_back(right_part);
 
-	glm::mat4* right_rot = new glm::mat4();
+	right_rot = new glm::mat4();
 	right_part->transforms.push_back(right_rot);
 	*right_rot = glm::mat4(1.0f);
+
+	glm::mat4* right_translate = new glm::mat4();
+	right_part->transforms.push_back(right_translate);
+	*right_translate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, -headband_rad, 0.0));
 
 	// right headband
 	Primitive* right_headband = new SectorTorus(headband_rad, headband_rad + headband_thickness, headband_width, pi/2, headband_ang/2);
@@ -89,7 +98,7 @@ void Character2::init(){
 	right_ear->transforms.push_back(right_ear_constraint);
 	*right_ear_constraint = glm::translate(glm::mat4(1.0f), glm::vec3(headband_rad * cos(pi/2 + headband_ang/2), headband_rad * sin(pi/2 + headband_ang/2), 0.0));
 
-	glm::mat4* right_housing_rot = new glm::mat4();
+	right_housing_rot = new glm::mat4();
 	right_ear->transforms.push_back(right_housing_rot);
 	*right_housing_rot = glm::rotate(glm::mat4(1.0f), pi/2 + pi/16, rotateZ);
 
@@ -111,34 +120,38 @@ void Character2::manoeuvre(Character2::control_type ctrl, glm::vec3 param){
 
 	switch(ctrl){
 
-		case LEFT_LEG_ANGLE: {
+		case HEADBAND_ANGLE: {
+			*left_rot = glm::rotate(*left_rot, param[0]/2, rotateX);
+			*left_rot = glm::rotate(*left_rot, param[1]/2, rotateY);
+			*left_rot = glm::rotate(*left_rot, param[2]/2, rotateZ);
+
+			*right_rot = glm::rotate(*right_rot, -param[0]/2, rotateX);
+			*right_rot = glm::rotate(*right_rot, -param[1]/2, rotateY);
+			*right_rot = glm::rotate(*right_rot, -param[2]/2, rotateZ);
 			break;
 		}
-		case RIGHT_LEG_ANGLE: {
+
+		case LEFT_HOUSING_ANGLE: {
+			*left_housing_rot = glm::rotate(*left_housing_rot, param[0], rotateX);
+			*left_housing_rot = glm::rotate(*left_housing_rot, param[1], rotateY);
+			*left_housing_rot = glm::rotate(*left_housing_rot, param[2], rotateZ);
 			break;
 		}
-		
-		case LEFT_ARM_ANGLE: {
-			break;
-		}
-		case RIGHT_ARM_ANGLE: {
-			break;
-		}
-		
-		case TORSO_ANGLE: {
-			break;
-		}
-		case FACE_ANGLE: {
+
+		case RIGHT_HOUSING_ANGLE: {
+			*right_housing_rot = glm::rotate(*right_housing_rot, param[0], rotateX);
+			*right_housing_rot = glm::rotate(*right_housing_rot, param[1], rotateY);
+			*right_housing_rot = glm::rotate(*right_housing_rot, param[2], rotateZ);
 			break;
 		}
 
 		case BODY_ANGLE: {
 			break;
 		}
+		
 		case BODY_TRANSLATE: {
 			break;
 		}
-
 		default:{
 			break;
 		}
