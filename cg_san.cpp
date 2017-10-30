@@ -85,7 +85,7 @@ void initVertexBufferGL(void)
 	// sphere->init();
 	// cube->init();
 	// cylinder->init();
-	// char1->init();
+	char1->init();
 	char2->init();
 	// torus->init();
 	/* 	
@@ -98,7 +98,7 @@ void initVertexBufferGL(void)
 	// sphere->generate();
 	// cube->generate();
 	// cylinder->generate();
-	// char1->generate();
+	char1->generate();
 	char2->generate();
 	// torus->generate();
 	/*
@@ -123,7 +123,7 @@ void renderGL(void)
 	glm::mat4 view_matrix = ortho_matrix * rotation_matrix;
 
 	// lighting
-	glm::vec4 light = view_matrix * glm::vec4(2.0, 2.0, 0.0, 1.0);
+	glm::vec4 light = view_matrix * glm::vec4(0.0, 0.0, 1.0, 1.0);
 	glUniform4fv(uLights, 1, glm::value_ptr(light));
 
 	glUniformMatrix3fv(viewMatrix, 1, GL_FALSE, glm::value_ptr(view_matrix));
@@ -132,8 +132,8 @@ void renderGL(void)
 	// sphere->render(view_matrix);
 	// cube->render(view_matrix);
 	// cylinder->render(view_matrix);
-	// char1->render(view_matrix);
-	char2->render(view_matrix);
+	char1->render(view_matrix);
+	// char2->render(view_matrix);
 	// torus->render(view_matrix);
 	
 	// Renders takes arguments - transformations 
