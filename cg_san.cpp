@@ -9,8 +9,9 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-// #include "object.hpp"
+#include "object.hpp"
 #include "character1.hpp"
+#include "character2.hpp"
 
 GLuint vPosition;
 GLuint vColor;
@@ -42,6 +43,7 @@ BaseObject* cylinder;
 BaseObject* torus;
 
 BaseObject* char1;
+BaseObject* char2;
 
 void printState()
 {
@@ -77,13 +79,15 @@ void initVertexBufferGL(void)
 	cube = new Cube();
 	cylinder = new Cylinder();
 	char1 = new Character1();
+	char2 = new Character2();
 	torus = new SectorTorus(0.8, 1, 0.3, -3.14/3, 3.14/2);
 
 	// sphere->init();
 	// cube->init();
 	// cylinder->init();
-	char1->init();
-	torus->init();
+	// char1->init();
+	char2->init();
+	// torus->init();
 	/* 	
 	 *	Generates vao, vbo takes args as a tree of "objects"
 	 *	character1.init()
@@ -94,8 +98,9 @@ void initVertexBufferGL(void)
 	// sphere->generate();
 	// cube->generate();
 	// cylinder->generate();
-	char1->generate();
-	torus->generate();
+	// char1->generate();
+	char2->generate();
+	// torus->generate();
 	/*
 	 *	Generate geometric primitives with tesselation params 
 	 *	char.generate() 
@@ -127,8 +132,9 @@ void renderGL(void)
 	// sphere->render(view_matrix);
 	// cube->render(view_matrix);
 	// cylinder->render(view_matrix);
-	char1->render(view_matrix);
-	torus->render(view_matrix);
+	// char1->render(view_matrix);
+	char2->render(view_matrix);
+	// torus->render(view_matrix);
 	
 	// Renders takes arguments - transformations 
 	// character1.render()

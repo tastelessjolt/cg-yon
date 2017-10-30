@@ -109,13 +109,21 @@ Sphere::Sphere() {
 
 	lat_angle = PI;
 	long_angle = 2 * PI;
+
+	closed = 0;
 }
 
 Sphere::Sphere(GLfloat lat_start, GLfloat lat_angle, GLfloat long_start, GLfloat long_angle) {
+	method = GL_TRIANGLE_STRIP;
+	tesselation = 50;
+
 	this->lat_start = lat_start;
-	this->long_start = long_start;
 	this->lat_angle = lat_angle;
+	
+	this->long_start = long_start;
 	this->long_angle = long_angle;
+
+	closed = 1;
 }
 
 void Sphere::loadpoints() {
@@ -126,8 +134,8 @@ void Sphere::loadpoints() {
 	GLfloat sectors=(180/(GLfloat(tesselation)*10))/2;
 
 	GLfloat l;
-	for (lats = lat_start; lats <= lat_angle; lats+=sectors) {
-		for(longs = long_start; longs <= long_angle; longs+=slices){
+	for (lats = lat_start; lats <= lat_start + lat_angle; lats+=sectors) {
+		for(longs = long_start; longs <= long_start + long_angle; longs+=slices){
 			GLfloat x = radius * sin(lats) * cos(longs);
 			GLfloat y = radius * sin(lats) * sin(longs);
 			GLfloat z = radius * cos(lats);
@@ -136,8 +144,8 @@ void Sphere::loadpoints() {
 			colors.push_back(red); vertices.push_back(pt); 
 			normals.push_back(pt);
 
-			if(lats+sectors>lat_angle)
-				l=lat_angle;
+			if(lats+sectors > lat_start + lat_angle)
+				l=lat_start + lat_angle;
 			else
 				l=lats+sectors;
 
@@ -150,6 +158,42 @@ void Sphere::loadpoints() {
 			normals.push_back(pt); 
 		}
 	}
+
+	// if (closed) {
+	// 	printf("Generating closing?\n");
+	// 	for (lats = lat_start; lats <= lat_start + lat_angle; lats += lat_angle){
+	// 		for (longs = long_start; longs <= long_start + long_angle; longs+= 2 * slices) {
+	// 			glm::vec4 pt(0.0, 0.0, 0.0, 1.0);
+	// 			colors.push_back(red); vertices.push_back(pt); 
+	// 			normals.push_back(pt);
+
+	// 			GLfloat x = radius * sin(lats) * cos(longs);
+	// 			GLfloat y = radius * sin(lats) * sin(longs);
+	// 			GLfloat z = radius * cos(lats);
+	// 			pt = glm::vec4(x, y, z, 1.0);
+
+	// 			colors.push_back(red); vertices.push_back(pt); 
+	// 			normals.push_back(pt);
+
+	// 			if(longs + slices > long_start + long_angle)
+	// 				l=long_start + long_angle;
+	// 			else
+	// 				l=longs+slices;
+
+	// 			x = radius * sin(lats) * cos(l);
+	// 			y = radius * sin(lats) * sin(l);
+	// 			z = radius * cos(lats);
+	// 			pt =glm::vec4(x, y, z, 1.0);
+
+	// 			colors.push_back(red); vertices.push_back(pt); 
+	// 			normals.push_back(pt); 
+
+	// 			pt = glm::vec4(0.0, 0.0, 0.0, 1.0);
+	// 			colors.push_back(red); vertices.push_back(pt); 
+	// 			normals.push_back(pt);
+	// 		}
+	// 	}
+	// }
 }
 
 Cylinder::Cylinder() {
@@ -276,14 +320,14 @@ void SectorTorus::loadpoints() {
 		vertices.push_back(botc_o); normals.push_back(botc_o); colors.push_back(grey);
 	}
 	{
-		GLfloat x = inner_radius * cos(sector_angle);
-		GLfloat y = inner_radius * sin(sector_angle);
+		GLfloat x = inner_radius * cos(start_angle + sector_angle);
+		GLfloat y = inner_radius * sin(start_angle + sector_angle);
 
 		glm::vec4 topc_i(x, y, top, 1.0);
 		glm::vec4 botc_i(x, y, bottom, 1.0);
 
-		x = outer_radius * cos(sector_angle);
-		y = outer_radius * sin(sector_angle);
+		x = outer_radius * cos(start_angle + sector_angle);
+		y = outer_radius * sin(start_angle + sector_angle);
 
 		glm::vec4 topc_o(x, y, top, 1.0);
 		glm::vec4 botc_o(x, y, bottom, 1.0);
@@ -298,7 +342,7 @@ void SectorTorus::loadpoints() {
 	}
 
 	GLfloat l;
-	for (GLfloat lats = start_angle; lats <= sector_angle; lats=lats+sectors)
+	for (GLfloat lats = start_angle; lats <= start_angle + sector_angle; lats=lats+sectors)
 	{
 		GLfloat x = inner_radius * cos(lats);
 		GLfloat y = inner_radius * sin(lats);
@@ -312,8 +356,8 @@ void SectorTorus::loadpoints() {
 		glm::vec4 topc_o(x, y, top, 1.0);
 		glm::vec4 botc_o(x, y, bottom, 1.0);
 
-		if(lats+sectors>sector_angle)
-			l=sector_angle;
+		if(lats+sectors>start_angle + sector_angle)
+			l=start_angle + sector_angle;
 		else
 			l=lats+sectors;
 
@@ -347,21 +391,21 @@ void SectorTorus::loadpoints() {
 		vertices.push_back(botcn_o); normals.push_back(botcn_o); colors.push_back(grey); 
 		
 
-		vertices.push_back(topcn_i); normals.push_back(topcn_i); colors.push_back(red); 
-		vertices.push_back(topc_i); normals.push_back(topc_i); colors.push_back(red); 
-		vertices.push_back(topc_o); normals.push_back(topc_o); colors.push_back(red); 
+		vertices.push_back(topcn_i); normals.push_back(topcn_i); colors.push_back(blue); 
+		vertices.push_back(topc_i); normals.push_back(topc_i); colors.push_back(blue); 
+		vertices.push_back(topc_o); normals.push_back(topc_o); colors.push_back(blue); 
 
-		vertices.push_back(topcn_i); normals.push_back(topcn_i); colors.push_back(red); 
-		vertices.push_back(topc_o); normals.push_back(topc_o); colors.push_back(red);
-		vertices.push_back(topcn_o); normals.push_back(topcn_o); colors.push_back(red); 
+		vertices.push_back(topcn_i); normals.push_back(topcn_i); colors.push_back(blue); 
+		vertices.push_back(topc_o); normals.push_back(topc_o); colors.push_back(blue);
+		vertices.push_back(topcn_o); normals.push_back(topcn_o); colors.push_back(blue); 
 
-		vertices.push_back(botcn_i); normals.push_back(botcn_i); colors.push_back(red); 
-		vertices.push_back(botc_i); normals.push_back(botc_i); colors.push_back(red); 
-		vertices.push_back(botc_o); normals.push_back(botc_o); colors.push_back(red); 
+		vertices.push_back(botcn_i); normals.push_back(botcn_i); colors.push_back(blue); 
+		vertices.push_back(botc_i); normals.push_back(botc_i); colors.push_back(blue); 
+		vertices.push_back(botc_o); normals.push_back(botc_o); colors.push_back(blue); 
 
-		vertices.push_back(botcn_i); normals.push_back(botcn_i); colors.push_back(red); 
-		vertices.push_back(botc_o); normals.push_back(botc_o); colors.push_back(red);
-		vertices.push_back(botcn_o); normals.push_back(botcn_o); colors.push_back(red); 
+		vertices.push_back(botcn_i); normals.push_back(botcn_i); colors.push_back(blue); 
+		vertices.push_back(botc_o); normals.push_back(botc_o); colors.push_back(blue);
+		vertices.push_back(botcn_o); normals.push_back(botcn_o); colors.push_back(blue); 
 
 	}
 }

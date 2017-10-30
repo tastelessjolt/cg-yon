@@ -1,7 +1,35 @@
+#ifndef CHAR1_HPP
+#define CHAR1_HPP
+
 #include "object.hpp"
 
 class Character1 : public Object {
 
+	GLfloat hipsize_l;
+	GLfloat hipsize_w;
+	GLfloat hipsize_h;
+	GLfloat pelvissize_l;
+	GLfloat pelvissize_w;
+	GLfloat pelvissize_h;
+	GLfloat legsize_l;
+	GLfloat legsize_w;
+	GLfloat legsize_h;
+	GLfloat footsize_l;
+	GLfloat footsize_w;
+	GLfloat footsize_h;
+	GLfloat abdmonesize_l;
+	GLfloat abdmonesize_w;
+	GLfloat abdmonesize_h;
+	GLfloat necksize_l;
+	GLfloat necksize_w;
+	GLfloat necksize_h;
+	GLfloat facesize_l;
+	GLfloat facesize_w;
+	GLfloat facesize_h;
+	GLfloat armsize_l;
+	GLfloat armsize_w;
+	GLfloat armsize_h;
+	GLfloat palmsize;
 
 	glm::vec3 left_leg_angle;
 	glm::mat4* left_leg_angle_matrix;
@@ -48,3 +76,5 @@ public:
 	void init();
 	void manoeuvre(control_type, glm::vec3);
 };
+
+#endif /* CHAR1_HPP */

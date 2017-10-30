@@ -35,6 +35,10 @@ INCLUDES_CHAR1=character1.hpp
 SRC_CHAR1=character1.cpp
 OBJ_CHAR1=character1.o
 
+INCLUDES_CHAR2=character2.hpp
+SRC_CHAR2=character2.cpp
+OBJ_CHAR2=character2.o
+
 all: $(BIN)
 
 $(OBJ_FW): $(INCLUDES_FW) $(SRC_FW)
@@ -49,8 +53,11 @@ $(OBJ_OBJ): $(INCLUDES_OBJ) $(SRC_OBJ)
 $(OBJ_CHAR1): $(INCLUDES_CHAR1) $(SRC_CHAR1) 
 	g++ -c $(CPPFLAGS) $(SRC_CHAR1) $(LDFLAGS) $(LIBS)
 
-$(BIN): $(OBJ_FW) $(OBJ_SU) $(OBJ_OBJ) $(OBJ_CHAR1) $(SRC_MAIN) 
-	g++ $(CPPFLAGS) $(SRC_MAIN) $(OBJ_FW) $(OBJ_SU) $(OBJ_OBJ) $(OBJ_CHAR1) -o $(BIN) $(LDFLAGS) $(LIBS)
+$(OBJ_CHAR2): $(INCLUDES_CHAR2) $(SRC_CHAR2) 
+	g++ -c $(CPPFLAGS) $(SRC_CHAR2) $(LDFLAGS) $(LIBS)
+
+$(BIN): $(OBJ_FW) $(OBJ_SU) $(OBJ_OBJ) $(OBJ_CHAR1) $(OBJ_CHAR2) $(SRC_MAIN) 
+	g++ $(CPPFLAGS) $(SRC_MAIN) $(OBJ_FW) $(OBJ_SU) $(OBJ_OBJ) $(OBJ_CHAR1) $(OBJ_CHAR2) -o $(BIN) $(LDFLAGS) $(LIBS)
 
 clean:
 	rm -f *~ *.o $(BIN)

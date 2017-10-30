@@ -1,3 +1,6 @@
+#ifndef OBJECT_HPP
+#define OBJECT_HPP
+
 #include "gl_framework.hpp"
 #include <vector>
 
@@ -53,6 +56,7 @@ class Sphere : public Primitive {
 	GLfloat long_start;
 	GLfloat lat_angle;
 	GLfloat long_angle;
+	uint closed;
 public:
 	Sphere();
 	Sphere(GLfloat, GLfloat, GLfloat, GLfloat);
@@ -95,4 +99,5 @@ public:
 	void loadpoints();
 };
 
+#endif /* OBJECT_HPP */
 

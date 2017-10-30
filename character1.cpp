@@ -8,46 +8,44 @@ glm::vec3 rotateY = glm::vec3(0.0, 1.0, 0.0);
 glm::vec3 rotateZ = glm::vec3(0.0, 0.0, 1.0);
 
 Character1::Character1(){
+	// sizes 
+	hipsize_l = 0.5;
+	hipsize_w = 1.0;
+	hipsize_h = 0.25;
+
+	pelvissize_l = 0.6;
+	pelvissize_w = 1.25;
+	pelvissize_h = 0.6;
+
+	legsize_l = 0.5;
+	legsize_w = 0.5;
+	legsize_h = 2.0;
+
+	footsize_l = 0.6;
+	footsize_w = 0.4;
+	footsize_h = 0.25;
+
+	abdmonesize_l = 0.60;
+	abdmonesize_w = 1.10;
+	abdmonesize_h = 1.5;
+
+	necksize_l = 0.5;
+	necksize_w = 0.5;
+	necksize_h = 0.75;
+
+	facesize_l = 0.7;
+	facesize_w = 0.7;
+	facesize_h = 0.65;
+
+	armsize_l = 0.3;
+	armsize_w = 0.3;
+	armsize_h = 1.5;
+
+	palmsize = 0.4;
 
 }
 
 void Character1::init(){
-
-	// sizes 
-	GLfloat hipsize_l = 0.5;
-	GLfloat hipsize_w = 1.0;
-	GLfloat hipsize_h = 0.25;
-
-	GLfloat pelvissize_l = 0.6;
-	GLfloat pelvissize_w = 1.25;
-	GLfloat pelvissize_h = 0.6;
-
-	GLfloat legsize_l = 0.5;
-	GLfloat legsize_w = 0.5;
-	GLfloat legsize_h = 2.0;
-
-	GLfloat footsize_l = 0.6;
-	GLfloat footsize_w = 0.4;
-	GLfloat footsize_h = 0.25;
-
-	GLfloat abdmonesize_l = 0.60;
-	GLfloat abdmonesize_w = 1.10;
-	GLfloat abdmonesize_h = 1.5;
-
-	GLfloat necksize_l = 0.5;
-	GLfloat necksize_w = 0.5;
-	GLfloat necksize_h = 0.75;
-
-	GLfloat facesize_l = 0.7;
-	GLfloat facesize_w = 0.7;
-	GLfloat facesize_h = 0.65;
-
-	GLfloat armsize_l = 0.3;
-	GLfloat armsize_w = 0.3;
-	GLfloat armsize_h = 1.5;
-
-	GLfloat palmsize = 0.4;
-
 
 	// character translations
 

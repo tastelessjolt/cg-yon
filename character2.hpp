@@ -1,3 +1,5 @@
+#ifndef CHAR2_HPP
+#define CHAR2_HPP
 #include "object.hpp"
 
 class Character2 : public Object {
@@ -25,5 +27,6 @@ public:
 	
 	Character2();
 	void init();
-	void manoeuvre(char2_control_type, glm::vec3);
+	void manoeuvre(control_type, glm::vec3);
 };
+#endif /* CHAR2_HPP */
