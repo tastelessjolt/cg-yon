@@ -37,8 +37,8 @@ GLfloat yrot = 0.0f;
 GLfloat zrot = 0.0f;
 
 GLfloat xpos = 0.0f;
-GLfloat ypos = 0.0f;
-GLfloat zpos = 0.0f;
+GLfloat ypos = 2.0f;
+GLfloat zpos = 2.0f;
 
 BaseObject* sphere;
 BaseObject* cube;
@@ -148,8 +148,8 @@ void renderGL(void)
 	// cylinder->render(view_matrix);
 	// torus->render(view_matrix);
 	char1->render(view_matrix);
-	// char2->render(view_matrix);
-	// environment->render(view_matrix);
+	char2->render(view_matrix);
+	environment->render(view_matrix);
 	// torus->render(view_matrix);
 }
 

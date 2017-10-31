@@ -171,7 +171,7 @@ void Sphere::loadpoints() {
 			glm::vec4 pt(x, y, z, 1.0);
 
 			colors.push_back(red); vertices.push_back(pt); 
-			normals.push_back(glm::vec3(pt));
+			normals.push_back(glm::vec3(pt)); texs.push_back(glm::vec2(longs/(2 * PI), lats/(PI)));
 
 			if(lats+sectors > lat_start + lat_angle)
 				l=lat_start + lat_angle;
@@ -184,7 +184,7 @@ void Sphere::loadpoints() {
 			pt =glm::vec4(x, y, z, 1.0);
 
 			colors.push_back(red); vertices.push_back(pt); 
-			normals.push_back(glm::vec3(pt)); 
+			normals.push_back(glm::vec3(pt)); texs.push_back(glm::vec2(longs/(2 * PI), lats/(PI))); 
 		}
 	}
 
@@ -261,8 +261,8 @@ void Cylinder::loadpoints() {
 		glm::vec4 botcn(x, y, bottom, 1.0);
 
 		vertices.push_back(topa); normals.push_back(glm::vec3(topa)); colors.push_back(blue); texs.push_back(glm::vec2(0.0, top + 0.5)); 
-		vertices.push_back(topc); normals.push_back(glm::vec3(topc)); colors.push_back(blue); texs.push_back(glm::vec2((lats)/(2*PI), top + 0.5)); 
-		vertices.push_back(topcn); normals.push_back(glm::vec3(topcn)); colors.push_back(blue); texs.push_back(glm::vec2((l)/(2*PI), top + 0.5)); 
+		vertices.push_back(topc); normals.push_back(glm::vec3(topc)); colors.push_back(blue); texs.push_back(glm::vec2(0.0, top + 0.5)); 
+		vertices.push_back(topcn); normals.push_back(glm::vec3(topcn)); colors.push_back(blue); texs.push_back(glm::vec2(0.0, top + 0.5)); 
 
 		vertices.push_back(topcn); normals.push_back(glm::vec3(topcn)); colors.push_back(blue); texs.push_back(glm::vec2((l)/(2*PI), top + 0.5)); 
 		vertices.push_back(topc); normals.push_back(glm::vec3(topc)); colors.push_back(blue); texs.push_back(glm::vec2((lats)/(2*PI), top + 0.5)); 
@@ -272,8 +272,8 @@ void Cylinder::loadpoints() {
 		vertices.push_back(botc); normals.push_back(glm::vec3(botc)); colors.push_back(blue); texs.push_back(glm::vec2((lats)/(2*PI), bottom + 0.5)); 
 		vertices.push_back(botcn); normals.push_back(glm::vec3(botcn)); colors.push_back(blue); texs.push_back(glm::vec2((l)/(2*PI), bottom + 0.5)); 
 		
-		vertices.push_back(botcn); normals.push_back(glm::vec3(botcn)); colors.push_back(blue); texs.push_back(glm::vec2((l)/(2*PI), bottom + 0.5)); 
-		vertices.push_back(botc); normals.push_back(glm::vec3(botc)); colors.push_back(blue); texs.push_back(glm::vec2((lats)/(2*PI), bottom + 0.5)); 
+		vertices.push_back(botcn); normals.push_back(glm::vec3(botcn)); colors.push_back(blue); texs.push_back(glm::vec2(0.0, bottom + 0.5)); 
+		vertices.push_back(botc); normals.push_back(glm::vec3(botc)); colors.push_back(blue); texs.push_back(glm::vec2(0.0, bottom + 0.5)); 
 		vertices.push_back(bota); normals.push_back(glm::vec3(bota)); colors.push_back(blue); texs.push_back(glm::vec2(0.0, bottom + 0.5)); 
 		
 	}

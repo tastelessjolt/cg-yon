@@ -235,7 +235,7 @@ void Character1::init(){
 	// abdomen
 	Primitive* abdomen = new Cube();
 	upperbody->children.push_back(abdomen);
-	abdomen->settexture("textures/robot.bmp", 600, 381);
+	abdomen->settexture("textures/shirt.bmp", 332, 275);
 
 	glm::mat4* abdomenmodel = new glm::mat4();
 	abdomen->transforms.push_back(abdomenmodel);
@@ -259,7 +259,7 @@ void Character1::init(){
 
 	Primitive* face = new Cylinder();
 	head->children.push_back(face);
-	face->settexture("textures/robot_face.bmp", 800, 600);
+	face->settexture("textures/face.bmp", 640, 320);
 
 	glm::mat4* facerotate = new glm::mat4();
 	face->transforms.push_back(facerotate);
@@ -320,6 +320,9 @@ void Character1::init(){
 	
 	Primitive* left_elbow = new Sphere();
 	leftelbow->children.push_back(left_elbow);
+
+	left_elbow->settexture("textures/face.bmp", 640, 320);
+
 	glm::mat4* leftelbowscale = new glm::mat4();
 	left_elbow->transforms.push_back(leftelbowscale);
 	*leftelbowscale = glm::scale(glm::mat4(1.0f), glm::vec3(armsize_w * 1.2, armsize_w * 1.2, armsize_w * 1.2)) * 
@@ -387,6 +390,9 @@ void Character1::init(){
 	
 	Primitive* right_elbow = new Sphere();
 	rightelbow->children.push_back(right_elbow);
+
+	right_elbow->settexture("textures/face.bmp", 640, 320);
+
 	glm::mat4* rightelbowscale = new glm::mat4();
 	right_elbow->transforms.push_back(rightelbowscale);
 	*rightelbowscale = glm::scale(glm::mat4(1.0f), glm::vec3(armsize_w * 1.2, armsize_w * 1.2, armsize_w * 1.2)) * 
