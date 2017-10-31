@@ -33,15 +33,23 @@ class Character1 : public Object {
 
 	glm::vec3 left_leg_angle;
 	glm::mat4* left_leg_angle_matrix;
+	glm::vec3 left_knee_angle;
+	glm::mat4* left_knee_angle_matrix;
 
 	glm::vec3 right_leg_angle;
 	glm::mat4* right_leg_angle_matrix;
+	glm::vec3 right_knee_angle;
+	glm::mat4* right_knee_angle_matrix;
 
 	glm::vec3 left_arm_angle;
 	glm::mat4* left_arm_angle_matrix;
+	glm::vec3 left_elbow_angle;
+	glm::mat4* left_elbow_angle_matrix;
 
 	glm::vec3 right_arm_angle;
 	glm::mat4* right_arm_angle_matrix;
+	glm::vec3 right_elbow_angle;
+	glm::mat4* right_elbow_angle_matrix;
 
 	glm::vec3 torso_angle;
 	glm::mat4* torso_angle_matrix;
@@ -60,10 +68,14 @@ public:
 	enum control_type
 	{
 		LEFT_LEG_ANGLE,
+		LEFT_KNEE_ANGLE,
 		RIGHT_LEG_ANGLE,
+		RIGHT_KNEE_ANGLE,
 		
 		LEFT_ARM_ANGLE,
+		LEFT_ELBOW_ANGLE,
 		RIGHT_ARM_ANGLE,
+		RIGHT_ELBOW_ANGLE,
 		
 		TORSO_ANGLE,
 		FACE_ANGLE,

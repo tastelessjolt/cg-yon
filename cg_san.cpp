@@ -28,9 +28,9 @@ GLuint uLights1_int;
 GLuint uLights2_int;
 GLuint uLights3_int;
 
-GLint light1on = 0;
-GLint light2on = 0;
-GLint light3on = 0;
+GLint light1on = 1;
+GLint light2on = 1;
+GLint light3on = 1;
 
 GLuint texture;
 GLuint textCoord;

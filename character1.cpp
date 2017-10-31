@@ -118,6 +118,7 @@ void Character1::init(){
 	glm::mat4* leftkneerot = new glm::mat4();
 	left_knee->transforms.push_back(leftkneerot);
 	*leftkneerot = glm::rotate(glm::mat4(1.0f), pi/8, rotateX);
+	left_knee_angle_matrix = leftkneerot;
 
 	glm::mat4* leftkneeconstraint = new glm::mat4();
 	left_knee->transforms.push_back(leftkneeconstraint);
@@ -194,6 +195,7 @@ void Character1::init(){
 	glm::mat4* rightkneerot = new glm::mat4();
 	right_knee->transforms.push_back(rightkneerot);
 	*rightkneerot = glm::rotate(glm::mat4(1.0f), pi/8, rotateX);
+	right_knee_angle_matrix = rightkneerot;
 
 	glm::mat4* rightkneeconstraint = new glm::mat4();
 	right_knee->transforms.push_back(rightkneeconstraint);
@@ -327,6 +329,7 @@ void Character1::init(){
 	glm::mat4* leftarm_elbow_rot = new glm::mat4();
 	leftelbow->transforms.push_back(leftarm_elbow_rot);
 	*leftarm_elbow_rot = glm::rotate(glm::mat4(1.0f), -pi/8, rotateY);
+	left_elbow_angle_matrix = leftarm_elbow_rot;
 
 	glm::mat4* leftarm_elbow_trans = new glm::mat4();
 	leftelbow->transforms.push_back(leftarm_elbow_trans);
@@ -397,6 +400,7 @@ void Character1::init(){
 	glm::mat4* rightarm_elbow_rot = new glm::mat4();
 	rightelbow->transforms.push_back(rightarm_elbow_rot);
 	*rightarm_elbow_rot = glm::rotate(glm::mat4(1.0f), pi/8, rotateY);
+	right_elbow_angle_matrix = rightarm_elbow_rot;
 
 	glm::mat4* rightarm_elbow_trans = new glm::mat4();
 	rightelbow->transforms.push_back(rightarm_elbow_trans);
@@ -434,34 +438,66 @@ void Character1::manoeuvre(Character1::control_type ctrl, glm::vec3 param){
 
 		case LEFT_LEG_ANGLE: {
 			left_leg_angle += param;
-			*left_leg_angle_matrix = glm::rotate(*left_leg_angle_matrix, param[0], rotateX);
+			*left_leg_angle_matrix = glm::rotate(glm::mat4(1.0f), left_leg_angle[0], rotateX);
+			*left_leg_angle_matrix = glm::rotate(*left_leg_angle_matrix, left_leg_angle[1], rotateY);
+			*left_leg_angle_matrix = glm::rotate(*left_leg_angle_matrix, left_leg_angle[2], rotateZ);
 			break;
 		}
 		case RIGHT_LEG_ANGLE: {
 			right_leg_angle += param;
-			*right_leg_angle_matrix = glm::rotate(*right_leg_angle_matrix, param[0], rotateX);
+			*right_leg_angle_matrix = glm::rotate(glm::mat4(1.0f), right_leg_angle[0], rotateX);
+			*right_leg_angle_matrix = glm::rotate(*right_leg_angle_matrix, right_leg_angle[1], rotateY);
+			*right_leg_angle_matrix = glm::rotate(*right_leg_angle_matrix, right_leg_angle[2], rotateZ);
 			break;
 		}
+
+		
+		case LEFT_KNEE_ANGLE: {
+			left_knee_angle += param;
+			*left_knee_angle_matrix = glm::rotate(glm::mat4(1.0f), left_knee_angle[0], rotateX);
+			break;
+		}
+		case RIGHT_KNEE_ANGLE: {
+			right_knee_angle += param;
+			*right_knee_angle_matrix = glm::rotate(glm::mat4(1.0f), right_knee_angle[0], rotateX);
+			break;
+		}
+
 		
 		case LEFT_ARM_ANGLE: {
 			left_arm_angle += param;
-			*left_arm_angle_matrix = glm::rotate(*left_arm_angle_matrix, param[0], rotateX);
+			*left_arm_angle_matrix = glm::rotate(glm::mat4(1.0f), left_arm_angle[0], rotateX);
+			*left_arm_angle_matrix = glm::rotate(*left_arm_angle_matrix, left_arm_angle[1], rotateY);
+			*left_arm_angle_matrix = glm::rotate(*left_arm_angle_matrix, left_arm_angle[2], rotateZ);
 			break;
 		}
 		case RIGHT_ARM_ANGLE: {
 			right_arm_angle += param;
-			*right_arm_angle_matrix = glm::rotate(*right_arm_angle_matrix, param[0], rotateX);
+			*right_arm_angle_matrix = glm::rotate(glm::mat4(1.0f), right_arm_angle[0], rotateX);
+			*right_arm_angle_matrix = glm::rotate(*right_arm_angle_matrix, right_arm_angle[1], rotateY);
+			*right_arm_angle_matrix = glm::rotate(*right_arm_angle_matrix, right_arm_angle[2], rotateZ);
 			break;
 		}
-		
+
+		case LEFT_ELBOW_ANGLE: {
+			left_elbow_angle += param;
+			*left_elbow_angle_matrix = glm::rotate(glm::mat4(1.0f), left_elbow_angle[1], rotateY);
+			break;
+		}
+		case RIGHT_ELBOW_ANGLE: {
+			right_elbow_angle += param;
+			*right_elbow_angle_matrix = glm::rotate(glm::mat4(1.0f), right_elbow_angle[1], rotateY);
+			break;
+		}
+
 		case TORSO_ANGLE: {
 			torso_angle += param;
-			*torso_angle_matrix = glm::rotate(*torso_angle_matrix, param[1], rotateY);
+			*torso_angle_matrix = glm::rotate(glm::mat4(1.0f), torso_angle[1], rotateY);
 			break;
 		}
 		case FACE_ANGLE: {
 			face_angle += param;
-			*face_angle_matrix = glm::rotate(*face_angle_matrix, param[1], rotateY);
+			*face_angle_matrix = glm::rotate(glm::mat4(1.0f), face_angle[1], rotateY);
 			break;
 		}
 
