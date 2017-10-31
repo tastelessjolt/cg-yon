@@ -7,7 +7,20 @@ extern glm::vec3 rotateY;
 extern glm::vec3 rotateZ;
 
 Character2::Character2(){
+	// headband
+	headband_rad = 1.0;
+	headband_thickness = 0.2;
+	headband_width = 0.5;
 
+	headband_ang = 230.0 * (pi / 180.0);
+
+	// housing
+	housing_rad = 0.5;
+
+	// earpads
+	earpads_rad = 0.3;
+	earpads_width = 0.25;
+	earpads_thickness = 0.1;
 }
 
 void Character2::init(){
@@ -16,21 +29,6 @@ void Character2::init(){
 
 	// transforms.push_back(fullbodytrans);
 	// transforms.push_back(fullbodyrot);
-
-	// headband
-	GLfloat headband_rad = 1.0;
-	GLfloat headband_thickness = 0.2;
-	GLfloat headband_width = 0.5;
-
-	GLfloat headband_ang = 230.0 * (pi / 180.0);
-
-	// housing
-	GLfloat housing_rad = 0.5;
-
-	// earpads
-	GLfloat earpads_rad = 0.3;
-	GLfloat earpads_width = 0.25;
-	GLfloat earpads_thickness = 0.1;
 	/*
 	 *	headband
 	*/

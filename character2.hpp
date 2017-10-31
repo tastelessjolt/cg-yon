@@ -3,6 +3,15 @@
 #include "object.hpp"
 
 class Character2 : public Object {
+	GLfloat headband_rad;
+	GLfloat headband_thickness;
+	GLfloat headband_width;
+	GLfloat headband_ang;
+	GLfloat housing_rad;
+	GLfloat earpads_rad;
+	GLfloat earpads_width;
+	GLfloat earpads_thickness;
+
 	glm::vec3 body_angle;
 	glm::mat4* body_angle_matrix;
 

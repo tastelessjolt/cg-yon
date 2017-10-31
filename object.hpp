@@ -3,6 +3,7 @@
 
 #include "gl_framework.hpp"
 #include <vector>
+#include <string>
 
 #include "glm/mat4x4.hpp"
 #include "glm/vec3.hpp"
@@ -41,11 +42,16 @@ protected:
 	GLuint vbo, vao;
 	std::vector<glm::vec4> vertices;
 	std::vector<glm::vec4> colors;
-	std::vector<glm::vec4> normals;
+	std::vector<glm::vec3> normals;
+	std::vector<glm::vec2> texs;
+	GLuint tex;
+	std::string texture_filename;
+	int tex_width, tex_height;
 public:
 	Primitive();
 	void init();	
 	void generate();
+	void settexture(std::string, int, int);
 	virtual void loadpoints() = 0;
 	void render();
 	void render(glm::mat4);

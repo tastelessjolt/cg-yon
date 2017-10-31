@@ -235,6 +235,7 @@ void Character1::init(){
 	// abdomen
 	Primitive* abdomen = new Cube();
 	upperbody->children.push_back(abdomen);
+	abdomen->settexture("textures/robot.bmp", 600, 381);
 
 	glm::mat4* abdomenmodel = new glm::mat4();
 	abdomen->transforms.push_back(abdomenmodel);

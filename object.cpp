@@ -1,17 +1,21 @@
 #include "object.hpp"
+#include "texture.hpp"
 
 extern GLuint vPosition;
 extern GLuint vColor;
 extern GLuint vNormal;
+extern GLuint textCoord;
+
 extern GLuint uModelViewMatrix;
 extern GLuint normalMatrix;
 extern GLuint viewMatrix;
 extern GLuint uLights;
+extern GLuint texture;
 
 
 #define red glm::vec4(1.0, 0.0, 0.0, 1.0)
 #define blue glm::vec4(0.0, 0.0, 1.0, 1.0)
-#define grey glm::vec4(0.2, 0.2, 0.2, 1.0)
+#define grey glm::vec4(0.6, 0.6, 0.6, 1.0)
 #define white glm::vec4(1.0, 1.0, 1.0, 1.0)
 
 double PI = 3.14159265;
@@ -50,7 +54,8 @@ void Object::render(glm::mat4 transform) {
 }
 
 Primitive::Primitive() {
-
+	tex = -1;
+	texture_filename = "";
 }
 
 void Primitive::init() {
@@ -60,14 +65,20 @@ void Primitive::init() {
 
 void Primitive::generate() {
 	loadpoints();
+	if (texture_filename == "") {
+		texs.clear();
+		for (int i = 0; i != vertices.size(); i++) 
+			texs.push_back(glm::vec2(-1.0, 0.0));
+	}
 
 	glBindVertexArray (vao);
 	glBindBuffer (GL_ARRAY_BUFFER, vbo);
 
-	glBufferData (GL_ARRAY_BUFFER, sizeof(glm::vec4) * (vertices.size() + colors.size() + normals.size()), NULL, GL_STATIC_DRAW);
+	glBufferData (GL_ARRAY_BUFFER, sizeof(glm::vec4) * (vertices.size() + colors.size()) + sizeof(glm::vec3) * (normals.size()) + sizeof(glm::vec2) * (texs.size()), NULL, GL_STATIC_DRAW);
 	glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(glm::vec4) * vertices.size(), &vertices[0] );
 	glBufferSubData( GL_ARRAY_BUFFER, sizeof(glm::vec4) * vertices.size(), sizeof(glm::vec4) * colors.size(), &colors[0] );
-	glBufferSubData( GL_ARRAY_BUFFER, sizeof(glm::vec4) *(vertices.size() + colors.size()), sizeof(glm::vec4) * (normals.size()), &normals[0] );
+	glBufferSubData( GL_ARRAY_BUFFER, sizeof(glm::vec4) *(vertices.size() + colors.size()), sizeof(glm::vec3) * (normals.size()), &normals[0] );
+	glBufferSubData( GL_ARRAY_BUFFER, sizeof(glm::vec4) *(vertices.size() + colors.size()) + sizeof(glm::vec3) * (normals.size()), sizeof(glm::vec2) * (texs.size()), &texs[0] );
 
 	glEnableVertexAttribArray( vPosition );
 	glVertexAttribPointer( vPosition, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
@@ -76,7 +87,16 @@ void Primitive::generate() {
 	glVertexAttribPointer( vColor, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(glm::vec4) *(vertices.size())));
 
 	glEnableVertexAttribArray( vNormal );
-	glVertexAttribPointer( vNormal, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(glm::vec4) *(vertices.size() + colors.size())) );
+	glVertexAttribPointer( vNormal, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(glm::vec4) *(vertices.size() + colors.size())) );
+
+	glEnableVertexAttribArray( textCoord );
+	glVertexAttribPointer( textCoord, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(glm::vec4) *(vertices.size() + colors.size()) + sizeof(glm::vec3) * (normals.size())) );
+
+	if (texture_filename != "") {
+		// Load Textures 
+		tex=LoadTexture(texture_filename.c_str(), tex_width, tex_height);
+		glBindTexture(GL_TEXTURE_2D, tex);
+	}
 }
 
 void Primitive::render() {
@@ -95,9 +115,17 @@ void Primitive::render(glm::mat4 transform) {
 	glUniformMatrix4fv(uModelViewMatrix, 1, GL_FALSE, glm::value_ptr(modelview_matrix));
 	glm::mat3 normal_matrix = glm::transpose (glm::inverse(glm::mat3(modelview_matrix)));
 	glUniformMatrix3fv(normalMatrix, 1, GL_FALSE, glm::value_ptr(normal_matrix));
-	
+
 	glBindVertexArray (vao);
+
+
 	glDrawArrays(method, 0, vertices.size());
+}
+
+void Primitive::settexture(std::string filename, int tex_width, int tex_height) {
+	this->texture_filename = filename;
+	this->tex_width = tex_width;
+	this->tex_height = tex_height;
 }
 
 Sphere::Sphere() {
@@ -142,7 +170,7 @@ void Sphere::loadpoints() {
 			glm::vec4 pt(x, y, z, 1.0);
 
 			colors.push_back(red); vertices.push_back(pt); 
-			normals.push_back(pt);
+			normals.push_back(glm::vec3(pt));
 
 			if(lats+sectors > lat_start + lat_angle)
 				l=lat_start + lat_angle;
@@ -155,7 +183,7 @@ void Sphere::loadpoints() {
 			pt =glm::vec4(x, y, z, 1.0);
 
 			colors.push_back(red); vertices.push_back(pt); 
-			normals.push_back(pt); 
+			normals.push_back(glm::vec3(pt)); 
 		}
 	}
 
@@ -165,7 +193,7 @@ void Sphere::loadpoints() {
 	// 		for (longs = long_start; longs <= long_start + long_angle; longs+= 2 * slices) {
 	// 			glm::vec4 pt(0.0, 0.0, 0.0, 1.0);
 	// 			colors.push_back(red); vertices.push_back(pt); 
-	// 			normals.push_back(pt);
+	// 			normals.push_back(glm::vec3(pt));
 
 	// 			GLfloat x = radius * sin(lats) * cos(longs);
 	// 			GLfloat y = radius * sin(lats) * sin(longs);
@@ -173,7 +201,7 @@ void Sphere::loadpoints() {
 	// 			pt = glm::vec4(x, y, z, 1.0);
 
 	// 			colors.push_back(red); vertices.push_back(pt); 
-	// 			normals.push_back(pt);
+	// 			normals.push_back(glm::vec3(pt));
 
 	// 			if(longs + slices > long_start + long_angle)
 	// 				l=long_start + long_angle;
@@ -186,11 +214,11 @@ void Sphere::loadpoints() {
 	// 			pt =glm::vec4(x, y, z, 1.0);
 
 	// 			colors.push_back(red); vertices.push_back(pt); 
-	// 			normals.push_back(pt); 
+	// 			normals.push_back(glm::vec3(pt)); 
 
 	// 			pt = glm::vec4(0.0, 0.0, 0.0, 1.0);
 	// 			colors.push_back(red); vertices.push_back(pt); 
-	// 			normals.push_back(pt);
+	// 			normals.push_back(glm::vec3(pt));
 	// 		}
 	// 	}
 	// }
@@ -231,21 +259,21 @@ void Cylinder::loadpoints() {
 		glm::vec4 topcn(x, y, top, 1.0);
 		glm::vec4 botcn(x, y, bottom, 1.0);
 
-		vertices.push_back(topa); normals.push_back(topa); colors.push_back(blue); 
-		vertices.push_back(topc); normals.push_back(topc); colors.push_back(blue); 
-		vertices.push_back(topcn); normals.push_back(topcn); colors.push_back(blue); 
+		vertices.push_back(topa); normals.push_back(glm::vec3(topa)); colors.push_back(blue); 
+		vertices.push_back(topc); normals.push_back(glm::vec3(topc)); colors.push_back(blue); 
+		vertices.push_back(topcn); normals.push_back(glm::vec3(topcn)); colors.push_back(blue); 
 
-		vertices.push_back(topcn); normals.push_back(topcn); colors.push_back(blue); 
-		vertices.push_back(topc); normals.push_back(topc); colors.push_back(blue); 
-		vertices.push_back(botc); normals.push_back(botc); colors.push_back(blue); 
+		vertices.push_back(topcn); normals.push_back(glm::vec3(topcn)); colors.push_back(blue); 
+		vertices.push_back(topc); normals.push_back(glm::vec3(topc)); colors.push_back(blue); 
+		vertices.push_back(botc); normals.push_back(glm::vec3(botc)); colors.push_back(blue); 
 		
-		vertices.push_back(topcn); normals.push_back(topcn); colors.push_back(blue); 
-		vertices.push_back(botc); normals.push_back(botc); colors.push_back(blue); 
-		vertices.push_back(botcn); normals.push_back(botcn); colors.push_back(blue); 
+		vertices.push_back(topcn); normals.push_back(glm::vec3(topcn)); colors.push_back(blue); 
+		vertices.push_back(botc); normals.push_back(glm::vec3(botc)); colors.push_back(blue); 
+		vertices.push_back(botcn); normals.push_back(glm::vec3(botcn)); colors.push_back(blue); 
 		
-		vertices.push_back(botcn); normals.push_back(botcn); colors.push_back(blue); 
-		vertices.push_back(botc); normals.push_back(botc); colors.push_back(blue); 
-		vertices.push_back(bota); normals.push_back(bota); colors.push_back(blue); 
+		vertices.push_back(botcn); normals.push_back(glm::vec3(botcn)); colors.push_back(blue); 
+		vertices.push_back(botc); normals.push_back(glm::vec3(botc)); colors.push_back(blue); 
+		vertices.push_back(bota); normals.push_back(glm::vec3(bota)); colors.push_back(blue); 
 		
 	}
 
@@ -258,12 +286,12 @@ Cube::Cube() {
 // quad generates two triangles for each face and assigns colors to the vertices
 void Cube::quad(int a, int b, int c, int d)
 {
-  colors.push_back(red); vertices.push_back(positions[a]); normals.push_back(positions[a]); 
-  colors.push_back(red); vertices.push_back(positions[b]); normals.push_back(positions[b]); 
-  colors.push_back(red); vertices.push_back(positions[c]); normals.push_back(positions[c]); 
-  colors.push_back(red); vertices.push_back(positions[a]); normals.push_back(positions[a]); 
-  colors.push_back(red); vertices.push_back(positions[c]); normals.push_back(positions[c]); 
-  colors.push_back(red); vertices.push_back(positions[d]); normals.push_back(positions[d]); 
+  colors.push_back(red); vertices.push_back(positions[a]); normals.push_back(glm::vec3(positions[a])); texs.push_back(glm::vec2(0.0, 0.0));
+  colors.push_back(red); vertices.push_back(positions[b]); normals.push_back(glm::vec3(positions[b])); texs.push_back(glm::vec2(1.0, 0.0));
+  colors.push_back(red); vertices.push_back(positions[c]); normals.push_back(glm::vec3(positions[c])); texs.push_back(glm::vec2(1.0, 1.0));
+  colors.push_back(red); vertices.push_back(positions[a]); normals.push_back(glm::vec3(positions[a])); texs.push_back(glm::vec2(0.0, 0.0));
+  colors.push_back(red); vertices.push_back(positions[c]); normals.push_back(glm::vec3(positions[c])); texs.push_back(glm::vec2(1.0, 1.0));
+  colors.push_back(red); vertices.push_back(positions[d]); normals.push_back(glm::vec3(positions[d])); texs.push_back(glm::vec2(0.0, 1.0));
  }
 
 // generate 12 triangles: 36 vertices and 36 colors
@@ -311,13 +339,13 @@ void SectorTorus::loadpoints() {
 		glm::vec4 topc_o(x, y, top, 1.0);
 		glm::vec4 botc_o(x, y, bottom, 1.0);
 
-		vertices.push_back(botc_i); normals.push_back(botc_i); colors.push_back(grey); 
-		vertices.push_back(topc_i); normals.push_back(topc_i); colors.push_back(grey); 
-		vertices.push_back(topc_o); normals.push_back(topc_o); colors.push_back(grey); 
+		vertices.push_back(botc_i); normals.push_back(glm::vec3(botc_i)); colors.push_back(grey); 
+		vertices.push_back(topc_i); normals.push_back(glm::vec3(topc_i)); colors.push_back(grey); 
+		vertices.push_back(topc_o); normals.push_back(glm::vec3(topc_o)); colors.push_back(grey); 
 
-		vertices.push_back(botc_i); normals.push_back(botc_i); colors.push_back(grey); 
-		vertices.push_back(topc_o); normals.push_back(topc_o); colors.push_back(grey);
-		vertices.push_back(botc_o); normals.push_back(botc_o); colors.push_back(grey);
+		vertices.push_back(botc_i); normals.push_back(glm::vec3(botc_i)); colors.push_back(grey); 
+		vertices.push_back(topc_o); normals.push_back(glm::vec3(topc_o)); colors.push_back(grey);
+		vertices.push_back(botc_o); normals.push_back(glm::vec3(botc_o)); colors.push_back(grey);
 	}
 	{
 		GLfloat x = inner_radius * cos(start_angle + sector_angle);
@@ -332,13 +360,13 @@ void SectorTorus::loadpoints() {
 		glm::vec4 topc_o(x, y, top, 1.0);
 		glm::vec4 botc_o(x, y, bottom, 1.0);
 
-		vertices.push_back(botc_i); normals.push_back(botc_i); colors.push_back(grey); 
-		vertices.push_back(topc_i); normals.push_back(topc_i); colors.push_back(grey); 
-		vertices.push_back(topc_o); normals.push_back(topc_o); colors.push_back(grey); 
+		vertices.push_back(botc_i); normals.push_back(glm::vec3(botc_i)); colors.push_back(grey); 
+		vertices.push_back(topc_i); normals.push_back(glm::vec3(topc_i)); colors.push_back(grey); 
+		vertices.push_back(topc_o); normals.push_back(glm::vec3(topc_o)); colors.push_back(grey); 
 
-		vertices.push_back(botc_i); normals.push_back(botc_i); colors.push_back(grey); 
-		vertices.push_back(topc_o); normals.push_back(topc_o); colors.push_back(grey);
-		vertices.push_back(botc_o); normals.push_back(botc_o); colors.push_back(grey);
+		vertices.push_back(botc_i); normals.push_back(glm::vec3(botc_i)); colors.push_back(grey); 
+		vertices.push_back(topc_o); normals.push_back(glm::vec3(topc_o)); colors.push_back(grey);
+		vertices.push_back(botc_o); normals.push_back(glm::vec3(botc_o)); colors.push_back(grey);
 	}
 
 	GLfloat l;
@@ -374,38 +402,38 @@ void SectorTorus::loadpoints() {
 		glm::vec4 topcn_o(x, y, top, 1.0);
 		glm::vec4 botcn_o(x, y, bottom, 1.0);
 
-		vertices.push_back(topcn_i); normals.push_back(topcn_i); colors.push_back(grey); 
-		vertices.push_back(topc_i); normals.push_back(topc_i); colors.push_back(grey); 
-		vertices.push_back(botc_i); normals.push_back(botc_i); colors.push_back(grey); 
+		vertices.push_back(topcn_i); normals.push_back(glm::vec3(topcn_i)); colors.push_back(grey); 
+		vertices.push_back(topc_i); normals.push_back(glm::vec3(topc_i)); colors.push_back(grey); 
+		vertices.push_back(botc_i); normals.push_back(glm::vec3(botc_i)); colors.push_back(grey); 
 		
-		vertices.push_back(topcn_i); normals.push_back(topcn_i); colors.push_back(grey); 
-		vertices.push_back(botc_i); normals.push_back(botc_i); colors.push_back(grey); 
-		vertices.push_back(botcn_i); normals.push_back(botcn_i); colors.push_back(grey); 
+		vertices.push_back(topcn_i); normals.push_back(glm::vec3(topcn_i)); colors.push_back(grey); 
+		vertices.push_back(botc_i); normals.push_back(glm::vec3(botc_i)); colors.push_back(grey); 
+		vertices.push_back(botcn_i); normals.push_back(glm::vec3(botcn_i)); colors.push_back(grey); 
 
-		vertices.push_back(topcn_o); normals.push_back(topcn_o); colors.push_back(grey); 
-		vertices.push_back(topc_o); normals.push_back(topc_o); colors.push_back(grey); 
-		vertices.push_back(botc_o); normals.push_back(botc_o); colors.push_back(grey); 
+		vertices.push_back(topcn_o); normals.push_back(glm::vec3(topcn_o)); colors.push_back(grey); 
+		vertices.push_back(topc_o); normals.push_back(glm::vec3(topc_o)); colors.push_back(grey); 
+		vertices.push_back(botc_o); normals.push_back(glm::vec3(botc_o)); colors.push_back(grey); 
 		
-		vertices.push_back(topcn_o); normals.push_back(topcn_o); colors.push_back(grey); 
-		vertices.push_back(botc_o); normals.push_back(botc_o); colors.push_back(grey); 
-		vertices.push_back(botcn_o); normals.push_back(botcn_o); colors.push_back(grey); 
+		vertices.push_back(topcn_o); normals.push_back(glm::vec3(topcn_o)); colors.push_back(grey); 
+		vertices.push_back(botc_o); normals.push_back(glm::vec3(botc_o)); colors.push_back(grey); 
+		vertices.push_back(botcn_o); normals.push_back(glm::vec3(botcn_o)); colors.push_back(grey); 
 		
 
-		vertices.push_back(topcn_i); normals.push_back(topcn_i); colors.push_back(blue); 
-		vertices.push_back(topc_i); normals.push_back(topc_i); colors.push_back(blue); 
-		vertices.push_back(topc_o); normals.push_back(topc_o); colors.push_back(blue); 
+		vertices.push_back(topcn_i); normals.push_back(glm::vec3(topcn_i)); colors.push_back(blue); 
+		vertices.push_back(topc_i); normals.push_back(glm::vec3(topc_i)); colors.push_back(blue); 
+		vertices.push_back(topc_o); normals.push_back(glm::vec3(topc_o)); colors.push_back(blue); 
 
-		vertices.push_back(topcn_i); normals.push_back(topcn_i); colors.push_back(blue); 
-		vertices.push_back(topc_o); normals.push_back(topc_o); colors.push_back(blue);
-		vertices.push_back(topcn_o); normals.push_back(topcn_o); colors.push_back(blue); 
+		vertices.push_back(topcn_i); normals.push_back(glm::vec3(topcn_i)); colors.push_back(blue); 
+		vertices.push_back(topc_o); normals.push_back(glm::vec3(topc_o)); colors.push_back(blue);
+		vertices.push_back(topcn_o); normals.push_back(glm::vec3(topcn_o)); colors.push_back(blue); 
 
-		vertices.push_back(botcn_i); normals.push_back(botcn_i); colors.push_back(blue); 
-		vertices.push_back(botc_i); normals.push_back(botc_i); colors.push_back(blue); 
-		vertices.push_back(botc_o); normals.push_back(botc_o); colors.push_back(blue); 
+		vertices.push_back(botcn_i); normals.push_back(glm::vec3(botcn_i)); colors.push_back(blue); 
+		vertices.push_back(botc_i); normals.push_back(glm::vec3(botc_i)); colors.push_back(blue); 
+		vertices.push_back(botc_o); normals.push_back(glm::vec3(botc_o)); colors.push_back(blue); 
 
-		vertices.push_back(botcn_i); normals.push_back(botcn_i); colors.push_back(blue); 
-		vertices.push_back(botc_o); normals.push_back(botc_o); colors.push_back(blue);
-		vertices.push_back(botcn_o); normals.push_back(botcn_o); colors.push_back(blue); 
+		vertices.push_back(botcn_i); normals.push_back(glm::vec3(botcn_i)); colors.push_back(blue); 
+		vertices.push_back(botc_o); normals.push_back(glm::vec3(botc_o)); colors.push_back(blue);
+		vertices.push_back(botcn_o); normals.push_back(glm::vec3(botcn_o)); colors.push_back(blue); 
 
 	}
 }

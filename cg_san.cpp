@@ -21,6 +21,8 @@ GLuint uModelViewMatrix;
 GLuint normalMatrix;
 GLuint viewMatrix;
 GLuint uLights;
+GLuint texture;
+GLuint textCoord;
 
 GLuint shaderProgram;
 
@@ -72,10 +74,15 @@ void initVertexBufferGL(void)
 	vPosition = glGetAttribLocation( shaderProgram, "vPosition" );
 	vColor = glGetAttribLocation( shaderProgram, "vColor" ); 
 	vNormal = glGetAttribLocation( shaderProgram, "vNormal" ); 
+	textCoord = glGetAttribLocation( shaderProgram, "textCoord" );
+
 	uModelViewMatrix = glGetUniformLocation( shaderProgram, "uModelViewMatrix");
 	normalMatrix =  glGetUniformLocation( shaderProgram, "normalMatrix");
 	viewMatrix = glGetUniformLocation( shaderProgram, "viewMatrix");
+
 	uLights = glGetUniformLocation( shaderProgram, "lights");
+	texture = glGetUniformLocation( shaderProgram, "utexture");
+
 
 	sphere = new Sphere();
 	cube = new Cube();
@@ -92,10 +99,10 @@ void initVertexBufferGL(void)
 	char2->init();
 	environment->init();
 	// torus->init();
-
 	// sphere->generate();
 	// cube->generate();
 	// cylinder->generate();
+
 	char1->generate();
 	char2->generate();
 	environment->generate();
@@ -139,14 +146,11 @@ void renderGL(void)
 	// sphere->render(view_matrix);
 	// cube->render(view_matrix);
 	// cylinder->render(view_matrix);
+	// torus->render(view_matrix);
 	char1->render(view_matrix);
 	char2->render(view_matrix);
-	// environment->render(view_matrix);
+	environment->render(view_matrix);
 	// torus->render(view_matrix);
-	
-	// Renders takes arguments - transformations 
-	// character1.render()
-	// character2.render()
 }
 
 int main(int argc, char** argv)
