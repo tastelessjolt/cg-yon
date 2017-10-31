@@ -100,6 +100,8 @@ void Character1::init(){
 	// left thigh
 	Primitive* left_thigh = new Cube();
 	left_leg_comp->children.push_back(left_thigh);
+
+	left_thigh->settexture("textures/thigh.bmp", 115, 116);
 	
 	glm::mat4* leftthighmodel = new glm::mat4();
 	left_thigh->transforms.push_back(leftthighmodel);
@@ -124,6 +126,8 @@ void Character1::init(){
 	Primitive* lknee = new Sphere();
 	left_knee->children.push_back(lknee);
 
+	lknee->settexture("textures/knee.bmp", 80, 80);
+
 	glm::mat4* lknee_model = new glm::mat4();
 	lknee->transforms.push_back(lknee_model);
 	*lknee_model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, legsize_h/4, 0.0)) * 
@@ -132,6 +136,9 @@ void Character1::init(){
 	// left limb
 	Primitive* left_limb = new Cube();
 	left_knee->children.push_back(left_limb);
+
+	left_limb->settexture("textures/leg.bmp", 118, 124);
+	
 	glm::mat4* leftlimbmodel = new glm::mat4();
 	left_limb->transforms.push_back(leftlimbmodel);
 	*leftlimbmodel = glm::scale(glm::mat4(1.0f), glm::vec3(legsize_w, legsize_h/2, legsize_l));
@@ -170,6 +177,8 @@ void Character1::init(){
 	Primitive* right_thigh = new Cube();
 	right_leg_comp->children.push_back(right_thigh);
 	
+	right_thigh->settexture("textures/thigh.bmp", 115, 116);
+
 	glm::mat4* rightthighmodel = new glm::mat4();
 	right_thigh->transforms.push_back(rightthighmodel);
 	*rightthighmodel = glm::scale(glm::mat4(1.0f), glm::vec3(legsize_w, legsize_h/2, legsize_l));
@@ -193,6 +202,8 @@ void Character1::init(){
 	Primitive* rknee = new Sphere();
 	right_knee->children.push_back(rknee);
 
+	rknee->settexture("textures/knee.bmp", 80, 80);
+
 	glm::mat4* rknee_model = new glm::mat4();
 	rknee->transforms.push_back(rknee_model);
 	*rknee_model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, legsize_h/4, 0.0)) * 
@@ -201,6 +212,9 @@ void Character1::init(){
 	// right limb
 	Primitive* right_limb = new Cube();
 	right_knee->children.push_back(right_limb);
+
+	right_limb->settexture("textures/leg.bmp", 118, 124);
+
 	glm::mat4* rightlimbmodel = new glm::mat4();
 	right_limb->transforms.push_back(rightlimbmodel);
 	*rightlimbmodel = glm::scale(glm::mat4(1.0f), glm::vec3(legsize_w, legsize_h/2, legsize_l));
@@ -235,7 +249,7 @@ void Character1::init(){
 	// abdomen
 	Primitive* abdomen = new Cube();
 	upperbody->children.push_back(abdomen);
-	abdomen->settexture("textures/shirt.bmp", 332, 275);
+	abdomen->settexture("textures/shirt.bmp", 274, 223);
 
 	glm::mat4* abdomenmodel = new glm::mat4();
 	abdomen->transforms.push_back(abdomenmodel);
