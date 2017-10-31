@@ -96,29 +96,29 @@ void initVertexBufferGL(void)
 	// cube->init();
 	// cylinder->init();
 	char1->init();
-	char2->init();
-	environment->init();
+	// char2->init();
+	// environment->init();
 	// torus->init();
 	// sphere->generate();
 	// cube->generate();
 	// cylinder->generate();
 
 	char1->generate();
-	char2->generate();
-	environment->generate();
+	// char2->generate();
+	// environment->generate();
 	// torus->generate();
 
-	glm::mat4* environ_scale = new glm::mat4();
-	environment->transforms.push_back(environ_scale);
-	*environ_scale = glm::scale(glm::mat4(1.0f), glm::vec3(10.0, 10.0, 10.0));
+	// glm::mat4* environ_scale = new glm::mat4();
+	// environment->transforms.push_back(environ_scale);
+	// *environ_scale = glm::scale(glm::mat4(1.0f), glm::vec3(10.0, 10.0, 10.0));
 
-	glm::mat4* char2_trans = new glm::mat4();
-	char2->transforms.push_back(char2_trans);
-	*char2_trans = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 2.5, 0.0));
+	// glm::mat4* char2_trans = new glm::mat4();
+	// char2->transforms.push_back(char2_trans);
+	// *char2_trans = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 2.5, 0.0));
 
-	glm::mat4* char2_scale = new glm::mat4();
-	char2->transforms.push_back(char2_scale);
-	*char2_scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.5, 0.5, 0.5));
+	// glm::mat4* char2_scale = new glm::mat4();
+	// char2->transforms.push_back(char2_scale);
+	// *char2_scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.5, 0.5, 0.5));
 
 }
 
@@ -148,8 +148,8 @@ void renderGL(void)
 	// cylinder->render(view_matrix);
 	// torus->render(view_matrix);
 	char1->render(view_matrix);
-	char2->render(view_matrix);
-	environment->render(view_matrix);
+	// char2->render(view_matrix);
+	// environment->render(view_matrix);
 	// torus->render(view_matrix);
 }
 

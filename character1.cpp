@@ -251,23 +251,25 @@ void Character1::init(){
 
 	Primitive* neck = new Cylinder();
 	head->children.push_back(neck);
+
 	glm::mat4* neckmodel = new glm::mat4();
 	neck->transforms.push_back(neckmodel);
-	*neckmodel = glm::rotate(glm::mat4(1.0f), pi/2, rotateX);
+	*neckmodel = glm::rotate(glm::mat4(1.0f), -pi/2, rotateX);
 	*neckmodel = glm::scale(glm::mat4(1.0f), glm::vec3(necksize_w, necksize_h, necksize_l)) * *neckmodel;
 
 	Primitive* face = new Cylinder();
 	head->children.push_back(face);
+	face->settexture("textures/robot_face.bmp", 800, 600);
 
 	glm::mat4* facerotate = new glm::mat4();
 	face->transforms.push_back(facerotate);
-	*facerotate = glm::rotate(glm::mat4(1.0f), 0.0f, rotateY);
+	*facerotate = glm::rotate(glm::mat4(1.0f), pi/2, rotateY);
 
 	face_angle_matrix = facerotate;
 
 	glm::mat4* facemodel = new glm::mat4();
 	face->transforms.push_back(facemodel);
-	*facemodel = glm::rotate(glm::mat4(1.0f), pi/2, rotateX);
+	*facemodel = glm::rotate(glm::mat4(1.0f), -pi/2, rotateX);
 	*facemodel = glm::scale(glm::mat4(1.0f), glm::vec3(facesize_w, facesize_h, facesize_l)) * *facemodel;
 
 
@@ -412,34 +414,34 @@ void Character1::manoeuvre(Character1::control_type ctrl, glm::vec3 param){
 
 		case LEFT_LEG_ANGLE: {
 			left_leg_angle += param;
-			*left_leg_angle_matrix = glm::rotate(glm::mat4(1.0f), left_leg_angle[0], rotateX);
+			*left_leg_angle_matrix = glm::rotate(*left_leg_angle_matrix, param[0], rotateX);
 			break;
 		}
 		case RIGHT_LEG_ANGLE: {
 			right_leg_angle += param;
-			*right_leg_angle_matrix = glm::rotate(glm::mat4(1.0f), right_leg_angle[0], rotateX);
+			*right_leg_angle_matrix = glm::rotate(*right_leg_angle_matrix, param[0], rotateX);
 			break;
 		}
 		
 		case LEFT_ARM_ANGLE: {
 			left_arm_angle += param;
-			*left_arm_angle_matrix = glm::rotate(glm::mat4(1.0f), left_arm_angle[0], rotateX);
+			*left_arm_angle_matrix = glm::rotate(*left_arm_angle_matrix, param[0], rotateX);
 			break;
 		}
 		case RIGHT_ARM_ANGLE: {
 			right_arm_angle += param;
-			*right_arm_angle_matrix = glm::rotate(glm::mat4(1.0f), right_arm_angle[0], rotateX);
+			*right_arm_angle_matrix = glm::rotate(*right_arm_angle_matrix, param[0], rotateX);
 			break;
 		}
 		
 		case TORSO_ANGLE: {
 			torso_angle += param;
-			*torso_angle_matrix = glm::rotate(glm::mat4(1.0f), torso_angle[1], rotateY);
+			*torso_angle_matrix = glm::rotate(*torso_angle_matrix, param[1], rotateY);
 			break;
 		}
 		case FACE_ANGLE: {
 			face_angle += param;
-			*face_angle_matrix = glm::rotate(glm::mat4(1.0f), face_angle[1], rotateY);
+			*face_angle_matrix = glm::rotate(*face_angle_matrix, param[1], rotateY);
 			break;
 		}
 
