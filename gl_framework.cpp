@@ -13,6 +13,10 @@ extern GLfloat xpos;
 extern GLfloat ypos;
 extern GLfloat zpos;
 
+extern GLint light1on;
+extern GLint light2on;
+extern GLint light3on;
+
 extern BaseObject* char1;
 extern BaseObject* char2;
 
@@ -104,6 +108,31 @@ namespace csX75
     action = glfwGetKey(window, GLFW_KEY_X);
     if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
       zpos += 0.05;
+    }
+
+    // lights on off
+    action = glfwGetKey(window, GLFW_KEY_1);
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
+      if (light1on == 0)
+        light1on = 1;
+      else
+        light1on = 0;
+    }
+
+    action = glfwGetKey(window, GLFW_KEY_2);
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
+      if (light2on == 0)
+        light2on = 1;
+      else
+        light2on = 0;
+    }
+
+    action = glfwGetKey(window, GLFW_KEY_3);
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
+      if (light3on == 0)
+        light3on = 1;
+      else
+        light3on = 0;
     }
 
     // left leg char 1

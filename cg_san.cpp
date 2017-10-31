@@ -20,7 +20,18 @@ GLuint vNormal;
 GLuint uModelViewMatrix;
 GLuint normalMatrix;
 GLuint viewMatrix;
-GLuint uLights;
+
+GLuint uLights1;
+GLuint uLights2;
+GLuint uLights3;
+GLuint uLights1_int;
+GLuint uLights2_int;
+GLuint uLights3_int;
+
+GLint light1on = 0;
+GLint light2on = 0;
+GLint light3on = 0;
+
 GLuint texture;
 GLuint textCoord;
 
@@ -80,45 +91,39 @@ void initVertexBufferGL(void)
 	normalMatrix =  glGetUniformLocation( shaderProgram, "normalMatrix");
 	viewMatrix = glGetUniformLocation( shaderProgram, "viewMatrix");
 
-	uLights = glGetUniformLocation( shaderProgram, "lights");
+	uLights1 = glGetUniformLocation( shaderProgram, "light1");
+	uLights2 = glGetUniformLocation( shaderProgram, "light2");
+	uLights3 = glGetUniformLocation( shaderProgram, "light3");
+
+	uLights1_int = glGetUniformLocation( shaderProgram, "light1_int");
+	uLights2_int = glGetUniformLocation( shaderProgram, "light2_int");
+	uLights3_int = glGetUniformLocation( shaderProgram, "light3_int");
+
 	texture = glGetUniformLocation( shaderProgram, "utexture");
 
-
-	sphere = new Sphere();
-	cube = new Cube();
-	cylinder = new Cylinder();
 	char1 = new Character1();
 	char2 = new Character2();
 	environment = new Environment();
-	// torus = new SectorTorus(0.8, 1, 0.3, -3.14/3, 3.14/2);
 
-	// sphere->init();
-	// cube->init();
-	// cylinder->init();
 	char1->init();
-	// char2->init();
-	// environment->init();
-	// torus->init();
-	// sphere->generate();
-	// cube->generate();
-	// cylinder->generate();
+	char2->init();
+	environment->init();
 
 	char1->generate();
-	// char2->generate();
-	// environment->generate();
-	// torus->generate();
+	char2->generate();
+	environment->generate();
 
-	// glm::mat4* environ_scale = new glm::mat4();
-	// environment->transforms.push_back(environ_scale);
-	// *environ_scale = glm::scale(glm::mat4(1.0f), glm::vec3(10.0, 10.0, 10.0));
+	glm::mat4* environ_scale = new glm::mat4();
+	environment->transforms.push_back(environ_scale);
+	*environ_scale = glm::scale(glm::mat4(1.0f), glm::vec3(10.0, 10.0, 10.0));
 
-	// glm::mat4* char2_trans = new glm::mat4();
-	// char2->transforms.push_back(char2_trans);
-	// *char2_trans = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 2.5, 0.0));
+	glm::mat4* char2_trans = new glm::mat4();
+	char2->transforms.push_back(char2_trans);
+	*char2_trans = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 2.5, 0.0));
 
-	// glm::mat4* char2_scale = new glm::mat4();
-	// char2->transforms.push_back(char2_scale);
-	// *char2_scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.5, 0.5, 0.5));
+	glm::mat4* char2_scale = new glm::mat4();
+	char2->transforms.push_back(char2_scale);
+	*char2_scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.5, 0.5, 0.5));
 
 }
 
@@ -137,20 +142,29 @@ void renderGL(void)
 	glm::mat4 view_matrix = persp_matrix * rotation_matrix * look_at;
 
 	// lighting
-	glm::vec4 light = view_matrix * glm::vec4(0.0, 0.0, 1.0, 1.0);
-	glUniform4fv(uLights, 1, glm::value_ptr(light));
+	glm::vec4 light1 = view_matrix * glm::vec4(9.0, 9.0, 9.0, 1.0);
+	glm::vec4 light2 = view_matrix * glm::vec4(9.0, -9.0, 9.0, 1.0);
+	glm::vec4 light3 = view_matrix * glm::vec4(0.0, 9.0, 0.0, 1.0);
+
+	GLfloat light1_int = 0.5 * light1on;
+	GLfloat light2_int = 0.5 * light2on;
+	GLfloat light3_int = 3.0 * light3on;
+	
+	glUniform4fv(uLights1, 1, glm::value_ptr(light1));
+	glUniform1f(uLights1_int, light1_int);
+
+	glUniform4fv(uLights2, 1, glm::value_ptr(light2));
+	glUniform1f(uLights2_int, light2_int);
+	
+	glUniform4fv(uLights3, 1, glm::value_ptr(light3));
+	glUniform1f(uLights3_int, light3_int);
+
 
 	glUniformMatrix3fv(viewMatrix, 1, GL_FALSE, glm::value_ptr(view_matrix));
-
 	
-	// sphere->render(view_matrix);
-	// cube->render(view_matrix);
-	// cylinder->render(view_matrix);
-	// torus->render(view_matrix);
 	char1->render(view_matrix);
-	// char2->render(view_matrix);
-	// environment->render(view_matrix);
-	// torus->render(view_matrix);
+	char2->render(view_matrix);
+	environment->render(view_matrix);
 }
 
 int main(int argc, char** argv)
