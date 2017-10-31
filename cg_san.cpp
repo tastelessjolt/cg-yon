@@ -12,6 +12,7 @@
 #include "object.hpp"
 #include "character1.hpp"
 #include "character2.hpp"
+#include "environ.hpp"
 
 GLuint vPosition;
 GLuint vColor;
@@ -44,6 +45,7 @@ BaseObject* torus;
 
 BaseObject* char1;
 BaseObject* char2;
+BaseObject* environment;
 
 void printState()
 {
@@ -80,31 +82,37 @@ void initVertexBufferGL(void)
 	cylinder = new Cylinder();
 	char1 = new Character1();
 	char2 = new Character2();
-	torus = new SectorTorus(0.8, 1, 0.3, -3.14/3, 3.14/2);
+	environment = new Environment();
+	// torus = new SectorTorus(0.8, 1, 0.3, -3.14/3, 3.14/2);
 
 	// sphere->init();
 	// cube->init();
 	// cylinder->init();
 	char1->init();
 	char2->init();
+	environment->init();
 	// torus->init();
-	/* 	
-	 *	Generates vao, vbo takes args as a tree of "objects"
-	 *	character1.init()
-	 * 	character2.init()
-	 */
-
 
 	// sphere->generate();
 	// cube->generate();
 	// cylinder->generate();
 	char1->generate();
 	char2->generate();
+	environment->generate();
 	// torus->generate();
-	/*
-	 *	Generate geometric primitives with tesselation params 
-	 *	char.generate() 
-	 */
+
+	glm::mat4* environ_scale = new glm::mat4();
+	environment->transforms.push_back(environ_scale);
+	*environ_scale = glm::scale(glm::mat4(1.0f), glm::vec3(10.0, 10.0, 10.0));
+
+	glm::mat4* char2_trans = new glm::mat4();
+	char2->transforms.push_back(char2_trans);
+	*char2_trans = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 2.5, 0.0));
+
+	glm::mat4* char2_scale = new glm::mat4();
+	char2->transforms.push_back(char2_scale);
+	*char2_scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.5, 0.5, 0.5));
+
 }
 
 void renderGL(void)
@@ -112,15 +120,14 @@ void renderGL(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUseProgram(shaderProgram);
 
-	look_at = glm::lookAt(glm::vec3(xpos, ypos, -1.0), glm::vec3(xpos, ypos, 1.0), glm::vec3(0.0, 1.0, 0.0));
-
-	glm::mat4 ortho_matrix = glm::ortho(-3.0, 3.0, -3.0, 3.0, -3.0, 3.0);
+	look_at = glm::lookAt(glm::vec3(xpos, ypos, zpos), glm::vec3(xpos, ypos, zpos - 1.0), glm::vec3(0.0, 1.0, 0.0));
+	glm::mat4 persp_matrix = glm::frustum(0.5, -0.5, -0.5, 0.5, 0.5, 200.0);
 
 	rotation_matrix = glm::rotate(glm::mat4(1.0f), xrot, glm::vec3(1.0f,0.0f,0.0f));
 	rotation_matrix = glm::rotate(rotation_matrix, yrot, glm::vec3(0.0f,1.0f,0.0f));
 	rotation_matrix = glm::rotate(rotation_matrix, zrot, glm::vec3(0.0f,0.0f,1.0f));
 
-	glm::mat4 view_matrix = ortho_matrix * rotation_matrix;
+	glm::mat4 view_matrix = persp_matrix * rotation_matrix * look_at;
 
 	// lighting
 	glm::vec4 light = view_matrix * glm::vec4(0.0, 0.0, 1.0, 1.0);
@@ -133,7 +140,8 @@ void renderGL(void)
 	// cube->render(view_matrix);
 	// cylinder->render(view_matrix);
 	char1->render(view_matrix);
-	// char2->render(view_matrix);
+	char2->render(view_matrix);
+	// environment->render(view_matrix);
 	// torus->render(view_matrix);
 	
 	// Renders takes arguments - transformations 
