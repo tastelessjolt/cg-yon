@@ -49,7 +49,7 @@ GLfloat zrot = 0.0f;
 
 GLfloat xpos = 0.0f;
 GLfloat ypos = 2.0f;
-GLfloat zpos = 2.0f;
+GLfloat zpos = 5.0f;
 
 BaseObject* sphere;
 BaseObject* cube;
