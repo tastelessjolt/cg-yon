@@ -20,6 +20,8 @@ GLuint uModelViewMatrix;
 GLuint normalMatrix;
 GLuint viewMatrix;
 GLuint uLights;
+GLuint texture;
+GLuint textCoord;
 
 GLuint shaderProgram;
 
@@ -70,10 +72,15 @@ void initVertexBufferGL(void)
 	vPosition = glGetAttribLocation( shaderProgram, "vPosition" );
 	vColor = glGetAttribLocation( shaderProgram, "vColor" ); 
 	vNormal = glGetAttribLocation( shaderProgram, "vNormal" ); 
+	textCoord = glGetAttribLocation( shaderProgram, "textCoord" );
+
 	uModelViewMatrix = glGetUniformLocation( shaderProgram, "uModelViewMatrix");
 	normalMatrix =  glGetUniformLocation( shaderProgram, "normalMatrix");
 	viewMatrix = glGetUniformLocation( shaderProgram, "viewMatrix");
+
 	uLights = glGetUniformLocation( shaderProgram, "lights");
+	texture = glGetUniformLocation( shaderProgram, "utexture");
+
 
 	sphere = new Sphere();
 	cube = new Cube();
@@ -85,9 +92,9 @@ void initVertexBufferGL(void)
 	// sphere->init();
 	// cube->init();
 	// cylinder->init();
-	char1->init();
-	char2->init();
 	// torus->init();
+	char1->init();
+	// char2->init();
 	/* 	
 	 *	Generates vao, vbo takes args as a tree of "objects"
 	 *	character1.init()
@@ -98,9 +105,9 @@ void initVertexBufferGL(void)
 	// sphere->generate();
 	// cube->generate();
 	// cylinder->generate();
-	char1->generate();
-	char2->generate();
 	// torus->generate();
+	char1->generate();
+	// char2->generate();
 	/*
 	 *	Generate geometric primitives with tesselation params 
 	 *	char.generate() 
@@ -132,9 +139,9 @@ void renderGL(void)
 	// sphere->render(view_matrix);
 	// cube->render(view_matrix);
 	// cylinder->render(view_matrix);
+	// torus->render(view_matrix);
 	char1->render(view_matrix);
 	// char2->render(view_matrix);
-	// torus->render(view_matrix);
 	
 	// Renders takes arguments - transformations 
 	// character1.render()

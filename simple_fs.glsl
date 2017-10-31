@@ -8,6 +8,8 @@ out vec4 frag_colour;
 
 uniform vec4 lights;
 uniform mat4 viewMatrix;
+uniform sampler2D utexture;
+in vec2 tex;
 
 void main () 
 {
@@ -33,7 +35,12 @@ void main ()
 		vec3 h = normalize(lightDir - eye);
 		float intSpec = max(dot(h,n), 0.0);	
 		spec = specular * pow(intSpec, shininess);
-	}  	
+	}
 
-	frag_colour = max((intensity * diffuse  + spec), ambient) * color; // All
+	if (tex[0] < 0.0) {
+		frag_colour = max((intensity * diffuse  + spec), ambient) * color; // All
+	}
+	else {
+		frag_colour = max((intensity * diffuse  + spec), ambient) * texture(utexture, tex); // All
+	}
 }
