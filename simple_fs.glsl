@@ -22,8 +22,8 @@ in vec2 tex;
 void main () 
 {
 	// Defining Materials
-	vec4 diffuse = vec4(0.3, 0.3, 0.3, 1.0); 
-	vec4 ambient = vec4(0.2, 0.2, 0.2, 1.0);
+	vec4 diffuse = vec4(0.6, 0.6, 0.6, 1.0); 
+	vec4 ambient = vec4(0.1, 0.1, 0.1, 1.0);
 	vec4 specular = vec4(0.0, 0.0, 0.0, 1.0);
 	float shininess = 5.0;
 
@@ -33,9 +33,10 @@ void main ()
 	float dotProduct[3];
 	float intensity[3];
 	
-	lightDir[0] = normalize(vec3(light1 - position)); 
-	lightDir[1] = normalize(vec3(light2 - position)); 
-	lightDir[2] = normalize(vec3(light3 - position)); 
+	// lightDir[0] = normalize(vec3(vec4(vec3(light1)/light1[3] - vec3(position)/position[3], 1.0) )); 
+	lightDir[0] = normalize(vec3(viewMatrix * (light1 - position))); 
+	lightDir[1] = normalize(vec3(viewMatrix * (light2 - position))); 
+	lightDir[2] = normalize(vec3(viewMatrix * (light3 - position))); 
 
 	vec3 n = normalize(vec3(normal));
 
@@ -44,7 +45,7 @@ void main ()
 		intensity[i] =  max(dotProduct[i], 0.0);
 	}
 
-	intensity[2] = max(0.0, dot(vec3(0.0, -1.0, 0.0), -lightDir[2]) - 0.9);
+	intensity[2] = max(0.0, dot(vec3(0.0, 1.0, 0.0), normalize(vec3(light3 - position))) - 0.9);
 
 	vec4 amb_int;
 	vec4 spec_int;
@@ -60,7 +61,7 @@ void main ()
 		}
 	} 
 
-	amb_int = ambient * (light1_int + light2_int + light3_int);
+	amb_int = ambient * (light1_int + light2_int);
 	diff_int = diffuse * (intensity[0] * light1_int + intensity[1] * light2_int + intensity[2] * light3_int);
 	spec_int = specular * spec;
 	
@@ -71,4 +72,12 @@ void main ()
 	else {
 		frag_colour = max((diff_int + spec_int), amb_int) * texture(utexture, tex); // All
 	}
+
+	// check normals
+	// frag_colour = vec4((vec2(n) + vec2(1.0))/2, 0.0, 1.0);
+
+	// check light dirs
+	// frag_colour = vec4( lightDir[0], 1.0 );
+	// vec4 p = viewMatrix * position; 
+	// frag_colour = vec4(position[0], 0.0, 0.0, 1.0);
 }

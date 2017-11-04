@@ -17,8 +17,9 @@
 GLuint vPosition;
 GLuint vColor;
 GLuint vNormal;
-GLuint uModelViewMatrix;
+GLuint uModelMatrix;
 GLuint normalMatrix;
+GLuint vViewMatrix;
 GLuint viewMatrix;
 
 GLuint uLights1;
@@ -43,6 +44,7 @@ glm::mat4 look_at;
 glm::mat4 modelview_matrix;
 glm::mat4 projection_matrix;
 glm::mat4 view_matrix;
+
 GLfloat xrot = 0.0f;
 GLfloat yrot = 0.0f;
 GLfloat zrot = 0.0f;
@@ -87,9 +89,10 @@ void initVertexBufferGL(void)
 	vNormal = glGetAttribLocation( shaderProgram, "vNormal" ); 
 	textCoord = glGetAttribLocation( shaderProgram, "textCoord" );
 
-	uModelViewMatrix = glGetUniformLocation( shaderProgram, "uModelViewMatrix");
+	uModelMatrix = glGetUniformLocation( shaderProgram, "uModelMatrix");
 	normalMatrix =  glGetUniformLocation( shaderProgram, "normalMatrix");
 	viewMatrix = glGetUniformLocation( shaderProgram, "viewMatrix");
+	vViewMatrix = glGetUniformLocation( shaderProgram, "vViewMatrix");
 
 	uLights1 = glGetUniformLocation( shaderProgram, "light1");
 	uLights2 = glGetUniformLocation( shaderProgram, "light2");
@@ -133,22 +136,25 @@ void renderGL(void)
 	glUseProgram(shaderProgram);
 
 	look_at = glm::lookAt(glm::vec3(xpos, ypos, zpos), glm::vec3(xpos, ypos, zpos - 1.0), glm::vec3(0.0, 1.0, 0.0));
+	// look_at = glm::lookAt(glm::vec3(0.0f, 2.0f, 5.0f), glm::vec3(0.0f, 2.0f, 5.0f - 1.0), glm::vec3(0.0, 1.0, 0.0));
 	glm::mat4 persp_matrix = glm::frustum(0.5, -0.5, -0.5, 0.5, 0.5, 200.0);
 
 	rotation_matrix = glm::rotate(glm::mat4(1.0f), xrot, glm::vec3(1.0f,0.0f,0.0f));
 	rotation_matrix = glm::rotate(rotation_matrix, yrot, glm::vec3(0.0f,1.0f,0.0f));
 	rotation_matrix = glm::rotate(rotation_matrix, zrot, glm::vec3(0.0f,0.0f,1.0f));
 
-	glm::mat4 view_matrix = persp_matrix * rotation_matrix * look_at;
+	view_matrix = persp_matrix * rotation_matrix * look_at;
+
+	std::cout << xpos << ", " << ypos << ", " << zpos << ", " << std::endl;
 
 	// lighting
-	glm::vec4 light1 = view_matrix * glm::vec4(9.0, 9.0, 9.0, 1.0);
-	glm::vec4 light2 = view_matrix * glm::vec4(9.0, -9.0, 9.0, 1.0);
-	glm::vec4 light3 = view_matrix * glm::vec4(0.0, 9.0, 0.0, 1.0);
+	glm::vec4 light1 = glm::vec4(9.0, 0.0, -9.0, 0.0);
+	glm::vec4 light2 = glm::vec4(3.0, -3.0, 3.0, 0.0);
+	glm::vec4 light3 = glm::vec4(0.0, 9.0, 0.0, 1.0);
 
-	GLfloat light1_int = 0.5 * light1on;
+	GLfloat light1_int = 2.0 * light1on;
 	GLfloat light2_int = 0.5 * light2on;
-	GLfloat light3_int = 3.0 * light3on;
+	GLfloat light3_int = 6.0 * light3on;
 	
 	glUniform4fv(uLights1, 1, glm::value_ptr(light1));
 	glUniform1f(uLights1_int, light1_int);
@@ -160,11 +166,12 @@ void renderGL(void)
 	glUniform1f(uLights3_int, light3_int);
 
 
-	glUniformMatrix3fv(viewMatrix, 1, GL_FALSE, glm::value_ptr(view_matrix));
+	glUniformMatrix4fv(viewMatrix, 1, GL_FALSE, glm::value_ptr(view_matrix));
+	glUniformMatrix4fv(vViewMatrix, 1, GL_FALSE, glm::value_ptr(view_matrix));
 	
-	char1->render(view_matrix);
-	char2->render(view_matrix);
-	environment->render(view_matrix);
+	char1->render(glm::mat4(1.0f));
+	char2->render(glm::mat4(1.0f));
+	environment->render(glm::mat4(1.0f));
 }
 
 int main(int argc, char** argv)

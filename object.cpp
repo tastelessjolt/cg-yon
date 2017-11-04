@@ -6,12 +6,12 @@ extern GLuint vColor;
 extern GLuint vNormal;
 extern GLuint textCoord;
 
-extern GLuint uModelViewMatrix;
+extern GLuint uModelMatrix;
 extern GLuint normalMatrix;
 extern GLuint viewMatrix;
 extern GLuint uLights;
 extern GLuint texture;
-
+extern glm::mat4 view_matrix;
 
 #define red glm::vec4(1.0, 0.0, 0.0, 1.0)
 #define blue glm::vec4(0.0, 0.0, 1.0, 1.0)
@@ -109,11 +109,10 @@ void Primitive::render(glm::mat4 transform) {
 		transform = transform * *tr;
 	}
 
-	glm::mat4 model_matrix = glm::mat4(1.0f);
+	glm::mat4 model_matrix = transform;
 
-	glm::mat4 modelview_matrix = transform * model_matrix;
-	glUniformMatrix4fv(uModelViewMatrix, 1, GL_FALSE, glm::value_ptr(modelview_matrix));
-	glm::mat3 normal_matrix = glm::transpose (glm::inverse(glm::mat3(modelview_matrix)));
+	glUniformMatrix4fv(uModelMatrix, 1, GL_FALSE, glm::value_ptr(model_matrix));
+	glm::mat3 normal_matrix = glm::transpose (glm::inverse(glm::mat3(view_matrix * model_matrix)));
 	glUniformMatrix3fv(normalMatrix, 1, GL_FALSE, glm::value_ptr(normal_matrix));
 
 	glBindVertexArray (vao);
