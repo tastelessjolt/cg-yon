@@ -1,5 +1,5 @@
-cg-san
-Assignment 三 (3) - Hierarchical Modeling with textures, lighting
+# cg-yon
+## Assignment 三 (3) - Hierarchical Modeling with textures, lighting
 
 GLFW_KEY_LEFT 			Camera ROTATE
 GLFW_KEY_RIGHT 			Camera ROTATE

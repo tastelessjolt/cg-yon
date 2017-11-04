@@ -16,8 +16,8 @@ endif
 LDFLAGS=-L/usr/local/lib 
 CPPFLAGS=-g -I/usr/local/include -std=c++11
 
-BIN=cg_san
-SRC_MAIN=cg_san.cpp 
+BIN=cg_yon
+SRC_MAIN=cg_yon.cpp 
 
 INCLUDES_FW=gl_framework.hpp
 SRC_FW=gl_framework.cpp 
