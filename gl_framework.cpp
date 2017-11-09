@@ -1,6 +1,7 @@
 #include "gl_framework.hpp"
 #include <unistd.h>
 #include <sys/stat.h>
+#include <fstream>
 
 #include "character1.hpp"
 #include "character2.hpp"
@@ -19,6 +20,8 @@ extern GLint light3on;
 
 extern BaseObject* char1;
 extern BaseObject* char2;
+
+std::string filename = "frames.txt";
 
 namespace csX75
 {
@@ -251,7 +254,7 @@ namespace csX75
       GLfloat delta = 0.05 *
       (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ? -1 : 1);
 
-      ((Character2 *)char2)->manoeuvre(Character2::LEFT_HOUSING_ANGLE, glm::vec3(delta, 0.0, 0.0));
+      ((Character2 *)char2)->manoeuvre(Character2::LEFT_HOUSING_ANGLE, glm::vec3(0.0, delta, 0.0));
     }
 
     action = glfwGetKey(window, GLFW_KEY_R);
@@ -267,7 +270,7 @@ namespace csX75
       GLfloat delta = 0.05 *
       (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ? -1 : 1);
 
-      ((Character2 *)char2)->manoeuvre(Character2::RIGHT_HOUSING_ANGLE, glm::vec3(delta, 0.0, 0.0));
+      ((Character2 *)char2)->manoeuvre(Character2::RIGHT_HOUSING_ANGLE, glm::vec3(0.0, delta, 0.0));
     }
 
     action = glfwGetKey(window, GLFW_KEY_B);
@@ -278,6 +281,28 @@ namespace csX75
       ((Character2 *)char2)->manoeuvre(Character2::RIGHT_HOUSING_ANGLE, glm::vec3(0.0, 0.0, delta));
     }
 
+    action = glfwGetKey(window, GLFW_KEY_C);
+    if (action == GLFW_PRESS) {
+        std::cout << "Char1 state: " << ( (Character1*)char1)->getState() << std::endl;
+        // std::cout << "Char2 state: " << ( (Character2*)char2)->getState() << std::endl;
+
+        std::fstream fs;
+        fs.open(filename, std::fstream::in | std::fstream::out | std::fstream::app);
+
+        if (!fs ) 
+        {
+          std::cout << "Cannot open file, file does not exist. Creating new file..";
+
+          fs.open(filename,  std::fstream::in | std::fstream::out | std::fstream::trunc);
+        }
+        else   
+        {    // use existing file
+          std::cout<<"success "<<filename <<" found. \n";
+          // cout<<"\nAppending writing and working with existing file"<<"\n---\n";
+        }
+
+        fs << ( (Character1*)char1)->getState() << std::endl;
+    }
 
     if (key == GLFW_KEY_L && (action == GLFW_PRESS)) {
       // std::string filename;

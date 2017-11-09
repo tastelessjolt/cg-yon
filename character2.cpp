@@ -21,6 +21,10 @@ Character2::Character2(){
 	earpads_rad = 0.3;
 	earpads_width = 0.25;
 	earpads_thickness = 0.1;
+
+
+	left_housing_angle = glm::vec3(0.0, 0.0, -pi/2 - pi/16);
+	right_housing_angle = glm::vec3(0.0, 0.0, pi/2 + pi/16);
 }
 
 void Character2::init(){
@@ -29,6 +33,7 @@ void Character2::init(){
 
 	// transforms.push_back(fullbodytrans);
 	// transforms.push_back(fullbodyrot);
+
 	/*
 	 *	headband
 	*/
@@ -59,7 +64,7 @@ void Character2::init(){
 
 	left_housing_rot = new glm::mat4();
 	left_ear->transforms.push_back(left_housing_rot);
-	*left_housing_rot = glm::rotate(glm::mat4(1.0f), -pi/2 - pi/16, rotateZ);
+	*left_housing_rot = glm::rotate(glm::mat4(1.0f), left_housing_angle[2], rotateZ);
 
 	Primitive* left_housing = new Sphere(0.0, pi, 0.0, pi);
 	left_ear->children.push_back(left_housing);
@@ -98,7 +103,7 @@ void Character2::init(){
 
 	right_housing_rot = new glm::mat4();
 	right_ear->transforms.push_back(right_housing_rot);
-	*right_housing_rot = glm::rotate(glm::mat4(1.0f), pi/2 + pi/16, rotateZ);
+	*right_housing_rot = glm::rotate(glm::mat4(1.0f), right_housing_angle[2], rotateZ);
 
 	Primitive* right_housing = new Sphere(0.0, pi, 0.0, pi);
 	right_ear->children.push_back(right_housing);
@@ -119,27 +124,31 @@ void Character2::manoeuvre(Character2::control_type ctrl, glm::vec3 param){
 	switch(ctrl){
 
 		case HEADBAND_ANGLE: {
-			*left_rot = glm::rotate(*left_rot, param[0]/2, rotateX);
-			*left_rot = glm::rotate(*left_rot, param[1]/2, rotateY);
-			*left_rot = glm::rotate(*left_rot, param[2]/2, rotateZ);
+			left_angle += param/(float)2.0;
+			*left_rot = glm::rotate(glm::mat4(1.0f), left_angle[0], rotateX);
+			*left_rot = glm::rotate(*left_rot, left_angle[1], rotateY);
+			*left_rot = glm::rotate(*left_rot, left_angle[2], rotateZ);
 
-			*right_rot = glm::rotate(*right_rot, -param[0]/2, rotateX);
-			*right_rot = glm::rotate(*right_rot, -param[1]/2, rotateY);
-			*right_rot = glm::rotate(*right_rot, -param[2]/2, rotateZ);
+			right_angle -= param/(float)2.0;
+			*right_rot = glm::rotate(glm::mat4(1.0f), right_angle[0], rotateX);
+			*right_rot = glm::rotate(*right_rot, right_angle[1], rotateY);
+			*right_rot = glm::rotate(*right_rot, right_angle[2], rotateZ);
 			break;
 		}
 
 		case LEFT_HOUSING_ANGLE: {
-			*left_housing_rot = glm::rotate(*left_housing_rot, param[0], rotateX);
-			*left_housing_rot = glm::rotate(*left_housing_rot, param[1], rotateY);
-			*left_housing_rot = glm::rotate(*left_housing_rot, param[2], rotateZ);
+			left_housing_angle += param;
+			*left_housing_rot = glm::rotate(glm::mat4(1.0f), left_housing_angle[0], rotateX);
+			*left_housing_rot = glm::rotate(*left_housing_rot, left_housing_angle[1], rotateY);
+			*left_housing_rot = glm::rotate(*left_housing_rot, left_housing_angle[2], rotateZ);
 			break;
 		}
 
 		case RIGHT_HOUSING_ANGLE: {
-			*right_housing_rot = glm::rotate(*right_housing_rot, param[0], rotateX);
-			*right_housing_rot = glm::rotate(*right_housing_rot, param[1], rotateY);
-			*right_housing_rot = glm::rotate(*right_housing_rot, param[2], rotateZ);
+			right_housing_angle += param;
+			*right_housing_rot = glm::rotate(glm::mat4(1.0f), right_housing_angle[0], rotateX);
+			*right_housing_rot = glm::rotate(*right_housing_rot, right_housing_angle[1], rotateY);
+			*right_housing_rot = glm::rotate(*right_housing_rot, right_housing_angle[2], rotateZ);
 			break;
 		}
 
