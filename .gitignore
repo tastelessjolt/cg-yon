@@ -3,3 +3,4 @@ cg_yon
 *.conf
 .DS_Store
 *.o
+*.txt

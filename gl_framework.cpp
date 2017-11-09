@@ -24,6 +24,7 @@ extern BaseObject* char2;
 std::string filename = "frames.txt";
 
 std::vector<std::string> frames;
+int frame_num;
 
 namespace csX75
 {
@@ -371,30 +372,69 @@ namespace csX75
 
     action = glfwGetKey(window, GLFW_KEY_M);
     if (action == GLFW_PRESS) {
-      std::cout << "Char1 state: " << ( (Character1*)char1)->getState() << std::endl;
-      std::cout << "Char2 state: " << ( (Character2*)char2)->getState() << std::endl;
-
+      // std::cout << "Char1 state: " << ( (Character1*)char1)->getState() << std::endl;
+      // std::cout << "Char2 state: " << ( (Character2*)char2)->getState() << std::endl;
       std::fstream fs;
-      fs.open(filename, std::fstream::in | std::fstream::out | std::fstream::app);
+      fs.open(filename, std::fstream::in | std::fstream::out);
 
       if (!fs ) 
       {
-        std::cout << "Cannot open file, file does not exist. Creating new file..";
-
-        fs.open(filename,  std::fstream::in | std::fstream::out | std::fstream::trunc);
+        std::cout << "Cannot open file, file does not exist.";
       }
       else   
       {    // use existing file
         std::cout<<"success "<<filename <<" found. \n";
         // cout<<"\nAppending writing and working with existing file"<<"\n---\n";
-      }
-      std::string buffer;
-      while (std::getline(fs, buffer)) {
-        frames.push_back(buffer);
-      }
+        std::string buffer;
+        frames.clear();
+        while (std::getline(fs, buffer, '\n')) {
+          std::cout << "buff" << std::endl;
+          frames.push_back(buffer);
+        }
 
-      fs.close();
+        fs.close();
+        frame_num = 0;
+      }
     }
+
+    action = glfwGetKey(window, GLFW_KEY_N);
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
+      if (frame_num < frames.size()) {
+        std::cout << "Frame " << frame_num << std::endl;
+        std::string buf = frames[frame_num++];
+        std::stringstream ss(buf);
+
+
+
+        getline(ss, buf, '|');
+        ( (Character1*)char1)->setState(buf);
+        getline(ss, buf, '|');
+        ( (Character2*)char2)->setState(buf);
+      }
+      else {
+        std::cout << "no next frame available" << std::endl;
+      }
+    }
+
+    action = glfwGetKey(window, GLFW_KEY_B);
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
+      if (frame_num > 0) {
+        std::cout << "Frame " << frame_num << std::endl;
+        std::string buf = frames[--frame_num];
+        std::stringstream ss(buf);
+
+
+
+        getline(ss, buf, '|');
+        ( (Character1*)char1)->setState(buf);
+        getline(ss, buf, '|');
+        ( (Character2*)char2)->setState(buf);
+      }
+      else {
+        std::cout << "no previous frame available" << std::endl;
+      }
+    }
+
   }
 
   void convert_to_world(GLFWwindow* window, GLint x, GLint y, GLfloat* xf, GLfloat* yf){
