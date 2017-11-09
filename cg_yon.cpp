@@ -53,11 +53,6 @@ GLfloat xpos = 0.0f;
 GLfloat ypos = 2.0f;
 GLfloat zpos = 5.0f;
 
-BaseObject* sphere;
-BaseObject* cube;
-BaseObject* cylinder;
-BaseObject* torus;
-
 BaseObject* char1;
 BaseObject* char2;
 BaseObject* environment;
@@ -143,8 +138,6 @@ void renderGL(void)
 	rotation_matrix = glm::rotate(rotation_matrix, zrot, glm::vec3(0.0f,0.0f,1.0f));
 
 	view_matrix = persp_matrix * rotation_matrix * look_at;
-
-	// std::cout << xpos << ", " << ypos << ", " << zpos << ", " << std::endl;
 
 	// lighting
 	glm::vec4 light1 = glm::vec4(9.0, 0.0, -9.0, 0.0);
