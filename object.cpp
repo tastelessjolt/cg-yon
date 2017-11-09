@@ -92,11 +92,6 @@ void Primitive::generate() {
 	glEnableVertexAttribArray( textCoord );
 	glVertexAttribPointer( textCoord, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(glm::vec4) *(vertices.size() + colors.size()) + sizeof(glm::vec3) * (normals.size())) );
 
-	if (texture_filename != "") {
-		// Load Textures 
-		tex=LoadTexture(texture_filename.c_str(), tex_width, tex_height);
-		// glBindTexture(GL_TEXTURE_2D, tex);
-	}
 }
 
 void Primitive::render() {
@@ -126,6 +121,12 @@ void Primitive::settexture(std::string filename, int tex_width, int tex_height) 
 	this->texture_filename = filename;
 	this->tex_width = tex_width;
 	this->tex_height = tex_height;
+
+	if (texture_filename != "") {
+		// Load Textures 
+		tex=LoadTexture(texture_filename.c_str(), tex_width, tex_height);
+		// glBindTexture(GL_TEXTURE_2D, tex);
+	}
 }
 
 Sphere::Sphere() {

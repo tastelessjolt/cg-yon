@@ -307,7 +307,9 @@ void Character1::init(){
 
 	Primitive* face = new Cylinder();
 	head->children.push_back(face);
-	face->settexture("textures/face.bmp", 640, 320);
+	face->settexture("textures/face.bmp", 1280, 320);
+
+	face_primitive = face;
 
 	glm::mat4* facerotate = new glm::mat4();
 	face->transforms.push_back(facerotate);
@@ -458,6 +460,10 @@ void Character1::init(){
 	*rightpalmmodel = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, armsize_h/4 + palmsize/8)) * *rightpalmmodel;
 
 	Object::init();
+}
+
+void Character1::expression(std::string filename, int width, int height){
+	face_primitive->settexture(filename, width, height);
 }
 
 void Character1::manoeuvre(Character1::control_type ctrl, glm::vec3 param){

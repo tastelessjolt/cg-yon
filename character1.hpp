@@ -63,6 +63,8 @@ class Character1 : public Object {
 	glm::vec3 body_translate;
 	glm::mat4* body_translate_matrix;
 
+	Primitive* face_primitive;
+
 
 public:
 	enum control_type
@@ -87,6 +89,7 @@ public:
 	Character1();
 	void init();
 	void manoeuvre(control_type, glm::vec3);
+	void expression(std::string, int, int);
 	std::string getState();
 	void setState(std::string);
 };
