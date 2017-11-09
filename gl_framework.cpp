@@ -62,54 +62,114 @@ namespace csX75
     if ((key == GLFW_KEY_ESCAPE || key == GLFW_KEY_Q) && action == GLFW_PRESS)
       quit(window);
 
-
+    GLfloat delta = 0.05;
     action = glfwGetKey(window, GLFW_KEY_LEFT);
     if ((action == GLFW_PRESS || action == GLFW_REPEAT)){
-      yrot -= 0.2;
+      if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
+        ((Character1*)char1)->manoeuvre(Character1::BODY_ANGLE, glm::vec3(0.0, -delta, 0.0));
+      else if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
+        ((Character2*)char2)->manoeuvre(Character2::BODY_ANGLE, glm::vec3(0.0, -delta, 0.0));
+      else
+        yrot -= 0.2;
     } 
     action = glfwGetKey(window, GLFW_KEY_RIGHT);
     if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
-      yrot += 0.2;
+      if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
+        ((Character1*)char1)->manoeuvre(Character1::BODY_ANGLE, glm::vec3(0.0, delta, 0.0));
+      else if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
+        ((Character2*)char2)->manoeuvre(Character2::BODY_ANGLE, glm::vec3(0.0, delta, 0.0));
+      else
+        yrot += 0.2;
     }
     action = glfwGetKey(window, GLFW_KEY_UP);
     if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
-      xrot -= 0.2;
+      if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
+        ((Character1*)char1)->manoeuvre(Character1::BODY_ANGLE, glm::vec3(-delta, 0.0, 0.0));
+      else if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
+        ((Character2*)char2)->manoeuvre(Character2::BODY_ANGLE, glm::vec3(-delta, 0.0, 0.0));
+      else
+        xrot -= 0.2;
     }
     action = glfwGetKey(window, GLFW_KEY_DOWN);
     if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
-      xrot += 0.2;
+      if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
+        ((Character1*)char1)->manoeuvre(Character1::BODY_ANGLE, glm::vec3(delta, 0.0, 0.0));
+      else if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
+        ((Character2*)char2)->manoeuvre(Character2::BODY_ANGLE, glm::vec3(delta, 0.0, 0.0));
+      else
+        xrot += 0.2;
     }
     action = glfwGetKey(window, GLFW_KEY_PAGE_UP);
     if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
-      zrot -= 0.2;
+      if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
+        ((Character1*)char1)->manoeuvre(Character1::BODY_ANGLE, glm::vec3(0.0, 0.0, -delta));
+      else if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
+        ((Character2*)char2)->manoeuvre(Character2::BODY_ANGLE, glm::vec3(0.0, 0.0, -delta));
+      else
+        zrot -= 0.2;
     }
     action = glfwGetKey(window, GLFW_KEY_PAGE_DOWN);
     if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
-      zrot += 0.2;
+      if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
+        ((Character1*)char1)->manoeuvre(Character1::BODY_ANGLE, glm::vec3(0.0, 0.0, delta));
+      else if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
+        ((Character2*)char2)->manoeuvre(Character2::BODY_ANGLE, glm::vec3(0.0, 0.0, delta));
+      else
+        zrot += 0.2;
     }
     action = glfwGetKey(window, GLFW_KEY_W);
     if ((action == GLFW_PRESS || action == GLFW_REPEAT)){
-      ypos += 0.05;
+      if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
+        ((Character1*)char1)->manoeuvre(Character1::BODY_TRANSLATE, glm::vec3(0.0, delta, 0.0));
+      else if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
+        ((Character2*)char2)->manoeuvre(Character2::BODY_TRANSLATE, glm::vec3(0.0, delta, 0.0));
+      else
+        ypos += 0.05;
     } 
     action = glfwGetKey(window, GLFW_KEY_A);
     if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
-      xpos -= 0.05; 
+      if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
+        ((Character1*)char1)->manoeuvre(Character1::BODY_TRANSLATE, glm::vec3(-delta, 0.0, 0.0));
+      else if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
+        ((Character2*)char2)->manoeuvre(Character2::BODY_TRANSLATE, glm::vec3(-delta, 0.0, 0.0));
+      else
+        xpos -= 0.05; 
     }
     action = glfwGetKey(window, GLFW_KEY_S);
     if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
-      ypos -= 0.05;
+      if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
+        ((Character1*)char1)->manoeuvre(Character1::BODY_TRANSLATE, glm::vec3(0.0, -delta, 0.0));
+      else if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
+        ((Character2*)char2)->manoeuvre(Character2::BODY_TRANSLATE, glm::vec3(0.0, -delta, 0.0));
+      else
+        ypos -= 0.05;
     }
     action = glfwGetKey(window, GLFW_KEY_D);
     if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
-      xpos += 0.05;
+      if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
+        ((Character1*)char1)->manoeuvre(Character1::BODY_TRANSLATE, glm::vec3(delta, 0.0, 0.0));
+      else if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
+        ((Character2*)char2)->manoeuvre(Character2::BODY_TRANSLATE, glm::vec3(delta, 0.0, 0.0));
+      else
+        xpos += 0.05;
     }
     action = glfwGetKey(window, GLFW_KEY_Z);
     if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
-      zpos -= 0.05; 
+      if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
+        ((Character1*)char1)->manoeuvre(Character1::BODY_TRANSLATE, glm::vec3(0.0, 0.0, -delta));
+      else if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
+        ((Character2*)char2)->manoeuvre(Character2::BODY_TRANSLATE, glm::vec3(0.0, 0.0, -delta));
+      else
+        zpos -= 0.05; 
     }
     action = glfwGetKey(window, GLFW_KEY_X);
     if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
-      zpos += 0.05;
+      if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
+        ((Character1*)char1)->manoeuvre(Character1::BODY_TRANSLATE, glm::vec3(0.0, 0.0, delta));
+      else if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
+        ((Character2*)char2)->manoeuvre(Character2::BODY_TRANSLATE, glm::vec3(0.0, 0.0, delta));
+      else
+        zpos += 0.05;
     }
 
     // lights on off
@@ -142,6 +202,7 @@ namespace csX75
     if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
       GLfloat delta = 0.05 *
       (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ? -1 : 1);
+      std::cout << "h pressed" << std::endl;
 
       ((Character1 *)char1)->manoeuvre(Character1::LEFT_LEG_ANGLE, glm::vec3(
                       delta * ( glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS ? 1 : 0 ), 
