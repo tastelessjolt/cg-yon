@@ -1,4 +1,6 @@
 #include "character1.hpp"
+#include <iomanip> // setprecision
+#include <sstream> // stringstream
 
 extern double PI;
 GLfloat pi = PI;
@@ -559,4 +561,23 @@ void Character1::manoeuvre(Character1::control_type ctrl, glm::vec3 param){
 
 	// rotation_matrix=children[0]->transforms[0];
 	// std::cout << (*rotation_matrix)[0][0] << std::endl;
+}
+
+std::string Character1::getState() {
+
+	std::stringstream stream;
+	stream << left_leg_angle[0] << "," << left_leg_angle[1] << "," << left_leg_angle[2] << ",";
+	stream << left_knee_angle[0] << "," << left_knee_angle[1] << "," << left_knee_angle[2] << ",";
+	stream << right_leg_angle[0] << "," << right_leg_angle[1] << "," << right_leg_angle[2] << ",";
+	stream << right_knee_angle[0] << "," << right_knee_angle[1] << "," << right_knee_angle[2] << ",";
+	stream << left_arm_angle[0] << "," << left_arm_angle[1] << "," << left_arm_angle[2] << ",";
+	stream << left_elbow_angle[0] << "," << left_elbow_angle[1] << "," << left_elbow_angle[2] << ",";
+	stream << right_arm_angle[0] << "," << right_arm_angle[1] << "," << right_arm_angle[2] << ",";
+	stream << right_elbow_angle[0] << "," << right_elbow_angle[1] << "," << right_elbow_angle[2] << ",";
+	stream << torso_angle[0] << "," << torso_angle[1] << "," << torso_angle[2] << ",";
+	stream << face_angle[0] << "," << face_angle[1] << "," << face_angle[2] << ",";
+	stream << body_angle[0] << "," << body_angle[1] << "," << body_angle[2] << ",";
+	stream << body_translate[0] << "," << body_translate[1] << "," << body_translate[2];
+
+	return stream.str();
 }

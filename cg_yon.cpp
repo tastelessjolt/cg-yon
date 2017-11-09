@@ -122,7 +122,6 @@ void initVertexBufferGL(void)
 	glm::mat4* char2_scale = new glm::mat4();
 	char2->transforms.push_back(char2_scale);
 	*char2_scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.5, 0.5, 0.5));
-
 }
 
 void renderGL(void)

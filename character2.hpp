@@ -18,9 +18,16 @@ class Character2 : public Object {
 	glm::vec3 body_translate;
 	glm::mat4* body_translate_matrix;
 
+	glm::vec3 left_angle; 
 	glm::mat4* left_rot;
+
+	glm::vec3 left_housing_angle;
 	glm::mat4* left_housing_rot;
+	
+	glm::vec3 right_angle;
 	glm::mat4* right_rot;
+	
+	glm::vec3 right_housing_angle;
 	glm::mat4* right_housing_rot;
 
 public:
