@@ -53,6 +53,7 @@ GLfloat xpos = 0.0f;
 GLfloat ypos = 2.0f;
 GLfloat zpos = 5.0f;
 
+BaseObject* world;
 BaseObject* char1;
 BaseObject* char2;
 BaseObject* environment;
@@ -99,17 +100,14 @@ void initVertexBufferGL(void)
 
 	texture = glGetUniformLocation( shaderProgram, "utexture");
 
+	world = new Object();
+
 	char1 = new Character1();
+	((Object*)world)->children.push_back(char1);
 	char2 = new Character2();
+	((Object*)world)->children.push_back(char2);
 	environment = new Environment();
-
-	char1->init();
-	char2->init();
-	environment->init();
-
-	char1->generate();
-	char2->generate();
-	environment->generate();
+	((Object*)world)->children.push_back(environment);
 
 	glm::mat4* environ_scale = new glm::mat4();
 	environment->transforms.push_back(environ_scale);
@@ -122,6 +120,18 @@ void initVertexBufferGL(void)
 	glm::mat4* char2_scale = new glm::mat4();
 	char2->transforms.push_back(char2_scale);
 	*char2_scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.5, 0.5, 0.5));
+	
+	world->init();
+
+	// char1->init();
+	// char2->init();
+	// environment->init();
+
+	world->generate();
+	// char1->generate();
+	// char2->generate();
+	// environment->generate();
+
 }
 
 void renderGL(void)
@@ -161,9 +171,11 @@ void renderGL(void)
 	glUniformMatrix4fv(viewMatrix, 1, GL_FALSE, glm::value_ptr(view_matrix));
 	glUniformMatrix4fv(vViewMatrix, 1, GL_FALSE, glm::value_ptr(view_matrix));
 	
-	char1->render(glm::mat4(1.0f));
-	char2->render(glm::mat4(1.0f));
-	environment->render(glm::mat4(1.0f));
+
+	world->render();
+	// char1->render(glm::mat4(1.0f));
+	// char2->render(glm::mat4(1.0f));
+	// environment->render(glm::mat4(1.0f));
 }
 
 int main(int argc, char** argv)
