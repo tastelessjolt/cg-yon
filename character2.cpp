@@ -165,3 +165,63 @@ void Character2::manoeuvre(Character2::control_type ctrl, glm::vec3 param){
 
 	}
 }
+
+std::string Character2::getState() {
+	std::stringstream sstream; 
+	sstream << body_angle[0] << "," << body_angle[1] << "," << body_angle[2] << ",";
+	sstream << body_translate[0] << "," << body_translate[1] << "," << body_translate[2] << ",";
+	sstream << left_angle[0] << "," << left_angle[1] << "," << left_angle[2] << ",";
+	sstream << left_housing_angle[0] << "," << left_housing_angle[1] << "," << left_housing_angle[2] << ",";
+	sstream << right_angle[0] << "," << right_angle[1] << "," << right_angle[2] << ",";
+	sstream << right_housing_angle[0] << "," << right_housing_angle[1] << "," << right_housing_angle[2];
+
+	return sstream.str();
+}
+
+void Character2::setState(std::string state) {
+	std::stringstream sstream(state);
+	std::string token;
+
+	std::getline(sstream, token, ',');
+	body_angle[0] = stof(token);
+	std::getline(sstream, token, ','); 
+	body_angle[1] = stof(token);
+	std::getline(sstream, token, ','); 
+	body_angle[2] = stof(token);
+	std::getline(sstream, token, ','); 
+	body_translate[0] = stof(token);
+	std::getline(sstream, token, ','); 
+	body_translate[1] = stof(token);
+	std::getline(sstream, token, ','); 
+	body_translate[2] = stof(token);
+	std::getline(sstream, token, ','); 
+	left_angle[0] = stof(token);
+	std::getline(sstream, token, ','); 
+	left_angle[1] = stof(token);
+	std::getline(sstream, token, ','); 
+	left_angle[2] = stof(token);
+	std::getline(sstream, token, ','); 
+	left_housing_angle[0] = stof(token);
+	std::getline(sstream, token, ','); 
+	left_housing_angle[1] = stof(token);
+	std::getline(sstream, token, ','); 
+	left_housing_angle[2] = stof(token);
+	std::getline(sstream, token, ','); 
+	right_angle[0] = stof(token);
+	std::getline(sstream, token, ','); 
+	right_angle[1] = stof(token);
+	std::getline(sstream, token, ','); 
+	right_angle[2] = stof(token);
+	std::getline(sstream, token, ','); 
+	right_housing_angle[0] = stof(token);
+	std::getline(sstream, token, ','); 
+	right_housing_angle[1] = stof(token);
+	std::getline(sstream, token, ',');
+	right_housing_angle[2] = stof(token);
+
+	manoeuvre(HEADBAND_ANGLE, glm::vec3(0.0f));
+	manoeuvre(LEFT_HOUSING_ANGLE, glm::vec3(0.0f));
+	manoeuvre(RIGHT_HOUSING_ANGLE, glm::vec3(0.0f));
+	manoeuvre(BODY_ANGLE, glm::vec3(0.0f));
+	manoeuvre(BODY_TRANSLATE, glm::vec3(0.0f));
+}

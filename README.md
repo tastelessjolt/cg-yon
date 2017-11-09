@@ -32,5 +32,5 @@
 `GLFW_KEY_E` Non humanoid headphones LEFT_HOUSING_ANGLE  
 `GLFW_KEY_R` Non humanoid headphones LEFT_HOUSING_ANGLE  
 `GLFW_KEY_G` Non humanoid headphones RIGHT_HOUSING_ANGLE  
-`GLFW_KEY_B` Non humanoid headphones RIGHT_HOUSING_ANGLE  
+`GLFW_KEY_V` Non humanoid headphones RIGHT_HOUSING_ANGLE  
 

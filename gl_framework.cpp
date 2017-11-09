@@ -23,6 +23,8 @@ extern BaseObject* char2;
 
 std::string filename = "frames.txt";
 
+std::vector<std::string> frames;
+
 namespace csX75
 {
   //! Initialize GL State
@@ -273,7 +275,7 @@ namespace csX75
       ((Character2 *)char2)->manoeuvre(Character2::RIGHT_HOUSING_ANGLE, glm::vec3(0.0, delta, 0.0));
     }
 
-    action = glfwGetKey(window, GLFW_KEY_B);
+    action = glfwGetKey(window, GLFW_KEY_V);
     if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
       GLfloat delta = 0.05 *
       (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ? -1 : 1);
@@ -284,7 +286,7 @@ namespace csX75
     action = glfwGetKey(window, GLFW_KEY_C);
     if (action == GLFW_PRESS) {
         std::cout << "Char1 state: " << ( (Character1*)char1)->getState() << std::endl;
-        // std::cout << "Char2 state: " << ( (Character2*)char2)->getState() << std::endl;
+        std::cout << "Char2 state: " << ( (Character2*)char2)->getState() << std::endl;
 
         std::fstream fs;
         fs.open(filename, std::fstream::in | std::fstream::out | std::fstream::app);
@@ -301,39 +303,36 @@ namespace csX75
           // cout<<"\nAppending writing and working with existing file"<<"\n---\n";
         }
 
-        fs << ( (Character1*)char1)->getState() << std::endl;
+        fs << ( (Character1*)char1)->getState() << "|" << ( (Character2*)char2)->getState() << std::endl;
+
+        fs.close();
     }
 
-    if (key == GLFW_KEY_L && (action == GLFW_PRESS)) {
-      // std::string filename;
-      // std::cout << "Enter the name of the file to be loaded (without extension): "; std::cin >> filename;
-      // filename+=".raw";
+    action = glfwGetKey(window, GLFW_KEY_M);
+    if (action == GLFW_PRESS) {
+      std::cout << "Char1 state: " << ( (Character1*)char1)->getState() << std::endl;
+      std::cout << "Char2 state: " << ( (Character2*)char2)->getState() << std::endl;
 
-      // struct stat buffer;
-      // if (stat(filename.c_str(), &buffer) != 0){
-      //   std::cerr << "Error: File not found" << std::endl;
-      //   return;
-      // }
+      std::fstream fs;
+      fs.open(filename, std::fstream::in | std::fstream::out | std::fstream::app);
 
-      // std::fstream fs(filename, std::fstream::in);
+      if (!fs ) 
+      {
+        std::cout << "Cannot open file, file does not exist. Creating new file..";
 
-      // triangles.clear();
-      // points.clear();
-      
-      // float tmp;
-      // std::string line;
-      // while(!fs.eof()){
-      //   std::getline(fs, line);
-      //   if (line != ""){
-      //     std::stringstream iss(line);
-      //     for(int i = 0; i < 6; i++){
-      //       iss >> tmp;
-      //       triangles.push_back(tmp);
-      //     }
-      //   }
-      // }
+        fs.open(filename,  std::fstream::in | std::fstream::out | std::fstream::trunc);
+      }
+      else   
+      {    // use existing file
+        std::cout<<"success "<<filename <<" found. \n";
+        // cout<<"\nAppending writing and working with existing file"<<"\n---\n";
+      }
+      std::string buffer;
+      while (std::getline(fs, buffer)) {
+        frames.push_back(buffer);
+      }
 
-      // fs.close();
+      fs.close();
     }
   }
 

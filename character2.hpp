@@ -43,5 +43,7 @@ public:
 	Character2();
 	void init();
 	void manoeuvre(control_type, glm::vec3);
+	std::string getState();
+	void setState(std::string);
 };
 #endif /* CHAR2_HPP */

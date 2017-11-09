@@ -1,6 +1,4 @@
 #include "character1.hpp"
-#include <iomanip> // setprecision
-#include <sstream> // stringstream
 
 extern double PI;
 GLfloat pi = PI;
@@ -536,7 +534,6 @@ void Character1::manoeuvre(Character1::control_type ctrl, glm::vec3 param){
 }
 
 std::string Character1::getState() {
-
 	std::stringstream stream;
 	stream << left_leg_angle[0] << "," << left_leg_angle[1] << "," << left_leg_angle[2] << ",";
 	stream << left_knee_angle[0] << "," << left_knee_angle[1] << "," << left_knee_angle[2] << ",";
@@ -552,4 +549,106 @@ std::string Character1::getState() {
 	stream << body_translate[0] << "," << body_translate[1] << "," << body_translate[2];
 
 	return stream.str();
+}
+
+void Character1::setState(std::string state) {
+	std::stringstream sstream(state);
+	std::string token;
+
+	getline(sstream, token, ',');
+	left_leg_angle[0] = stof(token);
+	getline(sstream, token, ',');
+	left_leg_angle[1] = stof(token);
+	getline(sstream, token, ',');
+	left_leg_angle[2] = stof(token);
+
+	getline(sstream, token, ',');
+	left_knee_angle[0] = stof(token);
+	getline(sstream, token, ',');
+	left_knee_angle[1] = stof(token);
+	getline(sstream, token, ',');
+	left_knee_angle[2] = stof(token);
+
+	getline(sstream, token, ',');
+	right_leg_angle[0] = stof(token);
+	getline(sstream, token, ',');
+	right_leg_angle[1] = stof(token);
+	getline(sstream, token, ',');
+	right_leg_angle[2] = stof(token);
+
+	getline(sstream, token, ',');
+	right_knee_angle[0] = stof(token);
+	getline(sstream, token, ',');
+	right_knee_angle[1] = stof(token);
+	getline(sstream, token, ',');
+	right_knee_angle[2] = stof(token);
+
+	getline(sstream, token, ',');
+	left_arm_angle[0] = stof(token);
+	getline(sstream, token, ',');
+	left_arm_angle[1] = stof(token);
+	getline(sstream, token, ',');
+	left_arm_angle[2] = stof(token);
+
+	getline(sstream, token, ',');
+	left_elbow_angle[0] = stof(token);
+	getline(sstream, token, ',');
+	left_elbow_angle[1] = stof(token);
+	getline(sstream, token, ',');
+	left_elbow_angle[2] = stof(token);
+
+	getline(sstream, token, ',');
+	right_arm_angle[0] = stof(token);
+	getline(sstream, token, ',');
+	right_arm_angle[1] = stof(token);
+	getline(sstream, token, ',');
+	right_arm_angle[2] = stof(token);
+
+	getline(sstream, token, ',');
+	right_elbow_angle[0] = stof(token);
+	getline(sstream, token, ',');
+	right_elbow_angle[1] = stof(token);
+	getline(sstream, token, ',');
+	right_elbow_angle[2] = stof(token);
+
+	getline(sstream, token, ',');
+	torso_angle[0] = stof(token);
+	getline(sstream, token, ',');
+	torso_angle[1] = stof(token);
+	getline(sstream, token, ',');
+	torso_angle[2] = stof(token);
+
+	getline(sstream, token, ',');
+	face_angle[0] = stof(token);
+	getline(sstream, token, ',');
+	face_angle[1] = stof(token);
+	getline(sstream, token, ',');
+	face_angle[2] = stof(token);
+
+	getline(sstream, token, ',');
+	body_angle[0] = stof(token);
+	getline(sstream, token, ',');
+	body_angle[1] = stof(token);
+	getline(sstream, token, ',');
+	body_angle[2] = stof(token);
+
+	getline(sstream, token, ',');
+	body_translate[0] = stof(token);
+	getline(sstream, token, ',');
+	body_translate[1] = stof(token);
+	getline(sstream, token, ',');
+	body_translate[2] = stof(token);
+
+	manoeuvre(LEFT_LEG_ANGLE, glm::vec3(0.0f));
+	manoeuvre(RIGHT_LEG_ANGLE, glm::vec3(0.0f));
+	manoeuvre(LEFT_KNEE_ANGLE, glm::vec3(0.0f));
+	manoeuvre(RIGHT_KNEE_ANGLE, glm::vec3(0.0f));
+	manoeuvre(LEFT_ARM_ANGLE, glm::vec3(0.0f));
+	manoeuvre(RIGHT_ARM_ANGLE, glm::vec3(0.0f));
+	manoeuvre(LEFT_ELBOW_ANGLE, glm::vec3(0.0f));
+	manoeuvre(RIGHT_ELBOW_ANGLE, glm::vec3(0.0f));
+	manoeuvre(TORSO_ANGLE, glm::vec3(0.0f));
+	manoeuvre(FACE_ANGLE, glm::vec3(0.0f));
+	manoeuvre(BODY_ANGLE, glm::vec3(0.0f));
+	manoeuvre(BODY_TRANSLATE, glm::vec3(0.0f));
 }
