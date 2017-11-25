@@ -4,3 +4,5 @@ cg_yon
 .DS_Store
 *.o
 *.txt
+frames.txt
+keyframes.txt

@@ -58,6 +58,8 @@ BaseObject* char1;
 BaseObject* char2;
 BaseObject* environment;
 
+GLint expr_state = 0;
+
 void printState()
 {
 	

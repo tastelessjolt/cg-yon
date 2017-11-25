@@ -28,9 +28,14 @@
 `GLFW_KEY_P (+ SHIFT)` Humanoid RIGHT_KNEE_ANGLE  
 `GLFW_KEY_T (+ SHIFT)` Humanoid TORSO_ANGLE  
 `GLFW_KEY_Y (+ SHIFT)` Humanoid FACE_ANGLE  
+`GLFW_KEY_MINUS` Humaniod expression cycle  
+
 `GLFW_KEY_F (+ SHIFT)` Non humanoid headphones HEADBAND_ANGLE  
 `GLFW_KEY_E (+ SHIFT)` Non humanoid headphones LEFT_HOUSING_ANGLE  
 `GLFW_KEY_R (+ SHIFT)` Non humanoid headphones LEFT_HOUSING_ANGLE  
 `GLFW_KEY_G (+ SHIFT)` Non humanoid headphones RIGHT_HOUSING_ANGLE  
 `GLFW_KEY_V (+ SHIFT)` Non humanoid headphones RIGHT_HOUSING_ANGLE  
 
+`C` Capture frame in a text file 'frames.txt'  
+`M` Load the frames from file 'frames.txt' into a buffer  
+`N / B` Play the buffer one frame at a time next/prev  

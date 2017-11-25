@@ -3,6 +3,12 @@
 
 #include "object.hpp"
 
+typedef struct texture {
+	std::string filename;
+	int width;
+	int height;
+} texture_t;
+
 class Character1 : public Object {
 
 	GLfloat hipsize_l;
@@ -64,6 +70,7 @@ class Character1 : public Object {
 	glm::mat4* body_translate_matrix;
 
 	Primitive* face_primitive;
+	texture_t face_texture;
 
 
 public:
@@ -89,7 +96,7 @@ public:
 	Character1();
 	void init();
 	void manoeuvre(control_type, glm::vec3);
-	void expression(std::string, int, int);
+	void expression(texture_t);
 	std::string getState();
 	void setState(std::string);
 };

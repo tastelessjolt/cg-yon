@@ -18,6 +18,8 @@ extern GLint light1on;
 extern GLint light2on;
 extern GLint light3on;
 
+extern GLint expr_state;
+
 extern BaseObject* char1;
 extern BaseObject* char2;
 
@@ -59,6 +61,51 @@ namespace csX75
 
   void quit (GLFWwindow *window) {
     glfwSetWindowShouldClose(window, GL_TRUE);
+  }
+
+  std::string getEnvState(){
+  	std::stringstream stream;
+
+  	stream << light1on << ",";
+  	stream << light2on << ",";
+  	stream << light3on << ",";
+
+  	stream << xpos << ",";
+  	stream << ypos << ",";
+  	stream << zpos << ",";
+
+  	stream << xrot << ",";
+  	stream << yrot << ",";
+  	stream << zrot;
+
+  	return stream.str();
+  }
+
+  void setEnvState(std::string state){
+  	std::stringstream sstream(state);
+  	std::string token;
+
+  	getline(sstream, token, ',');
+  	light1on = stoi(token);
+  	getline(sstream, token, ',');
+  	light2on = stoi(token);
+  	getline(sstream, token, ',');
+  	light3on = stoi(token);
+  	getline(sstream, token, ',');
+
+  	xpos = stoi(token);
+  	getline(sstream, token, ',');
+  	ypos = stoi(token);
+  	getline(sstream, token, ',');
+  	zpos = stoi(token);
+  	getline(sstream, token, ',');
+
+  	xrot = stof(token);
+  	getline(sstream, token, ',');
+  	yrot = stof(token);
+  	getline(sstream, token, ',');
+  	zrot = stof(token);
+  	
   }
 
   //!GLFW keyboard callback
@@ -203,12 +250,25 @@ namespace csX75
         light3on = 0;
     }
 
+	action = glfwGetKey(window, GLFW_KEY_MINUS);
+    if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
+    	expr_state = (expr_state + 1) % 3;
+
+    	texture_t tex;
+    	if (expr_state == 0)
+	    	tex.filename = "textures/face_happy.bmp";
+    	else if (expr_state == 1)
+	    	tex.filename = "textures/face.bmp";
+	    tex.width = 1280;
+	    tex.height = 320;
+
+    	((Character1 *)char1)->expression(tex); 
+    }
     // left leg char 1
     action = glfwGetKey(window, GLFW_KEY_H);
     if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
       GLfloat delta = 0.05 *
       (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ? -1 : 1);
-      std::cout << "h pressed" << std::endl;
 
       ((Character1 *)char1)->manoeuvre(Character1::LEFT_LEG_ANGLE, glm::vec3(
                       delta * ( glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS ? 1 : 0 ), 
@@ -365,6 +425,7 @@ namespace csX75
           // cout<<"\nAppending writing and working with existing file"<<"\n---\n";
         }
 
+        fs << getEnvState() << "|";
         fs << ( (Character1*)char1)->getState() << "|" << ( (Character2*)char2)->getState() << std::endl;
 
         fs.close();
@@ -388,7 +449,7 @@ namespace csX75
         std::string buffer;
         frames.clear();
         while (std::getline(fs, buffer, '\n')) {
-          std::cout << "buff" << std::endl;
+          // std::cout << "buff" << std::endl;
           frames.push_back(buffer);
         }
 
@@ -404,7 +465,8 @@ namespace csX75
         std::string buf = frames[frame_num++];
         std::stringstream ss(buf);
 
-
+		getline(ss, buf, '|');
+		setEnvState(buf);
 
         getline(ss, buf, '|');
         ( (Character1*)char1)->setState(buf);
@@ -423,7 +485,8 @@ namespace csX75
         std::string buf = frames[--frame_num];
         std::stringstream ss(buf);
 
-
+        getline(ss, buf, '|');
+		setEnvState(buf);
 
         getline(ss, buf, '|');
         ( (Character1*)char1)->setState(buf);

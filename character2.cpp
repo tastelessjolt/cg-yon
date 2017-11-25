@@ -31,8 +31,13 @@ void Character2::init(){
 
 	// character translations
 
-	// transforms.push_back(fullbodytrans);
-	// transforms.push_back(fullbodyrot);
+	glm::mat4* fullbodytrans = new glm::mat4(1.0f);
+	transforms.push_back(fullbodytrans);
+	body_translate_matrix = fullbodytrans;
+
+	glm::mat4* fullbodyrot = new glm::mat4(1.0f);
+	transforms.push_back(fullbodyrot);
+	body_angle_matrix = fullbodyrot;
 
 	/*
 	 *	headband
@@ -153,10 +158,16 @@ void Character2::manoeuvre(Character2::control_type ctrl, glm::vec3 param){
 		}
 
 		case BODY_ANGLE: {
+			body_angle += param;
+			*body_angle_matrix = glm::rotate(glm::mat4(1.0f), body_angle[0], rotateX);
+			*body_angle_matrix = glm::rotate(*body_angle_matrix, body_angle[1], rotateY);
+			*body_angle_matrix = glm::rotate(*body_angle_matrix, body_angle[2], rotateZ);
 			break;
 		}
 		
 		case BODY_TRANSLATE: {
+			body_translate += param;
+			*body_translate_matrix = glm::translate(glm::mat4(1.0f), body_translate);
 			break;
 		}
 		default:{

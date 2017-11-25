@@ -57,7 +57,7 @@ Character1::Character1(){
 
 	torso_angle = glm::vec3(0.0, 0.0, 0.0);
 
-	face_angle = glm::vec3(0.0, 0.0, 0.0);
+	face_angle = glm::vec3(0.0, pi/2, 0.0);
 
 	body_angle = glm::vec3(0.0, 0.0, 0.0);
 
@@ -307,7 +307,10 @@ void Character1::init(){
 
 	Primitive* face = new Cylinder();
 	head->children.push_back(face);
-	face->settexture("textures/face.bmp", 1280, 320);
+	face_texture.filename = "textures/face_happy.bmp";
+	face_texture.width = 1280;
+	face_texture.height = 320;
+	face->settexture(face_texture.filename, face_texture.width, face_texture.height);
 
 	face_primitive = face;
 
@@ -462,8 +465,9 @@ void Character1::init(){
 	Object::init();
 }
 
-void Character1::expression(std::string filename, int width, int height){
-	face_primitive->settexture(filename, width, height);
+void Character1::expression(texture_t tex){
+	face_texture = tex;
+	face_primitive->settexture(face_texture.filename, face_texture.width, face_texture.height);
 }
 
 void Character1::manoeuvre(Character1::control_type ctrl, glm::vec3 param){
@@ -580,7 +584,8 @@ std::string Character1::getState() {
 	stream << torso_angle[0] << "," << torso_angle[1] << "," << torso_angle[2] << ",";
 	stream << face_angle[0] << "," << face_angle[1] << "," << face_angle[2] << ",";
 	stream << body_angle[0] << "," << body_angle[1] << "," << body_angle[2] << ",";
-	stream << body_translate[0] << "," << body_translate[1] << "," << body_translate[2];
+	stream << body_translate[0] << "," << body_translate[1] << "," << body_translate[2] << ",";
+	stream << face_texture.filename << "," << face_texture.width << "," << face_texture.height;
 
 	return stream.str();
 }
@@ -673,6 +678,13 @@ void Character1::setState(std::string state) {
 	getline(sstream, token, ',');
 	body_translate[2] = stof(token);
 
+	getline(sstream, token, ',');
+	face_texture.filename = token;
+	getline(sstream, token, ',');
+	face_texture.width = stoi(token);
+	getline(sstream, token, ',');
+	face_texture.height = stoi(token);
+
 	manoeuvre(LEFT_LEG_ANGLE, glm::vec3(0.0f));
 	manoeuvre(RIGHT_LEG_ANGLE, glm::vec3(0.0f));
 	manoeuvre(LEFT_KNEE_ANGLE, glm::vec3(0.0f));
@@ -685,4 +697,6 @@ void Character1::setState(std::string state) {
 	manoeuvre(FACE_ANGLE, glm::vec3(0.0f));
 	manoeuvre(BODY_ANGLE, glm::vec3(0.0f));
 	manoeuvre(BODY_TRANSLATE, glm::vec3(0.0f));
+
+	expression(face_texture);
 }
