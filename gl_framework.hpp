@@ -3,6 +3,7 @@
 
 #define CI_RECORD_MODE 0
 #define CI_PLAYBACK_MODE 1
+#define CI_SAVE_MODE 2
 
 // Define a helpful macro for handling offsets into buffer objects
 #define BUFFER_OFFSET( offset )   ((GLvoid*) (offset))
@@ -19,6 +20,18 @@
 
 #include <fstream>
 #include <sstream>
+
+#include <sys/stat.h>
+
+class bezier
+{
+  std::vector<glm::vec3> control_points;
+  glm::vec3 decasteljau(GLint, GLint, GLfloat);
+public:
+  bezier();
+  void addControlPoint(glm::vec3);
+  glm::vec3 getPoint(GLfloat);
+};
 
 
 namespace csX75

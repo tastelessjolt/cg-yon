@@ -6,3 +6,4 @@ cg_yon
 *.txt
 frames.txt
 keyframes.txt
+frames/*

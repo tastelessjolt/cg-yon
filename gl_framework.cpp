@@ -33,6 +33,27 @@ int kframe_num = 0;
 int frame_jump = FPS;
 
 double playback_start_time;
+int prev_curr_frame = 0;
+int c_width, c_height;
+
+void bezier::addControlPoint(glm::vec3 point){
+	control_points.push_back(point);
+}
+
+glm::vec3 bezier::decasteljau(GLint i, GLint j, GLfloat t){
+	if (i == 0)
+		return control_points[j];
+	else
+		return (1-t) * decasteljau(i-1, j, t) + t * decasteljau(i-1, j+1, t);
+}
+
+glm::vec3 bezier::getPoint(GLfloat t){
+	if (0 <= t and t <= 1){
+		return decasteljau(control_points.size()-1, 0, t);
+	} else {
+		return glm::vec3(0.0, 0.0, 0.0);
+	}
+}
 
 namespace csX75
 {
@@ -538,10 +559,48 @@ namespace csX75
 		return 0;
 	}
 
-	void startPlayback(){
-		mode = CI_PLAYBACK_MODE;
-		playback_start_time = glfwGetTime();
-		std::cout << "Started Playback" << std::endl; 
+	void startPlayback(int saveFrames){
+
+		if (saveFrames == 0) {
+			mode = CI_PLAYBACK_MODE;
+			playback_start_time = glfwGetTime();
+			std::cout << "Started Playback at " << FPS << std::endl; 
+		} else {
+			mode = CI_SAVE_MODE;
+			playback_start_time = 0.0;
+			const int dir_err = mkdir("frames", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+			if (-1 == dir_err)
+			{
+			    std::cout << "Error creating directory!" << std::endl;
+			    exit(1);
+			}
+			std::cout << "Started storing frames at " << "'frames/'" << std::endl; 
+		}
+	}
+
+	unsigned char *pRGB;
+	void capture_frame(unsigned int framenum)
+	{
+		//global pointer float *pRGB
+		pRGB = new unsigned char [3 * (c_width+1) * (c_height + 1) ];
+
+		// set the framebuffer to read
+		//default for double buffered
+		glReadBuffer(GL_BACK);
+
+		glPixelStoref(GL_PACK_ALIGNMENT,1);//for word allignment
+
+		glReadPixels(0, 0, c_width, c_height, GL_RGB, GL_UNSIGNED_BYTE, pRGB);
+		char filename[200];
+		sprintf(filename,"frames/frame_%04d.ppm",framenum);
+		std::ofstream out(filename, std::ios::out);
+		out<<"P6"<<std::endl;
+		out<<c_width<<" "<<c_height<<" 255"<<std::endl;
+		out.write(reinterpret_cast<char const *>(pRGB), (3 * (c_width+1) * (c_height + 1)) * sizeof(int));
+		out.close();
+
+		//function to store pRGB in a file named count
+		delete pRGB;
 	}
 
 	void playback(){
@@ -549,11 +608,28 @@ namespace csX75
 		if (mode == CI_PLAYBACK_MODE)
 		{
 			int curr_frame = (glfwGetTime() - playback_start_time) * FPS;
-			std::cout << "showing frame " << curr_frame << std::endl; 
-			if (interpolator(curr_frame) == -1){
-				mode = CI_RECORD_MODE;
-				std::cout << "Finished Playback" << std::endl; 
+
+			if (prev_curr_frame != curr_frame)
+			{
+				std::cout << "showing frame " << curr_frame << std::endl; 
+				if (interpolator(curr_frame) == -1){
+					mode = CI_RECORD_MODE;
+					std::cout << "Finished Playback" << std::endl; 
+				}
+				prev_curr_frame = curr_frame;
 			}
+
+		} else if (mode == CI_SAVE_MODE) {
+			if (playback_start_time != 0)
+			{
+				std::cout << "saving frame " << playback_start_time - 1 << std::endl;
+				capture_frame(playback_start_time - 1);
+			}
+			if (interpolator(playback_start_time) == -1){
+				mode = CI_RECORD_MODE;
+				std::cout << "Finished storing frames" << std::endl; 
+			}
+			playback_start_time += 1;
 		}
 	}
 
@@ -972,7 +1048,8 @@ namespace csX75
 
 		action = glfwGetKey(window, GLFW_KEY_EQUAL);
 		if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
-				startPlayback();
+			startPlayback( (action = glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) ? 1 : 0 );
+			glfwGetWindowSize(window, &c_width, &c_height);
 		}
 
 	}

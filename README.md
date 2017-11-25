@@ -37,5 +37,9 @@
 `GLFW_KEY_V (+ SHIFT)` Non humanoid headphones RIGHT_HOUSING_ANGLE  
 
 `C` Capture frame in a text file 'frames.txt'  
+`C + SHIFT` Set the frame jump value  
 `M` Load the frames from file 'frames.txt' into a buffer  
 `N / B` Play the buffer one frame at a time next/prev  
+
+`=` Play the frames at 60 FPS  
+`= + SHIFT` Save each frame in a folder 'frames/'  
