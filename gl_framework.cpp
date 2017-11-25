@@ -36,23 +36,45 @@ double playback_start_time;
 int prev_curr_frame = 0;
 int c_width, c_height;
 
+GLfloat cam_param = 0;
+bezier cam_bezier;
+bool bezierEnabled = false;
+
+bezier::bezier(){
+	updated = false;
+}
 void bezier::addControlPoint(glm::vec3 point){
 	control_points.push_back(point);
+	updated = true;
 }
-
+void bezier::clearControlPoints(){
+	control_points.clear();
+	updated = true;
+}
 glm::vec3 bezier::decasteljau(GLint i, GLint j, GLfloat t){
 	if (i == 0)
 		return control_points[j];
 	else
 		return (1-t) * decasteljau(i-1, j, t) + t * decasteljau(i-1, j+1, t);
 }
-
 glm::vec3 bezier::getPoint(GLfloat t){
-	if (0 <= t and t <= 1){
+	if (0 <= t and t <= 1 and control_points.size() > 0){
 		return decasteljau(control_points.size()-1, 0, t);
 	} else {
 		return glm::vec3(0.0, 0.0, 0.0);
 	}
+}
+bool bezier::hasChanged(){
+	if (updated) {
+		updated = false;
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+std::vector<glm::vec3> bezier::getControlPoints(){
+	return control_points;
 }
 
 namespace csX75
@@ -65,7 +87,9 @@ namespace csX75
 		GLfloat light2on;
 		GLfloat light3on;
 
+		GLint status; // 0 for point, 1 for B without controlp, 2 for B with controlp
 		glm::vec3 campos;
+		GLfloat camparam;
 
 		glm::vec3 camrot;
 
@@ -162,11 +186,45 @@ namespace csX75
 			ft.light3on = stof(buf);
 
 			getline(sstream, buf, ',');
-			ft.campos[0] = stof(buf);
-			getline(sstream, buf, ',');
-			ft.campos[1] = stof(buf);
-			getline(sstream, buf, ',');
-			ft.campos[2] = stof(buf);
+			if (buf == "B")
+			{
+				ft.status = 1;
+
+				getline(sstream, buf, ',');
+				ft.camparam = stof(buf);
+				
+				getline(sstream, buf, ',');
+				if (buf == "P")
+				{
+					ft.status = 2;
+					cam_bezier.clearControlPoints();
+
+					getline(sstream, buf, ',');
+					int npoints = stoi(buf);
+
+					for (int i = 0; i < npoints; ++i)
+					{
+						getline(sstream, buf, ','); GLfloat t1 = stof(buf);
+						getline(sstream, buf, ','); GLfloat t2 = stof(buf);
+						getline(sstream, buf, ','); GLfloat t3 = stof(buf);
+						cam_bezier.addControlPoint(glm::vec3(t1, t2, t3));
+					}
+
+				}
+
+				ft.campos = cam_bezier.getPoint(ft.camparam);
+
+			} else if (buf == "C")
+			{
+				ft.status = 0;
+
+				getline(sstream, buf, ',');
+				ft.campos[0] = stof(buf);
+				getline(sstream, buf, ',');
+				ft.campos[1] = stof(buf);
+				getline(sstream, buf, ',');
+				ft.campos[2] = stof(buf);
+			}
 
 			getline(sstream, buf, ',');
 			ft.camrot[0] = stof(buf);
@@ -327,6 +385,7 @@ namespace csX75
 		stream << frame.light2on << ",";
 		stream << frame.light3on << ",";
 
+		stream << "C" << ",";
 		stream << frame.campos[0] << ",";
 		stream << frame.campos[1] << ",";
 		stream << frame.campos[2] << ",";
@@ -421,9 +480,29 @@ namespace csX75
 		stream << light2on << ",";
 		stream << light3on << ",";
 
-		stream << xpos << ",";
-		stream << ypos << ",";
-		stream << zpos << ",";
+		if (bezierEnabled)
+		{
+			stream << "B" << "," << cam_param << ",";
+			if (cam_bezier.hasChanged())
+			{
+				stream << "P" << ",";
+				std::vector<glm::vec3> cps = cam_bezier.getControlPoints();
+
+				stream << cps.size() << ",";
+				for (int i = 0; i < cps.size(); ++i)
+				{
+					stream << cps[i][0] << ",";
+					stream << cps[i][1] << ",";
+					stream << cps[i][2] << ",";
+				}
+			}
+		} else {
+			stream << "C" << ",";
+			stream << xpos << ",";
+			stream << ypos << ",";
+			stream << zpos << ",";
+		}
+
 
 		stream << xrot << ",";
 		stream << yrot << ",";
@@ -442,15 +521,47 @@ namespace csX75
 		light2on = stof(token);
 		getline(sstream, token, ',');
 		light3on = stof(token);
-		getline(sstream, token, ',');
 
-		xpos = stof(token);
 		getline(sstream, token, ',');
-		ypos = stof(token);
-		getline(sstream, token, ',');
-		zpos = stof(token);
-		getline(sstream, token, ',');
+		if (token == "B") {
 
+			getline(sstream, token, ',');
+			cam_param = stof(token);
+
+			getline(sstream, token, ',');
+			if (token == "P")
+			{
+				cam_bezier.clearControlPoints();
+
+				getline(sstream, token, ',');
+				int npoints = stoi(token);
+
+				for (int i = 0; i < npoints; ++i)
+				{
+					getline(sstream, token, ','); GLfloat t1 = stof(token);
+					getline(sstream, token, ','); GLfloat t2 = stof(token);
+					getline(sstream, token, ','); GLfloat t3 = stof(token);
+					cam_bezier.addControlPoint(glm::vec3(t1, t2, t3));
+				}
+			}
+			glm::vec3 campos = cam_bezier.getPoint(cam_param);
+			xpos = campos[0];
+			ypos = campos[1];
+			zpos = campos[2];
+
+		} else if (token == "C") {
+
+			getline(sstream, token, ',');
+			xpos = stof(token);
+			getline(sstream, token, ',');
+			ypos = stof(token);
+			getline(sstream, token, ',');
+			zpos = stof(token);
+
+		}
+
+
+		getline(sstream, token, ',');
 		xrot = stof(token);
 		getline(sstream, token, ',');
 		yrot = stof(token);
@@ -490,12 +601,19 @@ namespace csX75
 	frame_t frameip(frame_t f1, frame_t f2, GLfloat frame_fraction){
 		frame_t ft;
 
-
 		ft.light1on = linearip(f1.light1on, f2.light1on, frame_fraction);
 		ft.light2on = linearip(f1.light2on, f2.light2on, frame_fraction);
 		ft.light3on = linearip(f1.light3on, f2.light3on, frame_fraction);
 
-		ft.campos = linearip(f1.campos, f2.campos, frame_fraction);
+		if (f1.status == 0 or f2.status == 0) {
+			ft.campos = linearip(f1.campos, f2.campos, frame_fraction);
+		} else if (f1.status == 1 and f2.status == 1 ) {
+			ft.campos = cam_bezier.getPoint(linearip(f1.camparam, f2.camparam, frame_fraction));
+		} else if (f1.status == 2 and f2.status == 1) {
+			ft.campos = cam_bezier.getPoint(linearip(f1.camparam, f2.camparam, frame_fraction));
+		} else {
+			ft.campos = linearip(f1.campos, f2.campos, frame_fraction);
+		}
 
 		ft.camrot = linearip(f1.camrot, f2.camrot, frame_fraction);
 
@@ -550,8 +668,8 @@ namespace csX75
 		if (i == (frames_index.size()))
 			return -1;
 
-		frame_t f1 = frameStrToFrame(frames[i-1]);
 		frame_t f2 = frameStrToFrame(frames[i]);
+		frame_t f1 = frameStrToFrame(frames[i-1]);
 
 		frame_t ff = frameip(f1, f2, (double)(frame - frames_index[i-1]) / (double)(frames_index[i] - frames_index[i-1]));
 
@@ -1050,6 +1168,54 @@ namespace csX75
 		if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
 			startPlayback( (action = glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) ? 1 : 0 );
 			glfwGetWindowSize(window, &c_width, &c_height);
+		}
+
+		action = glfwGetKey(window, GLFW_KEY_SEMICOLON);
+		if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
+			action = glfwGetKey(window, GLFW_KEY_LEFT_SHIFT);
+			if (action == GLFW_PRESS) {
+				std::cout << "Cleared all control points" << std::endl;
+				cam_bezier.clearControlPoints();
+			} else {
+				std::cout << "Control point to be added: ";
+				GLfloat t1, t2, t3; std::cin >> t1 >> t2 >> t3;
+				cam_bezier.addControlPoint(glm::vec3(t1, t2, t3));
+				std::cout << "Added: " << t1 << "," << t2 << "," << t3 << std::endl;
+			}
+		}
+
+		action = glfwGetKey(window, GLFW_KEY_SLASH);
+		if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
+			bezierEnabled ^= true;
+			std::cout << "Camera " << (bezierEnabled ? "attached to" : "released from") << " bezier" << std::endl;  
+		}
+
+		action = glfwGetKey(window, GLFW_KEY_PERIOD);
+		if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
+			if (bezierEnabled)
+			{
+				if (cam_param + 0.005 <= 1)
+					cam_param += 0.005;
+				glm::vec3 campos = cam_bezier.getPoint(cam_param);
+				xpos = campos[0];
+				ypos = campos[1];
+				zpos = campos[2];
+				std::cout << "Camera at bezier(" << cam_param << ")" << std::endl;
+			}
+		}
+
+		action = glfwGetKey(window, GLFW_KEY_COMMA);
+		if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
+			if (bezierEnabled)
+			{
+				if (cam_param - 0.005 >= 0)
+					cam_param -= 0.005;
+				glm::vec3 campos = cam_bezier.getPoint(cam_param);
+				xpos = campos[0];
+				ypos = campos[1];
+				zpos = campos[2];
+				std::cout << "Camera at bezier(" << cam_param << ")" << std::endl;
+			}
 		}
 
 	}

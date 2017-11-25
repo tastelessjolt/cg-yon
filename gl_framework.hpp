@@ -26,11 +26,15 @@
 class bezier
 {
   std::vector<glm::vec3> control_points;
+  bool updated;
   glm::vec3 decasteljau(GLint, GLint, GLfloat);
 public:
   bezier();
   void addControlPoint(glm::vec3);
+  void clearControlPoints();
+  bool hasChanged();
   glm::vec3 getPoint(GLfloat);
+  std::vector<glm::vec3> getControlPoints();
 };
 
 
