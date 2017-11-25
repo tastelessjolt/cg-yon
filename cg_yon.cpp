@@ -29,9 +29,9 @@ GLuint uLights1_int;
 GLuint uLights2_int;
 GLuint uLights3_int;
 
-GLint light1on = 1;
-GLint light2on = 1;
-GLint light3on = 1;
+GLfloat light1on = 1.0;
+GLfloat light2on = 1.0;
+GLfloat light3on = 1.0;
 
 GLuint texture;
 GLuint textCoord;
@@ -59,6 +59,7 @@ BaseObject* char2;
 BaseObject* environment;
 
 GLint expr_state = 0;
+GLint mode = CI_RECORD_MODE;
 
 void printState()
 {
@@ -248,6 +249,7 @@ int main(int argc, char** argv)
 		printState();
 
 		// Render here
+		csX75::playback();
 		renderGL();
 
 		// Swap front and back buffers

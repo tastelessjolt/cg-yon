@@ -1,8 +1,8 @@
 #ifndef _GL_FRAMEWORK_HPP_
 #define _GL_FRAMEWORK_HPP_
 
-#define CI_MODELLING_MODE 0
-#define CI_INSPECTION_MODE 1
+#define CI_RECORD_MODE 0
+#define CI_PLAYBACK_MODE 1
 
 // Define a helpful macro for handling offsets into buffer objects
 #define BUFFER_OFFSET( offset )   ((GLvoid*) (offset))
@@ -25,6 +25,9 @@ namespace csX75
 {
   //! Initialize GL State
   void initGL(void);
+
+  //!playback
+  void playback(void);
 
   //!GLFW Error Callback
   void error_callback(int error, const char* description);
