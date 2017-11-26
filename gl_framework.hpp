@@ -5,6 +5,8 @@
 #define CI_PLAYBACK_MODE 1
 #define CI_SAVE_MODE 2
 
+#define CONS_PI 3.1415926
+
 // Define a helpful macro for handling offsets into buffer objects
 #define BUFFER_OFFSET( offset )   ((GLvoid*) (offset))
 
@@ -17,6 +19,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <math.h>
 
 #include <fstream>
 #include <sstream>

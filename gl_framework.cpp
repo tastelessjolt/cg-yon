@@ -177,6 +177,7 @@ namespace csX75
 		getline(ss, buf, '|');
 		{
 			std::stringstream sstream(buf);
+			bool ptoken = false;
 
 			getline(sstream, buf, ',');
 			ft.light1on = stof(buf);
@@ -196,6 +197,7 @@ namespace csX75
 				getline(sstream, buf, ',');
 				if (buf == "P")
 				{
+					ptoken = true;
 					ft.status = 2;
 					cam_bezier.clearControlPoints();
 
@@ -495,6 +497,8 @@ namespace csX75
 					stream << cps[i][1] << ",";
 					stream << cps[i][2] << ",";
 				}
+			} else {
+				stream << "NP" << ",";
 			}
 		} else {
 			stream << "C" << ",";
@@ -514,6 +518,7 @@ namespace csX75
 	void setEnvState(std::string state){
 		std::stringstream sstream(state);
 		std::string token;
+		bool ptoken = false;
 
 		getline(sstream, token, ',');
 		light1on = stof(token);
@@ -531,6 +536,7 @@ namespace csX75
 			getline(sstream, token, ',');
 			if (token == "P")
 			{
+				ptoken = true;
 				cam_bezier.clearControlPoints();
 
 				getline(sstream, token, ',');
@@ -560,14 +566,13 @@ namespace csX75
 
 		}
 
-
 		getline(sstream, token, ',');
 		xrot = stof(token);
 		getline(sstream, token, ',');
 		yrot = stof(token);
 		getline(sstream, token, ',');
 		zrot = stof(token);
-		
+
 	}
 
 	void setSceneState(std::string buf){
@@ -586,8 +591,44 @@ namespace csX75
 		return g1*(1-frac) + g2*(frac);
 	}
 
+	GLfloat revangleip(GLfloat g1, GLfloat g2, GLfloat frac){
+		// return linearip(g1, g2, frac);
+		if (g1 < g2)
+			return linearip(g1 + 2 * CONS_PI, g2, frac);
+		else
+			return linearip(g1, g2 + 2 * CONS_PI, frac);
+	}
+
 	glm::vec3 linearip(glm::vec3 g1, glm::vec3 g2, GLfloat frac){
 		return g1*(1-frac) + g2*(frac);
+	}
+
+	glm::vec3 proper_angle(glm::vec3 angle){
+		glm::vec3 pa;
+		pa[0] = fmod(angle[0], 2 * CONS_PI);
+		pa[1] = fmod(angle[1], 2 * CONS_PI);
+		pa[2] = fmod(angle[2], 2 * CONS_PI);
+		return pa;
+	}
+
+	glm::vec3 linearangleip(glm::vec3 g1, glm::vec3 g2, GLfloat frac){
+		glm::vec3 ia;
+
+		glm::vec3 gt1 = proper_angle(g1);
+		glm::vec3 gt2 = proper_angle(g2);
+
+		glm::vec3 df = gt1 - gt2;
+		for (int i = 0; i < 3; ++i)
+		{
+			if (fabs(df[i]) < CONS_PI)
+				ia[i] = linearip(gt1[i], gt2[i], frac);
+			else{
+				std::cout << "revangleip" << std::endl;
+				ia[i] = revangleip(gt1[i], gt2[i], frac);
+			}
+		}
+
+		return ia;
 	}
 
 	int linearip(int g1, int g2, GLfloat frac){
@@ -615,29 +656,29 @@ namespace csX75
 			ft.campos = linearip(f1.campos, f2.campos, frame_fraction);
 		}
 
-		ft.camrot = linearip(f1.camrot, f2.camrot, frame_fraction);
+		ft.camrot = linearangleip(f1.camrot, f2.camrot, frame_fraction);
 
-		ft.lg_left_leg_angle = linearip(f1.lg_left_leg_angle, f2.lg_left_leg_angle, frame_fraction);
+		ft.lg_left_leg_angle = linearangleip(f1.lg_left_leg_angle, f2.lg_left_leg_angle, frame_fraction);
 
-		ft.lg_left_knee_angle = linearip(f1.lg_left_knee_angle, f2.lg_left_knee_angle, frame_fraction);
+		ft.lg_left_knee_angle = linearangleip(f1.lg_left_knee_angle, f2.lg_left_knee_angle, frame_fraction);
 
-		ft.lg_right_leg_angle = linearip(f1.lg_right_leg_angle, f2.lg_right_leg_angle, frame_fraction);
+		ft.lg_right_leg_angle = linearangleip(f1.lg_right_leg_angle, f2.lg_right_leg_angle, frame_fraction);
 
-		ft.lg_right_knee_angle = linearip(f1.lg_right_knee_angle, f2.lg_right_knee_angle, frame_fraction);
+		ft.lg_right_knee_angle = linearangleip(f1.lg_right_knee_angle, f2.lg_right_knee_angle, frame_fraction);
 
-		ft.lg_left_arm_angle = linearip(f1.lg_left_arm_angle, f2.lg_left_arm_angle, frame_fraction);
+		ft.lg_left_arm_angle = linearangleip(f1.lg_left_arm_angle, f2.lg_left_arm_angle, frame_fraction);
 
-		ft.lg_left_elbow_angle = linearip(f1.lg_left_elbow_angle, f2.lg_left_elbow_angle, frame_fraction);
+		ft.lg_left_elbow_angle = linearangleip(f1.lg_left_elbow_angle, f2.lg_left_elbow_angle, frame_fraction);
 
-		ft.lg_right_arm_angle = linearip(f1.lg_right_arm_angle, f2.lg_right_arm_angle, frame_fraction);
+		ft.lg_right_arm_angle = linearangleip(f1.lg_right_arm_angle, f2.lg_right_arm_angle, frame_fraction);
 
-		ft.lg_right_elbow_angle = linearip(f1.lg_right_elbow_angle, f2.lg_right_elbow_angle, frame_fraction);
+		ft.lg_right_elbow_angle = linearangleip(f1.lg_right_elbow_angle, f2.lg_right_elbow_angle, frame_fraction);
 
-		ft.lg_torso_angle = linearip(f1.lg_torso_angle, f2.lg_torso_angle, frame_fraction);
+		ft.lg_torso_angle = linearangleip(f1.lg_torso_angle, f2.lg_torso_angle, frame_fraction);
 
-		ft.lg_face_angle = linearip(f1.lg_face_angle, f2.lg_face_angle, frame_fraction);
+		ft.lg_face_angle = linearangleip(f1.lg_face_angle, f2.lg_face_angle, frame_fraction);
 
-		ft.lg_body_angle = linearip(f1.lg_body_angle, f2.lg_body_angle, frame_fraction);
+		ft.lg_body_angle = linearangleip(f1.lg_body_angle, f2.lg_body_angle, frame_fraction);
 
 		ft.lg_body_translate = linearip(f1.lg_body_translate, f2.lg_body_translate, frame_fraction);
 
@@ -645,17 +686,17 @@ namespace csX75
 		ft.lg_width = linearip(f1.lg_width, f2.lg_width, frame_fraction);
 		ft.lg_height = linearip(f1.lg_height, f2.lg_height, frame_fraction);
 
-		ft.hf_body_angle = linearip(f1.hf_body_angle, f2.hf_body_angle, frame_fraction);
-
 		ft.hf_body_translate = linearip(f1.hf_body_translate, f2.hf_body_translate, frame_fraction);
 
-		ft.hf_left_angle = linearip(f1.hf_left_angle, f2.hf_left_angle, frame_fraction);
+		ft.hf_body_angle = linearangleip(f1.hf_body_angle, f2.hf_body_angle, frame_fraction);
 
-		ft.hf_left_housing_angle = linearip(f1.hf_left_housing_angle, f2.hf_left_housing_angle, frame_fraction);
+		ft.hf_left_angle = linearangleip(f1.hf_left_angle, f2.hf_left_angle, frame_fraction);
 
-		ft.hf_right_angle = linearip(f1.hf_right_angle, f2.hf_right_angle, frame_fraction);
+		ft.hf_left_housing_angle = linearangleip(f1.hf_left_housing_angle, f2.hf_left_housing_angle, frame_fraction);
 
-		ft.hf_right_housing_angle = linearip(f1.hf_right_housing_angle, f2.hf_right_housing_angle, frame_fraction);
+		ft.hf_right_angle = linearangleip(f1.hf_right_angle, f2.hf_right_angle, frame_fraction);
+
+		ft.hf_right_housing_angle = linearangleip(f1.hf_right_housing_angle, f2.hf_right_housing_angle, frame_fraction);
 
 		return ft;
 	}
@@ -722,6 +763,8 @@ namespace csX75
 	}
 
 	void playback(){
+
+		// std::cout << "Camera state " << xpos << "," << ypos << "," << zpos << "   " << xrot << "," << yrot << "," << zrot << std::endl;
 
 		if (mode == CI_PLAYBACK_MODE)
 		{
@@ -909,9 +952,11 @@ namespace csX75
 
 				texture_t tex;
 				if (expr_state == 0)
-						tex.filename = "textures/face_happy.bmp";
+					tex.filename = "textures/face_happy.bmp";
 				else if (expr_state == 1)
-						tex.filename = "textures/face.bmp";
+					tex.filename = "textures/face_sad.bmp";
+				else if (expr_state == 2)
+					tex.filename = "textures/face_surprised.bmp";
 				tex.width = 1280;
 				tex.height = 320;
 
@@ -1172,15 +1217,34 @@ namespace csX75
 
 		action = glfwGetKey(window, GLFW_KEY_SEMICOLON);
 		if ((action == GLFW_PRESS || action == GLFW_REPEAT)) {
-			action = glfwGetKey(window, GLFW_KEY_LEFT_SHIFT);
+			action = glfwGetKey(window, GLFW_KEY_LEFT_CONTROL);
 			if (action == GLFW_PRESS) {
-				std::cout << "Cleared all control points" << std::endl;
+				std::cout << "Reading from file 'bezier`" << std::endl;
 				cam_bezier.clearControlPoints();
+
+				std::fstream fs;
+				fs.open("bezier", std::fstream::in | std::fstream::out);
+				int npoints; fs >> npoints;
+
+				for (int i = 0; i < npoints; ++i)
+				{
+					GLfloat t1, t2, t3; fs >> t1; fs >> t2; fs >> t3;
+					cam_bezier.addControlPoint(glm::vec3(t1, t2, t3));
+					std::cout << "Added point " << t1 << "," << t2 << "," << t3 << std::endl;
+				}
+
 			} else {
-				std::cout << "Control point to be added: ";
-				GLfloat t1, t2, t3; std::cin >> t1 >> t2 >> t3;
-				cam_bezier.addControlPoint(glm::vec3(t1, t2, t3));
-				std::cout << "Added: " << t1 << "," << t2 << "," << t3 << std::endl;
+
+			action = glfwGetKey(window, GLFW_KEY_LEFT_SHIFT);
+				if (action == GLFW_PRESS) {
+					std::cout << "Cleared all control points" << std::endl;
+					cam_bezier.clearControlPoints();
+				} else {
+					std::cout << "Control point to be added: ";
+					GLfloat t1, t2, t3; std::cin >> t1 >> t2 >> t3;
+					cam_bezier.addControlPoint(glm::vec3(t1, t2, t3));
+					std::cout << "Added: " << t1 << "," << t2 << "," << t3 << std::endl;
+				}
 			}
 		}
 

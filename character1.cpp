@@ -31,11 +31,11 @@ Character1::Character1(){
 
 	necksize_l = 0.5;
 	necksize_w = 0.5;
-	necksize_h = 0.75;
+	necksize_h = 0.70;
 
 	facesize_l = 0.7;
 	facesize_w = 0.7;
-	facesize_h = 0.65;
+	facesize_h = 0.55;
 
 	armsize_l = 0.3;
 	armsize_w = 0.3;
@@ -283,7 +283,7 @@ void Character1::init(){
 	// abdomen
 	Primitive* abdomen = new Cube();
 	upperbody->children.push_back(abdomen);
-	abdomen->settexture("textures/shirt.bmp", 274, 223);
+	abdomen->settexture("textures/shirtd.bmp", 339, 361);
 
 	glm::mat4* abdomenmodel = new glm::mat4();
 	abdomen->transforms.push_back(abdomenmodel);

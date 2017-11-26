@@ -14,9 +14,10 @@ extern GLuint texture;
 extern glm::mat4 view_matrix;
 
 #define red glm::vec4(1.0, 0.0, 0.0, 1.0)
-#define blue glm::vec4(0.0, 0.0, 1.0, 1.0)
-#define grey glm::vec4(0.6, 0.6, 0.6, 1.0)
+#define blue glm::vec4(19.0/256.0, 57.0/256.0, 99.0/256.0, 1.0)
+#define grey glm::vec4(0.2, 0.2, 0.2, 1.0)
 #define white glm::vec4(1.0, 1.0, 1.0, 1.0)
+#define black glm::vec4(0.0, 0.0, 0.0, 1.0)
 
 double PI = 3.14159265;
 
@@ -183,7 +184,7 @@ void Sphere::loadpoints() {
 			z = radius * cos(l);
 			pt =glm::vec4(x, y, z, 1.0);
 
-			colors.push_back(red); vertices.push_back(pt); 
+			colors.push_back(black); vertices.push_back(pt); 
 			normals.push_back(glm::vec3(pt)); texs.push_back(glm::vec2(longs/(2 * PI), lats/(PI))); 
 		}
 	}
@@ -287,12 +288,12 @@ Cube::Cube() {
 // quad generates two triangles for each face and assigns colors to the vertices
 void Cube::quad(int a, int b, int c, int d)
 {
-  colors.push_back(red); vertices.push_back(positions[a]); normals.push_back(glm::vec3(positions[a])); texs.push_back(glm::vec2(0.0, 0.0));
-  colors.push_back(red); vertices.push_back(positions[b]); normals.push_back(glm::vec3(positions[b])); texs.push_back(glm::vec2(1.0, 0.0));
-  colors.push_back(red); vertices.push_back(positions[c]); normals.push_back(glm::vec3(positions[c])); texs.push_back(glm::vec2(1.0, 1.0));
-  colors.push_back(red); vertices.push_back(positions[a]); normals.push_back(glm::vec3(positions[a])); texs.push_back(glm::vec2(0.0, 0.0));
-  colors.push_back(red); vertices.push_back(positions[c]); normals.push_back(glm::vec3(positions[c])); texs.push_back(glm::vec2(1.0, 1.0));
-  colors.push_back(red); vertices.push_back(positions[d]); normals.push_back(glm::vec3(positions[d])); texs.push_back(glm::vec2(0.0, 1.0));
+  colors.push_back(black); vertices.push_back(positions[a]); normals.push_back(glm::vec3(positions[a])); texs.push_back(glm::vec2(0.0, 0.0));
+  colors.push_back(black); vertices.push_back(positions[b]); normals.push_back(glm::vec3(positions[b])); texs.push_back(glm::vec2(1.0, 0.0));
+  colors.push_back(black); vertices.push_back(positions[c]); normals.push_back(glm::vec3(positions[c])); texs.push_back(glm::vec2(1.0, 1.0));
+  colors.push_back(black); vertices.push_back(positions[a]); normals.push_back(glm::vec3(positions[a])); texs.push_back(glm::vec2(0.0, 0.0));
+  colors.push_back(black); vertices.push_back(positions[c]); normals.push_back(glm::vec3(positions[c])); texs.push_back(glm::vec2(1.0, 1.0));
+  colors.push_back(black); vertices.push_back(positions[d]); normals.push_back(glm::vec3(positions[d])); texs.push_back(glm::vec2(0.0, 1.0));
  }
 
 // generate 12 triangles: 36 vertices and 36 colors

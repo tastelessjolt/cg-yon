@@ -23,6 +23,7 @@ Camera on a bezier curve
 `,/.` Increment/Decrement t value  
 `;` Add Control Point
 `; + SHIFT` Clear Control Points
+`; + CTRL` Load points from file 'bezier'
 
 `GLFW_KEY_H + 7/8/9 (dof) [+ SHIFT]` Humanoid LEFT_LEG_ANGLE  
 `GLFW_KEY_J + 7/8/9 (dof) [+ SHIFT]` Humanoid RIGHT_LEG_ANGLE  
