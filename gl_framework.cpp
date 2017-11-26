@@ -811,7 +811,7 @@ namespace csX75
 		if ((key == GLFW_KEY_ESCAPE || key == GLFW_KEY_Q) && action == GLFW_PRESS)
 			quit(window);
 
-		GLfloat delta = 0.05;
+		GLfloat delta = 0.10;
 		action = glfwGetKey(window, GLFW_KEY_LEFT);
 		if ((action == GLFW_PRESS || action == GLFW_REPEAT)){
 			if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
