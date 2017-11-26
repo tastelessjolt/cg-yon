@@ -18,6 +18,12 @@
 `GLFW_KEY_2` Light 2 toggle  
 `GLFW_KEY_3` Light 3 toggle  
 
+Camera on a bezier curve  
+`/` Toggle attach and release camera to the bezier curve  
+`,/.` Increment/Decrement t value  
+`;` Add Control Point
+`; + SHIFT` Clear Control Points
+
 `GLFW_KEY_H + 7/8/9 (dof) [+ SHIFT]` Humanoid LEFT_LEG_ANGLE  
 `GLFW_KEY_J + 7/8/9 (dof) [+ SHIFT]` Humanoid RIGHT_LEG_ANGLE  
 `GLFW_KEY_K + 7/8/9 (dof) [+ SHIFT]` Humanoid LEFT_ARM_ANGLE  
